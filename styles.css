@@ -15,6 +15,8 @@
   --white: #ffffff;
   --bg-alt: #f7f5fa;
   --line: #e7e4ec;
+  --border: #b6b6b6;     /* neutral hairline for form controls */
+  --track: #d4d4d4;      /* neutral grey for bars/sliders */
   --radius: 5px;
   --maxw: 1140px;
   --pad: 24px;
@@ -332,18 +334,19 @@ button { font-family: inherit; cursor: pointer; }
   max-height: calc(100vh - 40px);
   overflow-y: auto;
   background: var(--white);
-  border-radius: 8px;
+  border: 1px solid #999;
+  border-radius: 3px;
   padding: 40px;
-  box-shadow: 0 24px 60px rgba(28,16,44,.28);
+  box-shadow: 0 6px 22px rgba(0,0,0,.18);
 }
 .modal-close {
-  position: absolute; top: 14px; right: 16px;
-  width: 38px; height: 38px;
+  position: absolute; top: 12px; right: 14px;
+  width: 36px; height: 36px;
   border: none; background: transparent;
   font-size: 1.9rem; line-height: 1; color: var(--muted);
-  border-radius: 6px;
 }
-.modal-close:hover { color: var(--purple); background: var(--purple-tint); }
+.modal-close:hover { color: var(--purple); }
+.modal .btn { border-radius: 2px; }
 .modal-title { font-size: 1.6rem; font-weight: 800; color: var(--purple); }
 .modal-sub { margin-top: 10px; color: var(--grey); font-size: 0.98rem; }
 .modal-sub a { color: var(--purple); font-weight: 700; }
@@ -358,22 +361,20 @@ button { font-family: inherit; cursor: pointer; }
   font-family: inherit;
   font-size: 0.98rem;
   color: var(--ink);
-  padding: 12px 14px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
   background: var(--white);
-  transition: border-color .15s ease, box-shadow .15s ease;
   width: 100%;
 }
 .field textarea { resize: vertical; }
 .field input:focus, .field select:focus, .field textarea:focus {
   outline: none;
   border-color: var(--purple);
-  box-shadow: 0 0 0 3px var(--purple-line);
 }
 .field input.invalid, .field select.invalid, .field textarea.invalid { border-color: #c0392b; }
 .field-check { display: flex; align-items: flex-start; gap: 10px; font-size: 0.9rem; color: var(--grey); }
-.field-check input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--purple); flex: 0 0 auto; }
+.field-check input { margin-top: 3px; width: 16px; height: 16px; accent-color: var(--purple); flex: 0 0 auto; }
 .form-foot { font-size: 0.82rem; color: var(--muted); text-align: center; }
 .form-error { color: #c0392b; font-size: 0.88rem; font-weight: 700; text-align: center; }
 
@@ -386,49 +387,48 @@ button { font-family: inherit; cursor: pointer; }
 .form-back:hover { color: var(--purple-dark); }
 .form-step-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; color: var(--muted); text-transform: uppercase; }
 
-.form-progress { height: 6px; background: var(--purple-line); border-radius: 99px; overflow: hidden; margin-bottom: 28px; }
-.form-progress-bar { height: 100%; width: 16%; background: var(--purple); border-radius: 99px; transition: width .3s ease; }
+.form-progress { height: 4px; background: var(--track); margin-bottom: 28px; }
+.form-progress-bar { height: 100%; width: 16%; background: var(--purple); }
 
 .form-step { display: none; }
-.form-step.is-active { display: block; animation: step-in .25s ease; }
-@keyframes step-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.form-step.is-active { display: block; }
 
-.step-title { font-size: 1.45rem; font-weight: 800; color: var(--purple); line-height: 1.2; }
+.step-title { font-size: 1.35rem; font-weight: 800; color: var(--purple); line-height: 1.25; }
 .step-sub { margin-top: 8px; color: var(--grey); font-size: 0.96rem; }
 .step-actions { margin-top: 24px; }
 
 /* Choice cards (loan type, use) */
-.choice-grid { display: grid; gap: 14px; margin-top: 24px; }
+.choice-grid { display: grid; gap: 12px; margin-top: 24px; }
 .choice-grid.two { grid-template-columns: 1fr 1fr; }
 .choice {
-  display: flex; flex-direction: column; gap: 6px; text-align: left;
-  padding: 22px 20px; min-height: 116px;
-  background: var(--white); border: 2px solid var(--line); border-radius: var(--radius);
+  display: flex; flex-direction: column; gap: 5px; text-align: left;
+  padding: 18px 18px; min-height: 104px;
+  background: var(--white); border: 1px solid var(--border); border-radius: 2px;
   font-family: inherit; cursor: pointer;
-  transition: border-color .15s ease, background-color .15s ease, transform .05s ease;
 }
-.choice:hover { border-color: var(--purple); background: var(--purple-tint); }
-.choice:active { transform: scale(0.99); }
-.choice.is-selected { border-color: var(--purple); background: var(--purple-tint); }
-.choice-title { font-weight: 800; font-size: 1.1rem; color: var(--ink); }
+.choice:hover { border-color: #6e6e6e; }
+.choice.is-selected { border-color: var(--purple); background: var(--purple); }
+.choice.is-selected .choice-title { color: var(--white); }
+.choice.is-selected .choice-desc { color: rgba(255,255,255,.82); }
+.choice-title { font-weight: 800; font-size: 1.05rem; color: var(--ink); }
 .choice-desc { font-size: 0.88rem; color: var(--muted); }
 
 /* Chips (term, state) */
-.chip-grid { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.chip-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
 .chip-grid.states { display: grid; grid-template-columns: repeat(4, 1fr); }
 .chip {
-  padding: 13px 18px; background: var(--white); border: 2px solid var(--line);
-  border-radius: var(--radius); font-family: inherit; font-weight: 700; font-size: 0.95rem;
-  color: var(--ink); cursor: pointer; transition: border-color .15s ease, background-color .15s ease, color .15s ease;
+  padding: 11px 16px; background: var(--white); border: 1px solid var(--border);
+  border-radius: 2px; font-family: inherit; font-weight: 700; font-size: 0.95rem;
+  color: var(--ink); cursor: pointer;
 }
-.chip:hover { border-color: var(--purple); background: var(--purple-tint); }
+.chip:hover { border-color: #6e6e6e; }
 .chip.is-selected { border-color: var(--purple); background: var(--purple); color: var(--white); }
 
 /* Slider (amount, year) */
-.slider-value { margin-top: 26px; text-align: center; font-size: 2.2rem; font-weight: 900; color: var(--purple); letter-spacing: -0.02em; }
-.slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; margin-top: 20px; border-radius: 99px; background: var(--purple-line); outline: none; }
-.slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 26px; height: 26px; border-radius: 50%; background: var(--purple); cursor: pointer; border: 3px solid var(--white); box-shadow: 0 1px 4px rgba(72,32,110,.35); }
-.slider::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--purple); cursor: pointer; border: 3px solid var(--white); }
+.slider-value { margin-top: 24px; text-align: center; font-size: 1.8rem; font-weight: 800; color: var(--purple); }
+.slider { -webkit-appearance: none; appearance: none; width: 100%; height: 5px; margin-top: 18px; border-radius: 0; background: var(--track); outline: none; }
+.slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border-radius: 2px; background: var(--purple); cursor: pointer; border: 1px solid var(--purple-dark); }
+.slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 2px; background: var(--purple); cursor: pointer; border: 1px solid var(--purple-dark); }
 .slider-ends { display: flex; justify-content: space-between; margin-top: 12px; font-size: 0.8rem; color: var(--muted); font-weight: 600; }
 
 /* --------------------------- Form success ------------------------ */
