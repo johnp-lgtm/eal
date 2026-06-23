@@ -147,8 +147,23 @@ button { font-family: inherit; cursor: pointer; }
 .header-phone:hover .header-phone-number { color: var(--purple-dark); }
 
 /* ------------------------------ Hero ----------------------------- */
-.hero { padding: clamp(56px, 9vw, 110px) 0; border-bottom: 1px solid var(--line); }
-.hero-inner { max-width: 760px; }
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(56px, 9vw, 110px) 0;
+  border-bottom: 1px solid var(--line);
+  background-color: var(--white);
+}
+/* Banner photo sits behind the content at low opacity so text stays sharp */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("assets/hero.jpg") center center / cover no-repeat;
+  opacity: 0.22;
+  z-index: 0;
+}
+.hero-inner { position: relative; z-index: 1; max-width: 760px; }
 .hero-title {
   font-size: clamp(2.4rem, 6vw, 4rem);
   font-weight: 800;
