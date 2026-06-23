@@ -7,15 +7,11 @@
   <meta name="description" content="Easy As Loans are Adelaide finance brokers with 15+ years' experience. Fast approvals, every situation welcome, and we're careful with your credit file. Real people, no call centres." />
 
   <!-- ============================================================
-       NOTE FOR EASY AS LOANS:
-       Items marked PLACEHOLDER below should be replaced with your
-       real details before going live:
-         • Phone number       (search: PLACEHOLDER-PHONE)
-         • Email address       (search: PLACEHOLDER-EMAIL)
-         • Customer review photos  (see /assets/reviews/README.txt)
+       NOTE FOR EASY AS LOANS — still to finalise before go-live:
          • Finance form delivery   (see /script.js -> FORM_ENDPOINT)
          • Official logo file       (currently faithfully recreated
                                      in SVG + live text below)
+       Done: phone, email, customer photos.
        ============================================================ -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -41,10 +37,9 @@
       </a>
 
       <div class="header-actions">
-        <a class="header-phone" href="tel:+61800000000">
+        <a class="header-phone" href="tel:+61402083863">
           <span class="header-phone-label">Talk to a real person</span>
-          <!-- PLACEHOLDER-PHONE -->
-          <span class="header-phone-number">(08) 0000 0000</span>
+          <span class="header-phone-number">0402 083 863</span>
         </a>
         <button type="button" class="btn btn-primary js-open-form">Apply now</button>
       </div>
@@ -65,8 +60,7 @@
         </p>
         <div class="hero-cta">
           <button type="button" class="btn btn-primary btn-lg js-open-form">Start your application</button>
-          <!-- PLACEHOLDER-PHONE -->
-          <a class="btn btn-ghost btn-lg" href="tel:+61800000000">Or call (08) 0000 0000</a>
+          <a class="btn btn-ghost btn-lg" href="tel:+61402083863">Or call 0402 083 863</a>
         </div>
         <p class="hero-note">Enquiring won't affect your credit score.</p>
       </div>
@@ -82,107 +76,21 @@
         </p>
       </div>
 
-      <!-- Auto-scrolling, infinite. The track is duplicated for a seamless loop. -->
-      <div class="marquee" aria-hidden="false">
+      <!-- Auto-scrolling, infinite. The set of photos is duplicated for a seamless loop. -->
+      <div class="marquee">
         <div class="marquee-track js-marquee-track">
-          <!-- Set A -->
-          <figure class="review-card">
-            <img class="review-photo" src="assets/reviews/review-1.svg" alt="Easy As Loans customer with their car" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
-              <span class="review-name">Sarah &amp; the new Hilux</span>
-              <span class="review-quote">“Approved in a day. Couldn't believe how easy.”</span>
-            </figcaption>
-          </figure>
-          <figure class="review-card">
-            <img class="review-photo" src="assets/reviews/review-2.svg" alt="Easy As Loans customer with their car" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
-              <span class="review-name">Daniel · first car</span>
-              <span class="review-quote">“They actually cared. Worth every star.”</span>
-            </figcaption>
-          </figure>
-          <figure class="review-card">
-            <img class="review-photo" src="assets/reviews/review-3.svg" alt="Easy As Loans customer with their car" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
-              <span class="review-name">Priya's Mazda</span>
-              <span class="review-quote">“On a visa and still sorted. Legends.”</span>
-            </figcaption>
-          </figure>
-          <figure class="review-card">
-            <img class="review-photo" src="assets/reviews/review-4.svg" alt="Easy As Loans customer with their car" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
-              <span class="review-name">The Nguyen family</span>
-              <span class="review-quote">“Honest, fast and friendly. Highly recommend.”</span>
-            </figcaption>
-          </figure>
-          <figure class="review-card">
-            <img class="review-photo" src="assets/reviews/review-5.svg" alt="Easy As Loans customer with their car" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
-              <span class="review-name">Marco's ute</span>
-              <span class="review-quote">“Casual work, no worries for these guys.”</span>
-            </figcaption>
-          </figure>
-          <figure class="review-card">
-            <img class="review-photo" src="assets/reviews/review-6.svg" alt="Easy As Loans customer with their car" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
-              <span class="review-name">Beth &amp; the Subaru</span>
-              <span class="review-quote">“Made a stressful thing feel easy as.”</span>
-            </figcaption>
-          </figure>
-          <!-- Set B (duplicate of A, hidden from screen readers, for seamless loop) -->
-          <figure class="review-card" aria-hidden="true">
-            <img class="review-photo" src="assets/reviews/review-1.svg" alt="" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars">★★★★★</span>
-              <span class="review-name">Sarah &amp; the new Hilux</span>
-              <span class="review-quote">“Approved in a day. Couldn't believe how easy.”</span>
-            </figcaption>
-          </figure>
-          <figure class="review-card" aria-hidden="true">
-            <img class="review-photo" src="assets/reviews/review-2.svg" alt="" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars">★★★★★</span>
-              <span class="review-name">Daniel · first car</span>
-              <span class="review-quote">“They actually cared. Worth every star.”</span>
-            </figcaption>
-          </figure>
-          <figure class="review-card" aria-hidden="true">
-            <img class="review-photo" src="assets/reviews/review-3.svg" alt="" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars">★★★★★</span>
-              <span class="review-name">Priya's Mazda</span>
-              <span class="review-quote">“On a visa and still sorted. Legends.”</span>
-            </figcaption>
-          </figure>
-          <figure class="review-card" aria-hidden="true">
-            <img class="review-photo" src="assets/reviews/review-4.svg" alt="" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars">★★★★★</span>
-              <span class="review-name">The Nguyen family</span>
-              <span class="review-quote">“Honest, fast and friendly. Highly recommend.”</span>
-            </figcaption>
-          </figure>
-          <figure class="review-card" aria-hidden="true">
-            <img class="review-photo" src="assets/reviews/review-5.svg" alt="" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars">★★★★★</span>
-              <span class="review-name">Marco's ute</span>
-              <span class="review-quote">“Casual work, no worries for these guys.”</span>
-            </figcaption>
-          </figure>
-          <figure class="review-card" aria-hidden="true">
-            <img class="review-photo" src="assets/reviews/review-6.svg" alt="" loading="lazy" />
-            <figcaption class="review-cap">
-              <span class="review-stars">★★★★★</span>
-              <span class="review-name">Beth &amp; the Subaru</span>
-              <span class="review-quote">“Made a stressful thing feel easy as.”</span>
-            </figcaption>
-          </figure>
+          <!-- Set A (real photos) -->
+          <figure class="review-card"><img class="review-photo" src="assets/reviews/review-1.jpg" alt="Easy As Loans customer with their car" loading="lazy" /></figure>
+          <figure class="review-card"><img class="review-photo" src="assets/reviews/review-2.jpg" alt="Easy As Loans customer with their car" loading="lazy" /></figure>
+          <figure class="review-card"><img class="review-photo" src="assets/reviews/review-3.jpg" alt="Easy As Loans customer with their car" loading="lazy" /></figure>
+          <figure class="review-card"><img class="review-photo" src="assets/reviews/review-4.jpg" alt="Easy As Loans customer with their car" loading="lazy" /></figure>
+          <figure class="review-card"><img class="review-photo" src="assets/reviews/review-5.jpg" alt="Easy As Loans customer with their car" loading="lazy" /></figure>
+          <!-- Set B (duplicate, hidden from screen readers, for seamless loop) -->
+          <figure class="review-card" aria-hidden="true"><img class="review-photo" src="assets/reviews/review-1.jpg" alt="" loading="lazy" /></figure>
+          <figure class="review-card" aria-hidden="true"><img class="review-photo" src="assets/reviews/review-2.jpg" alt="" loading="lazy" /></figure>
+          <figure class="review-card" aria-hidden="true"><img class="review-photo" src="assets/reviews/review-3.jpg" alt="" loading="lazy" /></figure>
+          <figure class="review-card" aria-hidden="true"><img class="review-photo" src="assets/reviews/review-4.jpg" alt="" loading="lazy" /></figure>
+          <figure class="review-card" aria-hidden="true"><img class="review-photo" src="assets/reviews/review-5.jpg" alt="" loading="lazy" /></figure>
         </div>
       </div>
     </section>
@@ -297,8 +205,7 @@
         <p class="cta-text">Start your application now, or pick up the phone — whatever's easiest.</p>
         <div class="cta-actions">
           <button type="button" class="btn btn-light btn-lg js-open-form">Start your application</button>
-          <!-- PLACEHOLDER-PHONE -->
-          <a class="btn btn-outline-light btn-lg" href="tel:+61800000000">(08) 0000 0000</a>
+          <a class="btn btn-outline-light btn-lg" href="tel:+61402083863">0402 083 863</a>
         </div>
       </div>
     </section>
@@ -338,10 +245,8 @@
 
       <div class="footer-col">
         <h4 class="footer-h">Get in touch</h4>
-        <!-- PLACEHOLDER-PHONE -->
-        <a href="tel:+61800000000">(08) 0000 0000</a>
-        <!-- PLACEHOLDER-EMAIL -->
-        <a href="mailto:hello@easyasloans.com.au">hello@easyasloans.com.au</a>
+        <a href="tel:+61402083863">0402 083 863</a>
+        <a href="mailto:info@easyasloans.com.au">info@easyasloans.com.au</a>
         <span class="footer-static">Adelaide, South Australia</span>
       </div>
     </div>
@@ -441,7 +346,6 @@
           <svg viewBox="0 0 52 52"><path class="logo-stroke" d="M14 27 l8 8 l16 -18" /></svg>
         </div>
         <h2 class="modal-title">Thanks — we've got it.</h2>
-        <p class="modal-sub">One of our team will be in touch very soon. If you'd rather talk now, give us a call on <!-- PLACEHOLDER-PHONE --><a href="tel:+61800000000">(08) 0000 0000</a>.</p>
         <button type="button" class="btn btn-ghost js-close-form">Close</button>
       </div>
     </div>

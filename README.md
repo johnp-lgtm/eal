@@ -40,10 +40,10 @@ Search the project for these markers:
 
 | Marker | What to replace |
 | --- | --- |
-| `PLACEHOLDER-PHONE` | Your real phone number (shown as `(08) 0000 0000`) |
-| `PLACEHOLDER-EMAIL` | Your real email (shown as `hello@easyasloans.com.au`) |
-| Customer photos | See `assets/reviews/README.txt` |
-| `FORM_ENDPOINT` in `script.js` | Where finance enquiries should be sent |
+| `FORM_ENDPOINT` in `script.js` | Where finance enquiries should be sent (still to do) |
+
+Done: phone (0402 083 863), email (info@easyasloans.com.au) and the customer
+photos are all live. To change a photo later, see `assets/reviews/README.txt`.
 
 ### Making the finance form actually send
 
