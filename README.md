@@ -19,7 +19,6 @@ assets/             hero.jpg + reviews/ customer photos
 admin/              Leads dashboard (login, sortable table, click-into detail)
 functions/api/      /api/leads — Cloudflare Pages Function (save lead + email)
 schema.sql          Database table for leads (Cloudflare D1)
-wrangler.toml       Cloudflare Pages config
 CRM-SETUP.md        Step-by-step guide to turn on the CRM
 eal_styleguide.pdf  The brand identity guidelines
 ```
