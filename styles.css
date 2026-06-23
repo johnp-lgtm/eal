@@ -151,8 +151,8 @@ button { font-family: inherit; cursor: pointer; }
 /* ------------------------------ Hero ----------------------------- */
 .hero {
   padding: clamp(56px, 8vw, 96px) 0;
-  background-color: var(--purple);
-  color: var(--white);
+  background-color: var(--white);
+  border-bottom: 1px solid var(--line);
 }
 .hero-inner {
   display: grid;
@@ -160,18 +160,17 @@ button { font-family: inherit; cursor: pointer; }
   align-items: center;
   gap: clamp(32px, 5vw, 64px);
 }
-.hero .eyebrow { color: rgba(255, 255, 255, 0.75); }
 .hero-title {
   font-size: clamp(2.1rem, 5.4vw, 3.8rem);
   font-weight: 800;
   letter-spacing: -0.025em;
-  color: var(--white);
+  color: var(--purple);
   margin-bottom: 22px;
   overflow-wrap: break-word;
 }
-.hero-lead { font-size: clamp(1.05rem, 2vw, 1.25rem); color: rgba(255, 255, 255, 0.85); max-width: 56ch; }
+.hero-lead { font-size: clamp(1.05rem, 2vw, 1.25rem); color: var(--grey); max-width: 56ch; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
-.hero-note { margin-top: 18px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
+.hero-note { margin-top: 18px; font-size: 0.9rem; color: var(--muted); }
 .hero-media { display: flex; justify-content: flex-end; }
 .hero-img {
   width: 100%;
