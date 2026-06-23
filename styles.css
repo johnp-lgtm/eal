@@ -397,6 +397,21 @@ button { font-family: inherit; cursor: pointer; }
 .step-sub { margin-top: 8px; color: var(--grey); font-size: 0.96rem; }
 .step-actions { margin-top: 24px; }
 
+/* Square options with icons (step 1) */
+.opt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+.opt {
+  aspect-ratio: 1 / 1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+  background: var(--white); border: 1px solid var(--border); border-radius: 2px;
+  font-family: inherit; cursor: pointer;
+}
+.opt:hover { border-color: #6e6e6e; }
+.opt.is-selected { background: var(--purple); border-color: var(--purple); }
+.opt-icon { width: 56px; height: 56px; color: var(--purple); }
+.opt.is-selected .opt-icon { color: var(--white); }
+.opt-label { font-weight: 800; font-size: 1.2rem; color: var(--ink); }
+.opt.is-selected .opt-label { color: var(--white); }
+
 /* Choice cards (loan type, use) */
 .choice-grid { display: grid; gap: 12px; margin-top: 24px; }
 .choice-grid.two { grid-template-columns: 1fr 1fr; }

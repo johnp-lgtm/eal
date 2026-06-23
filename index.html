@@ -296,16 +296,27 @@
 
           <!-- Step 1: loan type -->
           <section class="form-step is-active" data-step="loanType">
-            <h2 class="step-title" id="finance-modal-title">What kind of loan are you after?</h2>
-            <p class="step-sub">Pick one to begin — it only takes a minute.</p>
-            <div class="choice-grid two">
-              <button type="button" class="choice js-choice" data-field="loanType" data-value="Car loan">
-                <span class="choice-title">Car loan</span>
-                <span class="choice-desc">Car, ute, 4WD, bike or boat</span>
+            <h2 class="step-title" id="finance-modal-title">What can we help you finance?</h2>
+            <p class="step-sub">Takes about 30 seconds, and it won't affect your credit score.</p>
+            <div class="opt-grid">
+              <button type="button" class="opt js-choice" data-field="loanType" data-value="Car loan">
+                <svg class="opt-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M15 27 L19 18 H29 L34 27" />
+                  <rect x="6" y="27" width="36" height="8" rx="3" />
+                  <circle cx="16" cy="36.5" r="3.1" />
+                  <circle cx="32" cy="36.5" r="3.1" />
+                </svg>
+                <span class="opt-label">Car</span>
               </button>
-              <button type="button" class="choice js-choice" data-field="loanType" data-value="Personal loan">
-                <span class="choice-title">Personal loan</span>
-                <span class="choice-desc">Renovations, travel, debt &amp; more</span>
+              <button type="button" class="opt js-choice" data-field="loanType" data-value="Personal loan">
+                <svg class="opt-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <ellipse cx="24" cy="15" rx="13" ry="5" />
+                  <path d="M11 15 V25" />
+                  <path d="M37 15 V25" />
+                  <path d="M11 25 a13 5 0 0 0 26 0" />
+                  <path d="M11 20 a13 5 0 0 0 26 0" />
+                </svg>
+                <span class="opt-label">Personal</span>
               </button>
             </div>
           </section>
