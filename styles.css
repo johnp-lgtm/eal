@@ -160,11 +160,12 @@ button { font-family: inherit; cursor: pointer; }
 }
 .hero .eyebrow { color: rgba(255, 255, 255, 0.75); }
 .hero-title {
-  font-size: clamp(2.4rem, 5.4vw, 3.8rem);
+  font-size: clamp(2.1rem, 5.4vw, 3.8rem);
   font-weight: 800;
   letter-spacing: -0.025em;
   color: var(--white);
   margin-bottom: 22px;
+  overflow-wrap: break-word;
 }
 .hero-lead { font-size: clamp(1.05rem, 2vw, 1.25rem); color: rgba(255, 255, 255, 0.85); max-width: 56ch; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
