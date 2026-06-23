@@ -148,32 +148,35 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ------------------------------ Hero ----------------------------- */
 .hero {
-  position: relative;
-  overflow: hidden;
-  padding: clamp(56px, 9vw, 110px) 0;
-  border-bottom: 1px solid var(--line);
-  background-color: var(--white);
+  padding: clamp(56px, 8vw, 96px) 0;
+  background-color: var(--purple);
+  color: var(--white);
 }
-/* Banner photo sits behind the content at low opacity so text stays sharp */
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: url("assets/hero.jpg") center center / cover no-repeat;
-  opacity: 0.22;
-  z-index: 0;
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: clamp(32px, 5vw, 64px);
 }
-.hero-inner { position: relative; z-index: 1; max-width: 760px; }
+.hero .eyebrow { color: rgba(255, 255, 255, 0.75); }
 .hero-title {
-  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-size: clamp(2.4rem, 5.4vw, 3.8rem);
   font-weight: 800;
   letter-spacing: -0.025em;
-  color: var(--purple);
+  color: var(--white);
   margin-bottom: 22px;
 }
-.hero-lead { font-size: clamp(1.05rem, 2vw, 1.25rem); color: var(--grey); max-width: 60ch; }
+.hero-lead { font-size: clamp(1.05rem, 2vw, 1.25rem); color: rgba(255, 255, 255, 0.85); max-width: 56ch; }
 .hero-cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
-.hero-note { margin-top: 18px; font-size: 0.9rem; color: var(--muted); }
+.hero-note { margin-top: 18px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.7); }
+.hero-media { display: flex; justify-content: flex-end; }
+.hero-img {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 18px;
+}
 
 /* ----------------------------- Reviews --------------------------- */
 .reviews { padding: clamp(56px, 8vw, 90px) 0; background: var(--bg-alt); overflow: hidden; }
@@ -409,6 +412,9 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ---------------------------- Responsive ------------------------- */
 @media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 36px; }
+  .hero-media { justify-content: flex-start; order: -1; }
+  .hero-img { max-width: 420px; aspect-ratio: 16 / 10; }
   .why-grid { grid-template-columns: repeat(2, 1fr); }
   .process-steps { grid-template-columns: repeat(2, 1fr); }
   .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
