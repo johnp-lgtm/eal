@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Leads — Easy As Loans</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin">
+
+  <!-- Login -->
+  <div class="admin-login js-login">
+    <form class="login-card js-login-form">
+      <a class="logo" aria-label="Easy As Loans" href="../index.html" style="justify-content:center;margin-bottom:8px">
+        <svg class="logo-mark" viewBox="0 0 210 120" aria-hidden="true">
+          <path class="logo-stroke" d="M8 92 L98 24 L126 47 L126 32 L146 32 L146 51 C166 68 188 74 204 64"/>
+          <path class="logo-stroke" d="M8 101 C72 95 122 94 152 79 C172 69 190 68 204 64"/>
+        </svg>
+        <span class="logo-words"><span class="logo-easy">easy as</span><span class="logo-loans">LOANS</span></span>
+      </a>
+      <h1 class="login-title">Leads dashboard</h1>
+      <p class="login-sub">Enter the dashboard password to continue.</p>
+      <div class="field">
+        <label for="pw">Password</label>
+        <input type="password" id="pw" class="js-pw" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+      <p class="form-error js-login-error" hidden>Incorrect password.</p>
+    </form>
+  </div>
+
+  <!-- App -->
+  <div class="admin-app js-app" hidden>
+    <header class="admin-bar">
+      <div class="admin-bar-left">
+        <span class="logo-words"><span class="logo-easy">easy as</span><span class="logo-loans">LOANS</span></span>
+        <span class="admin-title">Leads</span>
+      </div>
+      <div class="admin-bar-right">
+        <span class="admin-count js-count">0 leads</span>
+        <button type="button" class="btn btn-ghost js-refresh">Refresh</button>
+        <button type="button" class="btn btn-ghost js-logout">Log out</button>
+      </div>
+    </header>
+
+    <div class="admin-toolbar">
+      <input type="search" class="admin-search js-search" placeholder="Search name, email, mobile, state…" />
+      <select class="admin-filter js-status-filter">
+        <option value="">All statuses</option>
+        <option value="New">New</option>
+        <option value="Contacted">Contacted</option>
+        <option value="Qualified">Qualified</option>
+        <option value="Won">Won</option>
+        <option value="Lost">Lost</option>
+      </select>
+    </div>
+
+    <div class="admin-tablewrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th data-sort="created_at" class="sortable">Received</th>
+            <th data-sort="full_name" class="sortable">Name</th>
+            <th data-sort="loan_type" class="sortable">Type</th>
+            <th data-sort="loan_amount" class="sortable num">Amount</th>
+            <th data-sort="state" class="sortable">State</th>
+            <th data-sort="status" class="sortable">Status</th>
+          </tr>
+        </thead>
+        <tbody class="js-rows"></tbody>
+      </table>
+      <p class="admin-empty js-empty" hidden>No leads yet. They'll appear here as soon as someone completes the form.</p>
+    </div>
+  </div>
+
+  <!-- Lead detail drawer -->
+  <div class="drawer js-drawer" hidden>
+    <div class="drawer-overlay js-drawer-close"></div>
+    <aside class="drawer-panel" role="dialog" aria-modal="true" aria-label="Lead detail">
+      <button type="button" class="drawer-close js-drawer-close" aria-label="Close">&times;</button>
+      <div class="js-detail"></div>
+    </aside>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

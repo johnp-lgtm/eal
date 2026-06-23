@@ -10,14 +10,31 @@ Pages, GitHub Pages, your own server).
 ## Structure
 
 ```
-index.html         Home page (header, hero, reviews, why-us, process, FAQ, footer, finance form modal)
-terms.html         Terms & Conditions (placeholder content)
-privacy.html       Privacy Policy (placeholder content)
-styles.css         All styling (brand colours + type from the style guide)
-script.js          Finance form modal + validation
-assets/reviews/    Customer photos (placeholders for now — see README there)
-eal_styleguide.pdf The brand identity guidelines
+index.html          Home page (header, hero, reviews, why-us, process, FAQ, footer, multi-step form)
+terms.html          Terms & Conditions (placeholder content)
+privacy.html        Privacy Policy (placeholder content)
+styles.css          All styling (brand colours + type from the style guide)
+script.js           Finance form (multi-step) + modal logic
+assets/             hero.jpg + reviews/ customer photos
+admin/              Leads dashboard (login, sortable table, click-into detail)
+functions/api/      /api/leads — Cloudflare Pages Function (save lead + email)
+schema.sql          Database table for leads (Cloudflare D1)
+wrangler.toml       Cloudflare Pages config
+CRM-SETUP.md        Step-by-step guide to turn on the CRM
+eal_styleguide.pdf  The brand identity guidelines
 ```
+
+## The finance form + CRM
+
+The "Apply" buttons open a multi-step form (loan type, amount slider, term,
+personal/business, car year for car loans, state, then contact details).
+
+On completion the lead is POSTed as JSON to `/api/leads`, which saves it to a
+database and emails a copy. You then view and manage leads at `/admin`.
+
+**This needs a one-time setup on Cloudflare Pages — see [CRM-SETUP.md](CRM-SETUP.md).**
+Until that's done, the form still works for previewing (it shows the success
+message but won't store the lead).
 
 ## Brand
 
@@ -34,23 +51,14 @@ The logo is faithfully recreated as an SVG mark + live text so it recolours
 cleanly (purple on white in the header, white reversed in the footer). To use
 your official logo artwork instead, replace the `.logo` markup.
 
-## Before you go live — replace the placeholders
+## Status
 
-Search the project for these markers:
+Done: phone (0402 083 863), email (info@easyasloans.com.au), customer photos,
+hero banner, and the multi-step form UI. To change a photo later, see
+`assets/reviews/README.txt`.
 
-| Marker | What to replace |
-| --- | --- |
-| `FORM_ENDPOINT` in `script.js` | Where finance enquiries should be sent (still to do) |
-
-Done: phone (0402 083 863), email (info@easyasloans.com.au) and the customer
-photos are all live. To change a photo later, see `assets/reviews/README.txt`.
-
-### Making the finance form actually send
-
-The form currently validates and shows a success message, but doesn't deliver
-the enquiry anywhere yet. Open `script.js` and set `FORM_ENDPOINT` to a form
-service URL (e.g. [Formspree](https://formspree.io), [Basin](https://usebasin.com),
-or your own endpoint). Once set, submissions are POSTed there.
+To do: complete the Cloudflare setup in [CRM-SETUP.md](CRM-SETUP.md) so leads
+are stored and emailed, and finalise the legal pages.
 
 ### Legal pages
 

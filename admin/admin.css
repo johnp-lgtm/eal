@@ -1,0 +1,98 @@
+/* Easy As Loans — admin dashboard styles (uses brand vars from styles.css) */
+
+body.admin { background: var(--bg-alt); }
+
+/* The [hidden] attribute must win over the display rules below */
+.admin-login[hidden], .admin-app[hidden], .drawer[hidden] { display: none !important; }
+
+/* ------------------------------ Login ---------------------------- */
+.admin-login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.login-card {
+  width: 100%; max-width: 400px; background: var(--white);
+  border: 1px solid var(--line); border-radius: 10px; padding: 36px 32px;
+  box-shadow: 0 18px 50px rgba(28,16,44,.10);
+  display: flex; flex-direction: column; gap: 14px; text-align: center;
+}
+.login-title { font-size: 1.5rem; font-weight: 800; color: var(--purple); }
+.login-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 6px; }
+.login-card .field { text-align: left; }
+
+/* ------------------------------ App bar -------------------------- */
+.admin-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  background: var(--purple); color: #fff; padding: 14px 24px;
+}
+.admin-bar-left { display: flex; align-items: baseline; gap: 14px; }
+.admin-bar .logo-easy { color: #fff; font-size: 1.3rem; }
+.admin-bar .logo-loans { color: rgba(255,255,255,.8); }
+.admin-title { font-weight: 700; color: rgba(255,255,255,.85); }
+.admin-bar-right { display: flex; align-items: center; gap: 10px; }
+.admin-count { font-size: 0.85rem; color: rgba(255,255,255,.8); margin-right: 4px; }
+.admin-bar .btn-ghost { color: #fff; border-color: rgba(255,255,255,.45); background: transparent; }
+.admin-bar .btn-ghost:hover { background: rgba(255,255,255,.10); border-color: #fff; }
+
+/* ----------------------------- Toolbar --------------------------- */
+.admin-toolbar { display: flex; gap: 12px; padding: 20px 24px 0; max-width: 1200px; margin: 0 auto; width: 100%; }
+.admin-search, .admin-filter {
+  font-family: inherit; font-size: 0.95rem; padding: 11px 14px;
+  border: 1px solid var(--line); border-radius: var(--radius); background: #fff; color: var(--ink);
+}
+.admin-search { flex: 1; }
+.admin-search:focus, .admin-filter:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 3px var(--purple-line); }
+
+/* ------------------------------ Table ---------------------------- */
+.admin-tablewrap { max-width: 1200px; margin: 18px auto 60px; padding: 0 24px; width: 100%; }
+.admin-table { width: 100%; border-collapse: collapse; background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.admin-table th, .admin-table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); font-size: 0.92rem; }
+.admin-table th { background: #faf9fc; font-weight: 800; color: var(--grey); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.admin-table th.num, .admin-table td.num { text-align: right; }
+.admin-table th.sortable { cursor: pointer; user-select: none; }
+.admin-table th.sortable:hover { color: var(--purple); }
+.admin-table th.sorted-asc::after { content: " ▲"; font-size: 0.7em; }
+.admin-table th.sorted-desc::after { content: " ▼"; font-size: 0.7em; }
+.admin-table tbody tr { cursor: pointer; }
+.admin-table tbody tr:hover { background: var(--purple-tint); }
+.admin-table tbody tr:last-child td { border-bottom: none; }
+.admin-name { font-weight: 700; color: var(--ink); }
+
+.badge { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 0.76rem; font-weight: 700; border: 1px solid; }
+.badge.New        { color: #1d6fb8; border-color: #bcdcf2; background: #eef6fc; }
+.badge.Contacted  { color: #8a5a00; border-color: #f0dcae; background: #fcf5e6; }
+.badge.Qualified  { color: #5a3a86; border-color: #ddccef; background: #f4eefb; }
+.badge.Won        { color: #1d7a4d; border-color: #b6e0c8; background: #eaf7f0; }
+.badge.Lost       { color: #9a3535; border-color: #e6c3c3; background: #fbeeee; }
+
+.admin-empty { text-align: center; color: var(--muted); padding: 40px 0; }
+
+/* ------------------------------ Drawer --------------------------- */
+.drawer { position: fixed; inset: 0; z-index: 100; }
+.drawer[hidden] { display: none; }
+.drawer-overlay { position: absolute; inset: 0; background: rgba(28,16,44,.5); }
+.drawer-panel {
+  position: absolute; top: 0; right: 0; height: 100%; width: 100%; max-width: 460px;
+  background: #fff; padding: 32px; overflow-y: auto; box-shadow: -10px 0 40px rgba(28,16,44,.2);
+  animation: drawer-in .22s ease;
+}
+@keyframes drawer-in { from { transform: translateX(20px); opacity: .6; } to { transform: none; opacity: 1; } }
+.drawer-close { position: absolute; top: 14px; right: 16px; width: 38px; height: 38px; border: none; background: transparent; font-size: 1.9rem; color: var(--muted); border-radius: 6px; cursor: pointer; }
+.drawer-close:hover { color: var(--purple); background: var(--purple-tint); }
+
+.detail-name { font-size: 1.5rem; font-weight: 800; color: var(--purple); }
+.detail-meta { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+.detail-section { margin-top: 24px; }
+.detail-section h3 { font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 800; margin-bottom: 10px; }
+.detail-row { display: flex; justify-content: space-between; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.detail-row .k { color: var(--grey); }
+.detail-row .v { font-weight: 700; color: var(--ink); text-align: right; word-break: break-word; }
+.detail-row .v a { color: var(--purple); }
+.detail-actions { margin-top: 26px; display: flex; align-items: center; gap: 10px; }
+.detail-actions label { font-size: 0.85rem; font-weight: 700; color: var(--ink); }
+.detail-actions select { font-family: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius); font-weight: 700; color: var(--ink); }
+.detail-actions select:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 3px var(--purple-line); }
+.detail-cta { margin-top: 22px; display: flex; gap: 10px; }
+
+@media (max-width: 640px) {
+  .admin-toolbar { flex-direction: column; }
+  .admin-table th:nth-child(4), .admin-table td:nth-child(4) { display: none; } /* hide Amount on small screens */
+  .drawer-panel { padding: 26px 20px; }
+}

@@ -1,7 +1,7 @@
 /* ===================================================================
    Easy As Loans — interactions
    - Finance enquiry modal (open/close, focus trap, ESC, scroll lock)
-   - Client-side form validation + submission
+   - Multi-step lead form (choices, sliders, chips) + submission
    - Footer year
    =================================================================== */
 
@@ -9,20 +9,20 @@
   "use strict";
 
   /* -----------------------------------------------------------------
-     FORM DELIVERY
+     LEAD DELIVERY
      ------------------------------------------------------------------
-     Right now the form validates and shows a success message, but it
-     does NOT yet send the enquiry anywhere. To receive submissions,
-     set FORM_ENDPOINT to a form-handling URL (e.g. Formspree, Basin,
-     your own endpoint). When set, the form will POST the fields there.
-     Leave it null to keep the demo (success message only).
-     Example: var FORM_ENDPOINT = "https://formspree.io/f/yourid";
+     Completed leads are POSTed as JSON to LEAD_ENDPOINT. In production
+     this is the Cloudflare Pages Function at /api/leads, which saves
+     the lead to the database (so it shows in /admin) and emails a copy.
+     If the endpoint isn't reachable (e.g. opening index.html directly
+     from disk before deployment), the form still completes in "demo
+     mode" so it can be previewed.
      ----------------------------------------------------------------- */
-  var FORM_ENDPOINT = null;
+  var LEAD_ENDPOINT = "/api/leads";
 
   /* ----------------------------- Year ----------------------------- */
-  var yearEl = document.querySelector(".js-year");
-  if (yearEl) { yearEl.textContent = new Date().getFullYear(); }
+  var yearEl = document.querySelectorAll(".js-year");
+  yearEl.forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
   /* ----------------------------- Modal ---------------------------- */
   var modal = document.getElementById("finance-modal");
@@ -32,19 +32,159 @@
   var successContent = modal.querySelector(".js-form-success");
   var form = modal.querySelector(".js-finance-form");
   var errorMsg = modal.querySelector(".js-form-error");
+  var backBtn = modal.querySelector(".js-back");
+  var stepLabel = modal.querySelector(".js-step-label");
+  var progressBar = modal.querySelector(".js-progress");
   var lastFocused = null;
 
   var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
+  /* ------------------------- Step engine -------------------------- */
+  var lead = {};
+  var allSteps = Array.prototype.slice.call(form.querySelectorAll(".form-step"));
+  var currentKey = null;
+
+  // Set the car-year slider range to current year + 1
+  (function initYearSlider() {
+    var yearSlider = form.querySelector('[data-field="carYear"]');
+    if (!yearSlider) { return; }
+    var max = new Date().getFullYear() + 1;
+    yearSlider.max = String(max);
+    yearSlider.value = String(max - 3);
+    var maxLabel = form.querySelector(".js-year-max");
+    if (maxLabel) { maxLabel.textContent = String(max); }
+    var out = form.querySelector(".js-year-out");
+    if (out) { out.textContent = yearSlider.value; }
+  })();
+
+  function keyOf(section) { return section.getAttribute("data-step"); }
+
+  // The active sequence of steps, skipping any conditional step that
+  // doesn't match the current answers (carYear only for car loans).
+  function flow() {
+    return allSteps.filter(function (s) {
+      var cond = s.getAttribute("data-conditional");
+      if (!cond) { return true; }
+      return lead.loanType === cond;
+    });
+  }
+
+  function formatMoney(n) {
+    var v = Number(n) || 0;
+    var s = "$" + v.toLocaleString("en-AU");
+    return v >= 150000 ? s + "+" : s;
+  }
+
+  // Reflect stored answers back into a step's controls (for going Back)
+  function reflectStep(section) {
+    var key = keyOf(section);
+    // choices / chips
+    section.querySelectorAll(".js-choice").forEach(function (btn) {
+      var field = btn.getAttribute("data-field");
+      btn.classList.toggle("is-selected", String(lead[field]) === btn.getAttribute("data-value"));
+    });
+    // sliders
+    var slider = section.querySelector(".js-slider");
+    if (slider) {
+      var field = slider.getAttribute("data-field");
+      if (lead[field] != null) { slider.value = String(lead[field]); }
+      updateSliderReadout(slider);
+    }
+    // detail inputs
+    section.querySelectorAll("[data-field]").forEach(function (input) {
+      if (input.tagName === "INPUT" && input.type !== "range") {
+        var f = input.getAttribute("data-field");
+        if (lead[f] != null) { input.value = lead[f]; }
+      }
+    });
+  }
+
+  function updateSliderReadout(slider) {
+    var field = slider.getAttribute("data-field");
+    if (field === "loanAmount") {
+      var out = form.querySelector(".js-amount-out");
+      if (out) { out.textContent = formatMoney(slider.value); }
+    } else if (field === "carYear") {
+      var yo = form.querySelector(".js-year-out");
+      if (yo) { yo.textContent = slider.value; }
+    }
+  }
+
+  function showStep(key) {
+    var seq = flow();
+    var section = allSteps.filter(function (s) { return keyOf(s) === key; })[0];
+    if (!section) { return; }
+    currentKey = key;
+
+    allSteps.forEach(function (s) { s.classList.toggle("is-active", s === section); });
+    reflectStep(section);
+
+    var pos = seq.indexOf(section);
+    var total = seq.length;
+    progressBar.style.width = Math.round(((pos + 1) / total) * 100) + "%";
+    stepLabel.textContent = "Step " + (pos + 1) + " of " + total;
+    backBtn.hidden = pos === 0;
+    if (errorMsg) { errorMsg.hidden = true; }
+
+    // Focus the first interactive control (or the heading) for accessibility
+    window.setTimeout(function () {
+      var focusTarget = section.querySelector(".js-choice, .js-slider, input:not([type=hidden]), .js-next");
+      if (focusTarget) { focusTarget.focus({ preventScroll: true }); }
+      section.scrollIntoView({ block: "nearest" });
+    }, 30);
+  }
+
+  function goNext() {
+    var seq = flow();
+    var pos = seq.map(keyOf).indexOf(currentKey);
+    if (pos < seq.length - 1) { showStep(keyOf(seq[pos + 1])); }
+  }
+
+  function goBack() {
+    var seq = flow();
+    var pos = seq.map(keyOf).indexOf(currentKey);
+    if (pos > 0) { showStep(keyOf(seq[pos - 1])); }
+  }
+
+  // Choice / chip selection -> store + auto-advance
+  form.querySelectorAll(".js-choice").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var field = btn.getAttribute("data-field");
+      var value = btn.getAttribute("data-value");
+      lead[field] = (field === "loanTerm" || field === "carYear") ? Number(value) : value;
+      // visual selection within this step
+      var parent = btn.closest(".form-step");
+      parent.querySelectorAll('.js-choice[data-field="' + field + '"]').forEach(function (b) {
+        b.classList.toggle("is-selected", b === btn);
+      });
+      window.setTimeout(goNext, 180);
+    });
+  });
+
+  // Sliders -> live readout + store
+  form.querySelectorAll(".js-slider").forEach(function (slider) {
+    var field = slider.getAttribute("data-field");
+    lead[field] = Number(slider.value);
+    slider.addEventListener("input", function () {
+      lead[field] = Number(slider.value);
+      updateSliderReadout(slider);
+    });
+  });
+
+  // Continue buttons
+  form.querySelectorAll(".js-next").forEach(function (btn) {
+    btn.addEventListener("click", goNext);
+  });
+  backBtn.addEventListener("click", goBack);
+
+  /* --------------------------- Modal open/close ------------------- */
   function openModal() {
     lastFocused = document.activeElement;
     modal.hidden = false;
     document.body.classList.add("body-lock");
-    // Always show the form (reset from any previous success state)
     formContent.hidden = false;
     successContent.hidden = true;
-    var first = modal.querySelector("#f-name");
-    if (first) { window.setTimeout(function () { first.focus(); }, 30); }
+    showStep(keyOf(flow()[0]));
     document.addEventListener("keydown", onKeydown);
   }
 
@@ -58,99 +198,123 @@
   function onKeydown(e) {
     if (e.key === "Escape") { closeModal(); return; }
     if (e.key !== "Tab") { return; }
-    // Simple focus trap
-    var nodes = Array.prototype.slice
-      .call(modal.querySelectorAll(FOCUSABLE))
+    var nodes = Array.prototype.slice.call(modal.querySelectorAll(FOCUSABLE))
       .filter(function (n) { return n.offsetParent !== null; });
     if (!nodes.length) { return; }
-    var firstNode = nodes[0];
-    var lastNode = nodes[nodes.length - 1];
-    if (e.shiftKey && document.activeElement === firstNode) {
-      e.preventDefault(); lastNode.focus();
-    } else if (!e.shiftKey && document.activeElement === lastNode) {
-      e.preventDefault(); firstNode.focus();
-    }
+    var first = nodes[0], last = nodes[nodes.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   }
 
-  // Open triggers
   document.querySelectorAll(".js-open-form").forEach(function (btn) {
-    btn.addEventListener("click", function (e) {
-      e.preventDefault();
-      openModal();
-    });
+    btn.addEventListener("click", function (e) { e.preventDefault(); openModal(); });
   });
-
-  // Close triggers
   modal.querySelectorAll(".js-close-form").forEach(function (btn) {
     btn.addEventListener("click", closeModal);
-  });
-
-  /* --------------------------- Validation ------------------------- */
-  function validate() {
-    var ok = true;
-    var requiredFields = form.querySelectorAll("[required]");
-    requiredFields.forEach(function (el) {
-      var valid = el.type === "checkbox" ? el.checked : String(el.value).trim() !== "";
-      if (el.type === "email" && valid) {
-        valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
-      }
-      if (!valid) { ok = false; el.classList.add("invalid"); }
-      else { el.classList.remove("invalid"); }
-    });
-    return ok;
-  }
-
-  // Clear the invalid state as the user fixes a field
-  form.addEventListener("input", function (e) {
-    if (e.target.classList.contains("invalid")) {
-      e.target.classList.remove("invalid");
-    }
   });
 
   /* --------------------------- Submission ------------------------- */
   form.addEventListener("submit", function (e) {
     e.preventDefault();
-    errorMsg.hidden = true;
+    if (errorMsg) { errorMsg.hidden = true; }
 
-    if (!validate()) {
+    // Capture detail fields
+    var details = form.querySelector('[data-step="details"]');
+    details.querySelectorAll("[data-field]").forEach(function (input) {
+      lead[input.getAttribute("data-field")] = input.value.trim();
+    });
+    var consent = details.querySelector(".js-consent");
+    lead.consent = !!(consent && consent.checked);
+
+    // Validate the final step
+    var problems = [];
+    if (!lead.fullName) { problems.push("name"); }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lead.email || "")) { problems.push("email"); }
+    if (!lead.mobile || lead.mobile.replace(/\D/g, "").length < 8) { problems.push("mobile"); }
+    if (!lead.consent) { problems.push("consent"); }
+
+    details.querySelectorAll("[data-field]").forEach(function (input) {
+      var f = input.getAttribute("data-field");
+      input.classList.toggle("invalid", problems.indexOf(f) !== -1);
+    });
+
+    if (problems.length) {
+      errorMsg.textContent = problems.indexOf("consent") !== -1 && problems.length === 1
+        ? "Please tick the box so we can contact you."
+        : "Please check the highlighted fields.";
       errorMsg.hidden = false;
-      var firstInvalid = form.querySelector(".invalid");
-      if (firstInvalid) { firstInvalid.focus(); }
+      var firstBad = details.querySelector(".invalid");
+      if (firstBad) { firstBad.focus(); }
       return;
     }
 
+    var payload = buildPayload();
     var submitBtn = form.querySelector(".js-submit");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending…";
 
-    function showSuccess() {
-      formContent.hidden = true;
-      successContent.hidden = false;
-      form.reset();
-      successContent.scrollIntoView({ block: "nearest" });
-    }
-
-    if (FORM_ENDPOINT) {
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Sending…";
-      fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Accept": "application/json" },
-        body: new FormData(form)
+    submitLead(payload)
+      .then(showSuccess)
+      .catch(function (err) {
+        if (err && err.demo) { showSuccess(); return; } // no backend yet (preview)
+        errorMsg.textContent = "Sorry — something went wrong. Please call us on 0402 083 863 and we'll sort it out.";
+        errorMsg.hidden = false;
       })
-        .then(function (res) {
-          if (!res.ok) { throw new Error("Network response was not ok"); }
-          showSuccess();
-        })
-        .catch(function () {
-          errorMsg.textContent = "Sorry — something went wrong. Please call us and we'll sort it out.";
-          errorMsg.hidden = false;
-        })
-        .finally(function () {
-          submitBtn.disabled = false;
-          submitBtn.textContent = "Submit enquiry";
-        });
-    } else {
-      // Demo mode: no endpoint configured yet.
-      showSuccess();
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit my application";
+      });
+  });
+
+  // Clear the invalid state as the user types
+  form.addEventListener("input", function (e) {
+    if (e.target.classList && e.target.classList.contains("invalid")) {
+      e.target.classList.remove("invalid");
     }
   });
+
+  function buildPayload() {
+    var p = {
+      loanType: lead.loanType || "",
+      loanAmount: lead.loanAmount || null,
+      loanTerm: lead.loanTerm || null,
+      use: lead.use || "",
+      state: lead.state || "",
+      fullName: lead.fullName || "",
+      email: lead.email || "",
+      mobile: lead.mobile || "",
+      consent: !!lead.consent,
+      submittedAt: new Date().toISOString(),
+      source: "easyasloans.com.au",
+      pageUrl: window.location.href
+    };
+    if (lead.loanType === "Car loan") { p.carYear = lead.carYear || null; }
+    var hp = form.querySelector(".js-hp");
+    if (hp && hp.value) { p.website = hp.value; } // honeypot
+    return p;
+  }
+
+  function submitLead(payload) {
+    return fetch(LEAD_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(payload)
+    }).then(function (res) {
+      if (!res.ok) { throw new Error("Bad response " + res.status); }
+      return res.json().catch(function () { return {}; });
+    }).catch(function (err) {
+      // Network failure (e.g. no backend in local preview) -> demo mode
+      if (err instanceof TypeError) { var e = new Error("demo"); e.demo = true; throw e; }
+      throw err;
+    });
+  }
+
+  function showSuccess() {
+    formContent.hidden = true;
+    successContent.hidden = false;
+    successContent.scrollIntoView({ block: "nearest" });
+    // Reset for next time
+    lead = {};
+    form.reset();
+  }
 })();

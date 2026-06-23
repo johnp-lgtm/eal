@@ -286,70 +286,129 @@
       <button type="button" class="modal-close js-close-form" aria-label="Close form">&times;</button>
 
       <div class="modal-content js-form-content">
-        <h2 class="modal-title" id="finance-modal-title">Start your application</h2>
-        <p class="modal-sub">Fill in a few details and we'll be in touch shortly. It only takes a minute, and enquiring won't affect your credit score.</p>
+        <div class="form-top">
+          <button type="button" class="form-back js-back" hidden>&larr; Back</button>
+          <span class="form-step-label js-step-label">Step 1 of 6</span>
+        </div>
+        <div class="form-progress"><div class="form-progress-bar js-progress"></div></div>
 
-        <form class="finance-form js-finance-form" novalidate>
-          <div class="field">
-            <label for="f-name">Full name <span class="req">*</span></label>
-            <input type="text" id="f-name" name="name" autocomplete="name" required />
-          </div>
+        <form class="lead-form js-finance-form" novalidate>
 
-          <div class="field-row">
+          <!-- Step 1: loan type -->
+          <section class="form-step is-active" data-step="loanType">
+            <h2 class="step-title" id="finance-modal-title">What kind of loan are you after?</h2>
+            <p class="step-sub">Pick one to begin — it only takes a minute.</p>
+            <div class="choice-grid two">
+              <button type="button" class="choice js-choice" data-field="loanType" data-value="Car loan">
+                <span class="choice-title">Car loan</span>
+                <span class="choice-desc">Car, ute, 4WD, bike or boat</span>
+              </button>
+              <button type="button" class="choice js-choice" data-field="loanType" data-value="Personal loan">
+                <span class="choice-title">Personal loan</span>
+                <span class="choice-desc">Renovations, travel, debt &amp; more</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Step 2: loan amount (slider) -->
+          <section class="form-step" data-step="loanAmount">
+            <h2 class="step-title">How much would you like to borrow?</h2>
+            <p class="step-sub">Drag the slider — a rough figure is fine.</p>
+            <div class="slider-value js-amount-out">$30,000</div>
+            <input type="range" class="slider js-slider" data-field="loanAmount" min="5000" max="150000" step="1000" value="30000" aria-label="Loan amount" />
+            <div class="slider-ends"><span>$5k</span><span>$150k+</span></div>
+            <div class="step-actions">
+              <button type="button" class="btn btn-primary btn-lg btn-block js-next">Continue</button>
+            </div>
+          </section>
+
+          <!-- Step 3: loan term (chips) -->
+          <section class="form-step" data-step="loanTerm">
+            <h2 class="step-title">Over how many years?</h2>
+            <p class="step-sub">Most loans run between 1 and 7 years.</p>
+            <div class="chip-grid">
+              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="1">1 year</button>
+              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="2">2 years</button>
+              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="3">3 years</button>
+              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="4">4 years</button>
+              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="5">5 years</button>
+              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="6">6 years</button>
+              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="7">7 years</button>
+            </div>
+          </section>
+
+          <!-- Step 4: personal or business -->
+          <section class="form-step" data-step="use">
+            <h2 class="step-title">Is this for personal or business use?</h2>
+            <div class="choice-grid two">
+              <button type="button" class="choice js-choice" data-field="use" data-value="Personal">
+                <span class="choice-title">Personal</span>
+                <span class="choice-desc">For you or your household</span>
+              </button>
+              <button type="button" class="choice js-choice" data-field="use" data-value="Business">
+                <span class="choice-title">Business</span>
+                <span class="choice-desc">For your business or ABN</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Step 5: car year (slider) — only shown for car loans -->
+          <section class="form-step" data-step="carYear" data-conditional="Car loan">
+            <h2 class="step-title">What year is the car?</h2>
+            <p class="step-sub">A rough year is fine if you're still looking.</p>
+            <div class="slider-value js-year-out">2020</div>
+            <input type="range" class="slider js-slider" data-field="carYear" min="1990" max="2026" step="1" value="2020" aria-label="Car year" />
+            <div class="slider-ends"><span>1990</span><span class="js-year-max">2026</span></div>
+            <div class="step-actions">
+              <button type="button" class="btn btn-primary btn-lg btn-block js-next">Continue</button>
+            </div>
+          </section>
+
+          <!-- Step 6: state (chips) -->
+          <section class="form-step" data-step="state">
+            <h2 class="step-title">Which state are you in?</h2>
+            <p class="step-sub">So we match you with the right lenders.</p>
+            <div class="chip-grid states">
+              <button type="button" class="chip js-choice" data-field="state" data-value="SA">SA</button>
+              <button type="button" class="chip js-choice" data-field="state" data-value="NSW">NSW</button>
+              <button type="button" class="chip js-choice" data-field="state" data-value="VIC">VIC</button>
+              <button type="button" class="chip js-choice" data-field="state" data-value="QLD">QLD</button>
+              <button type="button" class="chip js-choice" data-field="state" data-value="WA">WA</button>
+              <button type="button" class="chip js-choice" data-field="state" data-value="TAS">TAS</button>
+              <button type="button" class="chip js-choice" data-field="state" data-value="ACT">ACT</button>
+              <button type="button" class="chip js-choice" data-field="state" data-value="NT">NT</button>
+            </div>
+          </section>
+
+          <!-- Step 7: contact details -->
+          <section class="form-step" data-step="details">
+            <h2 class="step-title">Last step — how do we reach you?</h2>
+            <p class="step-sub">We'll be in touch shortly. Enquiring won't affect your credit score.</p>
+            <!-- Honeypot: hidden from people, catches bots. Do not remove. -->
+            <input type="text" class="js-hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
             <div class="field">
-              <label for="f-phone">Mobile <span class="req">*</span></label>
-              <input type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel" required />
+              <label for="f-name">Full name <span class="req">*</span></label>
+              <input type="text" id="f-name" data-field="fullName" autocomplete="name" required />
             </div>
             <div class="field">
               <label for="f-email">Email <span class="req">*</span></label>
-              <input type="email" id="f-email" name="email" autocomplete="email" required />
-            </div>
-          </div>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="f-finance">What are you financing?</label>
-              <select id="f-finance" name="financing">
-                <option value="Car">Car</option>
-                <option value="Ute / 4WD">Ute / 4WD</option>
-                <option value="Caravan / Boat">Caravan / Boat</option>
-                <option value="Motorbike">Motorbike</option>
-                <option value="Personal loan">Personal loan</option>
-                <option value="Business">Business</option>
-                <option value="Other">Other</option>
-              </select>
+              <input type="email" id="f-email" data-field="email" autocomplete="email" required />
             </div>
             <div class="field">
-              <label for="f-employment">Employment</label>
-              <select id="f-employment" name="employment">
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
-                <option value="Casual">Casual</option>
-                <option value="Self-employed">Self-employed</option>
-                <option value="Visa holder">Visa holder</option>
-                <option value="Other">Other</option>
-              </select>
+              <label for="f-mobile">Mobile <span class="req">*</span></label>
+              <input type="tel" id="f-mobile" data-field="mobile" autocomplete="tel" inputmode="tel" required />
             </div>
-          </div>
+            <label class="field-check">
+              <input type="checkbox" class="js-consent" required />
+              <span>I'd like Easy As Loans to contact me about my enquiry. <span class="req">*</span></span>
+            </label>
+            <div class="step-actions">
+              <button type="submit" class="btn btn-primary btn-lg btn-block js-submit">Submit my application</button>
+            </div>
+            <p class="form-foot">We'll never share your details. This enquiry won't affect your credit score.</p>
+            <p class="form-error js-form-error" role="alert" hidden></p>
+          </section>
 
-          <div class="field">
-            <label for="f-amount">Approximate amount (optional)</label>
-            <input type="text" id="f-amount" name="amount" inputmode="numeric" placeholder="e.g. $25,000" />
-          </div>
-
-          <div class="field">
-            <label for="f-message">Anything you'd like us to know? (optional)</label>
-            <textarea id="f-message" name="message" rows="3" placeholder="Your situation, the car you're after, timing…"></textarea>
-          </div>
-
-          <label class="field-check">
-            <input type="checkbox" id="f-consent" name="consent" required />
-            <span>I'd like Easy As Loans to contact me about my enquiry. <span class="req">*</span></span>
-          </label>
-
-          <button type="submit" class="btn btn-primary btn-lg btn-block js-submit">Submit enquiry</button>
-          <p class="form-foot">We'll never share your details. This enquiry won't affect your credit score.</p>
-          <p class="form-error js-form-error" role="alert" hidden>Please complete the required fields marked *.</p>
         </form>
       </div>
 
@@ -359,6 +418,7 @@
           <svg viewBox="0 0 52 52"><path class="logo-stroke" d="M14 27 l8 8 l16 -18" /></svg>
         </div>
         <h2 class="modal-title">Thanks — we've got it.</h2>
+        <p class="modal-sub">One of our team will be in touch very soon. If you'd rather talk now, give us a call on <a href="tel:+61402083863">0402 083 863</a>.</p>
         <button type="button" class="btn btn-ghost js-close-form">Close</button>
       </div>
     </div>
