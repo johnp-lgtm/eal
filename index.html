@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Easy As Loans — Car &amp; Finance Brokers | Adelaide</title>
+  <meta name="description" content="Easy As Loans are Adelaide finance brokers with 15+ years' experience. Fast approvals, every situation welcome, and we're careful with your credit file. Real people, no call centres." />
+
+  <!-- ============================================================
+       NOTE FOR EASY AS LOANS:
+       Items marked PLACEHOLDER below should be replaced with your
+       real details before going live:
+         • Phone number       (search: PLACEHOLDER-PHONE)
+         • Email address       (search: PLACEHOLDER-EMAIL)
+         • Customer review photos  (see /assets/reviews/README.txt)
+         • Finance form delivery   (see /script.js -> FORM_ENDPOINT)
+         • Official logo file       (currently faithfully recreated
+                                     in SVG + live text below)
+       ============================================================ -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#top" class="logo" aria-label="Easy As Loans home">
+        <!-- Roofline mark (recreated from brand style guide) -->
+        <svg class="logo-mark" viewBox="0 0 210 120" role="img" aria-hidden="true" focusable="false">
+          <path class="logo-stroke" d="M8 92 L98 24 L126 47 L126 32 L146 32 L146 51 C166 68 188 74 204 64"/>
+          <path class="logo-stroke" d="M8 101 C72 95 122 94 152 79 C172 69 190 68 204 64"/>
+        </svg>
+        <span class="logo-words">
+          <span class="logo-easy">easy as</span>
+          <span class="logo-loans">LOANS</span>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <a class="header-phone" href="tel:+61800000000">
+          <span class="header-phone-label">Talk to a real person</span>
+          <!-- PLACEHOLDER-PHONE -->
+          <span class="header-phone-number">(08) 0000 0000</span>
+        </a>
+        <button type="button" class="btn btn-primary js-open-form">Apply now</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ============================ HERO ============================ -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <p class="eyebrow">Adelaide finance brokers · 15+ years</p>
+        <h1 class="hero-title">Finance, made&nbsp;easy&nbsp;as.</h1>
+        <p class="hero-lead">
+          We're a small Adelaide team who get good people into the right loan —
+          quickly, honestly, and without hammering your credit file. No call
+          centres, no run-around. Just us, helping you every step of the way.
+        </p>
+        <div class="hero-cta">
+          <button type="button" class="btn btn-primary btn-lg js-open-form">Start your application</button>
+          <!-- PLACEHOLDER-PHONE -->
+          <a class="btn btn-ghost btn-lg" href="tel:+61800000000">Or call (08) 0000 0000</a>
+        </div>
+        <p class="hero-note">Enquiring won't affect your credit score.</p>
+      </div>
+    </section>
+
+    <!-- ====================== REVIEWS / MARQUEE ====================== -->
+    <section class="reviews" aria-label="Customer reviews">
+      <div class="container reviews-head">
+        <h2 class="section-title">Real customers. Real cars.</h2>
+        <p class="section-sub">
+          Fifteen years of handshakes, keys and happy drive-aways. Here are a
+          few of the people we've helped.
+        </p>
+      </div>
+
+      <!-- Auto-scrolling, infinite. The track is duplicated for a seamless loop. -->
+      <div class="marquee" aria-hidden="false">
+        <div class="marquee-track js-marquee-track">
+          <!-- Set A -->
+          <figure class="review-card">
+            <img class="review-photo" src="assets/reviews/review-1.svg" alt="Easy As Loans customer with their car" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
+              <span class="review-name">Sarah &amp; the new Hilux</span>
+              <span class="review-quote">“Approved in a day. Couldn't believe how easy.”</span>
+            </figcaption>
+          </figure>
+          <figure class="review-card">
+            <img class="review-photo" src="assets/reviews/review-2.svg" alt="Easy As Loans customer with their car" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
+              <span class="review-name">Daniel · first car</span>
+              <span class="review-quote">“They actually cared. Worth every star.”</span>
+            </figcaption>
+          </figure>
+          <figure class="review-card">
+            <img class="review-photo" src="assets/reviews/review-3.svg" alt="Easy As Loans customer with their car" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
+              <span class="review-name">Priya's Mazda</span>
+              <span class="review-quote">“On a visa and still sorted. Legends.”</span>
+            </figcaption>
+          </figure>
+          <figure class="review-card">
+            <img class="review-photo" src="assets/reviews/review-4.svg" alt="Easy As Loans customer with their car" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
+              <span class="review-name">The Nguyen family</span>
+              <span class="review-quote">“Honest, fast and friendly. Highly recommend.”</span>
+            </figcaption>
+          </figure>
+          <figure class="review-card">
+            <img class="review-photo" src="assets/reviews/review-5.svg" alt="Easy As Loans customer with their car" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
+              <span class="review-name">Marco's ute</span>
+              <span class="review-quote">“Casual work, no worries for these guys.”</span>
+            </figcaption>
+          </figure>
+          <figure class="review-card">
+            <img class="review-photo" src="assets/reviews/review-6.svg" alt="Easy As Loans customer with their car" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars" aria-label="5 out of 5 stars">★★★★★</span>
+              <span class="review-name">Beth &amp; the Subaru</span>
+              <span class="review-quote">“Made a stressful thing feel easy as.”</span>
+            </figcaption>
+          </figure>
+          <!-- Set B (duplicate of A, hidden from screen readers, for seamless loop) -->
+          <figure class="review-card" aria-hidden="true">
+            <img class="review-photo" src="assets/reviews/review-1.svg" alt="" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-name">Sarah &amp; the new Hilux</span>
+              <span class="review-quote">“Approved in a day. Couldn't believe how easy.”</span>
+            </figcaption>
+          </figure>
+          <figure class="review-card" aria-hidden="true">
+            <img class="review-photo" src="assets/reviews/review-2.svg" alt="" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-name">Daniel · first car</span>
+              <span class="review-quote">“They actually cared. Worth every star.”</span>
+            </figcaption>
+          </figure>
+          <figure class="review-card" aria-hidden="true">
+            <img class="review-photo" src="assets/reviews/review-3.svg" alt="" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-name">Priya's Mazda</span>
+              <span class="review-quote">“On a visa and still sorted. Legends.”</span>
+            </figcaption>
+          </figure>
+          <figure class="review-card" aria-hidden="true">
+            <img class="review-photo" src="assets/reviews/review-4.svg" alt="" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-name">The Nguyen family</span>
+              <span class="review-quote">“Honest, fast and friendly. Highly recommend.”</span>
+            </figcaption>
+          </figure>
+          <figure class="review-card" aria-hidden="true">
+            <img class="review-photo" src="assets/reviews/review-5.svg" alt="" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-name">Marco's ute</span>
+              <span class="review-quote">“Casual work, no worries for these guys.”</span>
+            </figcaption>
+          </figure>
+          <figure class="review-card" aria-hidden="true">
+            <img class="review-photo" src="assets/reviews/review-6.svg" alt="" loading="lazy" />
+            <figcaption class="review-cap">
+              <span class="review-stars">★★★★★</span>
+              <span class="review-name">Beth &amp; the Subaru</span>
+              <span class="review-quote">“Made a stressful thing feel easy as.”</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== WHY CHOOSE US ======================== -->
+    <section class="why" id="why">
+      <div class="container">
+        <h2 class="section-title">Why people choose us</h2>
+        <p class="section-sub">
+          We've been doing this a long time. The reason people come back — and
+          send their mates — comes down to a few simple things.
+        </p>
+
+        <div class="why-grid">
+          <article class="why-item">
+            <h3 class="why-heading">Fast approvals</h3>
+            <p>We move quickly and chase the lenders so you don't have to. Many of our customers are approved the same day.</p>
+          </article>
+          <article class="why-item">
+            <h3 class="why-heading">Careful with your credit</h3>
+            <p>We're conscious of your credit file from the very first call, and we won't do anything that needlessly marks it.</p>
+          </article>
+          <article class="why-item">
+            <h3 class="why-heading">Every situation welcome</h3>
+            <p>Casual employment, visas, low credit, self-employed — we've seen it all and we know how to find a way forward.</p>
+          </article>
+          <article class="why-item">
+            <h3 class="why-heading">Real people, no call centres</h3>
+            <p>You deal with us, personally, here in Adelaide. The same friendly faces from your first question to your last.</p>
+          </article>
+          <article class="why-item">
+            <h3 class="why-heading">15+ years of trust</h3>
+            <p>We've built this business on doing right by people. Speed and honesty, every single time.</p>
+          </article>
+          <article class="why-item">
+            <h3 class="why-heading">We genuinely love cars</h3>
+            <p>Getting you into the right car is the best part of our day. We're as excited about it as you are.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================= OUR PROCESS ========================= -->
+    <section class="process" id="process">
+      <div class="container">
+        <h2 class="section-title">How it works</h2>
+        <p class="section-sub">Four simple steps from "I'm thinking about it" to keys in hand.</p>
+
+        <ol class="process-steps">
+          <li class="process-step">
+            <span class="process-num">01</span>
+            <h3 class="process-heading">Have a chat</h3>
+            <p>Tell us what you're after. A quick application or phone call is all it takes to get started.</p>
+          </li>
+          <li class="process-step">
+            <span class="process-num">02</span>
+            <h3 class="process-heading">We do the legwork</h3>
+            <p>We match you to the right lender for your situation — protecting your credit file as we go.</p>
+          </li>
+          <li class="process-step">
+            <span class="process-num">03</span>
+            <h3 class="process-heading">Get approved</h3>
+            <p>We come back to you fast with a clear answer and a deal that genuinely suits you.</p>
+          </li>
+          <li class="process-step">
+            <span class="process-num">04</span>
+            <h3 class="process-heading">Drive away</h3>
+            <p>Paperwork sorted, settlement done. You're in the car — easy as.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================ FAQ ============================ -->
+    <section class="faq" id="faq">
+      <div class="container faq-inner">
+        <h2 class="section-title">Common questions</h2>
+
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Will applying affect my credit score?</summary>
+            <div class="faq-body"><p>Making an enquiry with us won't affect your credit score. We're careful with your credit file at every stage and will always talk you through anything before it happens.</p></div>
+          </details>
+          <details class="faq-item">
+            <summary>I'm on a casual contract or a visa — can you still help?</summary>
+            <div class="faq-body"><p>Absolutely. Casual employment, visa holders, self-employed, new to the country — these are situations we deal with all the time and know how to navigate.</p></div>
+          </details>
+          <details class="faq-item">
+            <summary>My credit isn't perfect. Is it worth applying?</summary>
+            <div class="faq-body"><p>Yes. We can handle just about every situation there is, including low or impaired credit. Have a chat with us and we'll give you an honest read on your options.</p></div>
+          </details>
+          <details class="faq-item">
+            <summary>How fast can I be approved?</summary>
+            <div class="faq-body"><p>We move quickly. Many customers receive an answer the same day. The sooner we have your details, the sooner we can get to work.</p></div>
+          </details>
+          <details class="faq-item">
+            <summary>What can I finance?</summary>
+            <div class="faq-body"><p>Cars are our bread and butter, but we also arrange finance for utes, caravans, boats, bikes and personal lending. If you're not sure, just ask.</p></div>
+          </details>
+          <details class="faq-item">
+            <summary>Are you licensed?</summary>
+            <div class="faq-body"><p>Yes. Easy As Loans holds Australian Credit Licence (ACL) 477976 and operates under ABN 77 590 660 633.</p></div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================== CTA BAND ========================== -->
+    <section class="cta-band">
+      <div class="container cta-inner">
+        <h2 class="cta-title">Ready when you are.</h2>
+        <p class="cta-text">Start your application now, or pick up the phone — whatever's easiest.</p>
+        <div class="cta-actions">
+          <button type="button" class="btn btn-light btn-lg js-open-form">Start your application</button>
+          <!-- PLACEHOLDER-PHONE -->
+          <a class="btn btn-outline-light btn-lg" href="tel:+61800000000">(08) 0000 0000</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <a href="#top" class="logo logo-reversed" aria-label="Easy As Loans home">
+          <svg class="logo-mark" viewBox="0 0 210 120" role="img" aria-hidden="true" focusable="false">
+            <path class="logo-stroke" d="M8 92 L98 24 L126 47 L126 32 L146 32 L146 51 C166 68 188 74 204 64"/>
+            <path class="logo-stroke" d="M8 101 C72 95 122 94 152 79 C172 69 190 68 204 64"/>
+          </svg>
+          <span class="logo-words">
+            <span class="logo-easy">easy as</span>
+            <span class="logo-loans">LOANS</span>
+          </span>
+        </a>
+        <p class="footer-tag">Adelaide finance brokers. Real people, fast approvals, honest advice.</p>
+      </div>
+
+      <nav class="footer-col" aria-label="Site">
+        <h4 class="footer-h">Explore</h4>
+        <a href="#why">Why choose us</a>
+        <a href="#process">How it works</a>
+        <a href="#faq">FAQs</a>
+        <a href="#" class="js-open-form">Apply now</a>
+      </nav>
+
+      <nav class="footer-col" aria-label="Legal">
+        <h4 class="footer-h">Legal</h4>
+        <a href="terms.html">Terms &amp; Conditions</a>
+        <a href="privacy.html">Privacy Policy</a>
+      </nav>
+
+      <div class="footer-col">
+        <h4 class="footer-h">Get in touch</h4>
+        <!-- PLACEHOLDER-PHONE -->
+        <a href="tel:+61800000000">(08) 0000 0000</a>
+        <!-- PLACEHOLDER-EMAIL -->
+        <a href="mailto:hello@easyasloans.com.au">hello@easyasloans.com.au</a>
+        <span class="footer-static">Adelaide, South Australia</span>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <div class="container">
+        <p class="footer-licence">
+          Easy As Loans · Australian Credit Licence (ACL) 477976 · ABN 77 590 660 633
+        </p>
+        <p class="footer-disclaimer">
+          Easy As Loans is a finance broker, not a lender. Applications are subject to the lender's
+          terms, conditions, fees and eligibility criteria. Any information on this website is general
+          in nature and does not take into account your personal circumstances.
+        </p>
+        <p class="footer-copy">© <span class="js-year">2026</span> Easy As Loans. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ====================== FINANCE FORM MODAL ====================== -->
+  <div class="modal" id="finance-modal" role="dialog" aria-modal="true" aria-labelledby="finance-modal-title" hidden>
+    <div class="modal-overlay js-close-form" tabindex="-1"></div>
+    <div class="modal-panel" role="document">
+      <button type="button" class="modal-close js-close-form" aria-label="Close form">&times;</button>
+
+      <div class="modal-content js-form-content">
+        <h2 class="modal-title" id="finance-modal-title">Start your application</h2>
+        <p class="modal-sub">Fill in a few details and we'll be in touch shortly. It only takes a minute, and enquiring won't affect your credit score.</p>
+
+        <form class="finance-form js-finance-form" novalidate>
+          <div class="field">
+            <label for="f-name">Full name <span class="req">*</span></label>
+            <input type="text" id="f-name" name="name" autocomplete="name" required />
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="f-phone">Mobile <span class="req">*</span></label>
+              <input type="tel" id="f-phone" name="phone" autocomplete="tel" inputmode="tel" required />
+            </div>
+            <div class="field">
+              <label for="f-email">Email <span class="req">*</span></label>
+              <input type="email" id="f-email" name="email" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="f-finance">What are you financing?</label>
+              <select id="f-finance" name="financing">
+                <option value="Car">Car</option>
+                <option value="Ute / 4WD">Ute / 4WD</option>
+                <option value="Caravan / Boat">Caravan / Boat</option>
+                <option value="Motorbike">Motorbike</option>
+                <option value="Personal loan">Personal loan</option>
+                <option value="Business">Business</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="f-employment">Employment</label>
+              <select id="f-employment" name="employment">
+                <option value="Full-time">Full-time</option>
+                <option value="Part-time">Part-time</option>
+                <option value="Casual">Casual</option>
+                <option value="Self-employed">Self-employed</option>
+                <option value="Visa holder">Visa holder</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f-amount">Approximate amount (optional)</label>
+            <input type="text" id="f-amount" name="amount" inputmode="numeric" placeholder="e.g. $25,000" />
+          </div>
+
+          <div class="field">
+            <label for="f-message">Anything you'd like us to know? (optional)</label>
+            <textarea id="f-message" name="message" rows="3" placeholder="Your situation, the car you're after, timing…"></textarea>
+          </div>
+
+          <label class="field-check">
+            <input type="checkbox" id="f-consent" name="consent" required />
+            <span>I'd like Easy As Loans to contact me about my enquiry. <span class="req">*</span></span>
+          </label>
+
+          <button type="submit" class="btn btn-primary btn-lg btn-block js-submit">Submit enquiry</button>
+          <p class="form-foot">We'll never share your details. This enquiry won't affect your credit score.</p>
+          <p class="form-error js-form-error" role="alert" hidden>Please complete the required fields marked *.</p>
+        </form>
+      </div>
+
+      <!-- Success state (shown after submit) -->
+      <div class="modal-success js-form-success" hidden>
+        <div class="success-tick" aria-hidden="true">
+          <svg viewBox="0 0 52 52"><path class="logo-stroke" d="M14 27 l8 8 l16 -18" /></svg>
+        </div>
+        <h2 class="modal-title">Thanks — we've got it.</h2>
+        <p class="modal-sub">One of our team will be in touch very soon. If you'd rather talk now, give us a call on <!-- PLACEHOLDER-PHONE --><a href="tel:+61800000000">(08) 0000 0000</a>.</p>
+        <button type="button" class="btn btn-ghost js-close-form">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
