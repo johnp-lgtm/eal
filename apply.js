@@ -19,13 +19,17 @@
     '<path class="logo-stroke" style="stroke:#48206e;stroke-width:7;fill:none;stroke-linecap:round;stroke-linejoin:round" d="M8 92 L98 24 L126 47 L126 32 L146 32 L146 51 C166 68 188 74 204 64"/>' +
     '<path class="logo-stroke" style="stroke:#48206e;stroke-width:7;fill:none;stroke-linecap:round;stroke-linejoin:round" d="M8 101 C72 95 122 94 152 79 C172 69 190 68 204 64"/></svg>';
 
+  var CREDIT_ICON =
+    '<svg class="credit-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+    '<path d="M4 17 a8 8 0 0 1 16 0" /><path d="M12 17 L16 11" /><circle cx="12" cy="17" r="1.4" fill="currentColor" stroke="none" /></svg>';
+
   /* ----------------------------- helpers -------------------------- */
   function money(n) { return "$" + (Number(n) || 0).toLocaleString("en-AU"); }
   function clampAmount(n) { return Math.min(150000, Math.max(2000, Math.round(n / 500) * 500)); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
-  function optButtons(field, opts, cols) {
-    return '<div class="optrow ' + (cols === 1 ? "one" : "") + '">' +
+  function optButtons(field, opts, classes) {
+    return '<div class="optrow ' + (classes || "") + '">' +
       opts.map(function (o) {
         var v = o.value != null ? o.value : o, l = o.label != null ? o.label : o;
         return '<button type="button" class="opt-btn" data-field="' + field + '" data-value="' + esc(v) + '">' + esc(l) + "</button>";
@@ -100,7 +104,7 @@
     title: "What is your residency status?",
     tip: "On a visa or renting? No problem — we work with lenders across every situation.",
     body: function (d) {
-      var status = preselect(optButtons("residencyStatus", ["Australian Citizen", "Permanent resident", "Temporary visa"]), "residencyStatus", d.residencyStatus);
+      var status = optButtons("residencyStatus", ["Australian Citizen", "Permanent resident", "Temporary visa"], "lastwide");
       return status +
         '<span class="q-label">What is your current living situation?</span>' +
         selectField("livingSituation", "Select option", ["Renting", "Renting but own property", "Owner with mortgage", "Owner without mortgage", "Living with parents", "Board"]);
@@ -113,25 +117,36 @@
     }
   };
 
+  function idField(field, label, hint, type, placeholder, val) {
+    return '<div class="q-field idf">' +
+      '<label for="a-' + field + '">' + esc(label) + "</label>" +
+      (hint ? '<span class="q-hint">' + esc(hint) + "</span>" : "") +
+      '<input class="q-input" id="a-' + field + '" type="' + (type || "text") + '" data-field="' + field + '"' +
+        ' placeholder="' + esc(placeholder || "") + '" value="' + esc(val || "") + '" />' +
+      "</div>";
+  }
+
   var STEP_FINAL = {
     section: "Final details",
     title: "Final details",
-    sub: "Where should we send your options?",
-    tip: "Almost done! Pop in your details and we'll be in touch. Enquiring won't affect your credit score.",
-    cta: "See my options",
+    tip: "All your information is kept confidential.",
+    cta: "Get quote",
+    trust: '<p class="q-trust">' + CREDIT_ICON + " This won't impact your credit score</p>",
     body: function (d) {
-      return '<div class="q-field"><label for="a-name">Full name</label><input class="q-input" id="a-name" data-field="fullName" autocomplete="name" value="' + esc(d.fullName || "") + '" /></div>' +
-        '<div class="q-field"><label for="a-email">Email</label><input class="q-input" id="a-email" type="email" data-field="email" autocomplete="email" value="' + esc(d.email || "") + '" /></div>' +
-        '<div class="q-field"><label for="a-mobile">Mobile</label><input class="q-input" id="a-mobile" type="tel" data-field="mobile" autocomplete="tel" value="' + esc(d.mobile || "") + '" /></div>' +
-        '<label class="q-consent"><input type="checkbox" data-field="consent" ' + (d.consent ? "checked" : "") + ' /> <span>I\'d like Easy As Loans to contact me about my enquiry.</span></label>';
+      return idField("firstName", "First name", "As it appears on your ID", "text", "Enter first name", d.firstName) +
+        idField("middleName", "Middle name (optional)", "If you have a middle name on your ID", "text", "Enter middle name", d.middleName) +
+        idField("lastName", "Last name", "As it appears on your ID", "text", "Enter last name", d.lastName) +
+        idField("dob", "Date of birth", "As it appears on your ID", "text", "DD/MM/YYYY", d.dob) +
+        idField("email", "Email address", "We send your quote to this email address", "email", "Enter email address", d.email) +
+        idField("mobile", "Mobile number", "You use this to login and retrieve your quote", "tel", "Enter mobile number", d.mobile);
     },
     validate: function (root, d) {
-      var problems = [];
-      if (!d.fullName) { problems.push("name"); }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email || "")) { problems.push("email"); }
-      if (!d.mobile || d.mobile.replace(/\D/g, "").length < 8) { problems.push("mobile"); }
-      if (!d.consent) { return { ok: false, msg: "Please tick the box so we can contact you." }; }
-      return problems.length ? { ok: false, msg: "Please check your name, email and mobile." } : { ok: true };
+      if (!d.firstName) { return { ok: false, msg: "Please enter your first name." }; }
+      if (!d.lastName) { return { ok: false, msg: "Please enter your last name." }; }
+      if (!/^\d{2}\/\d{2}\/\d{4}$/.test(d.dob || "")) { return { ok: false, msg: "Please enter your date of birth as DD/MM/YYYY." }; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email || "")) { return { ok: false, msg: "Please enter a valid email address." }; }
+      if (!d.mobile || d.mobile.replace(/\D/g, "").length < 8) { return { ok: false, msg: "Please enter a valid mobile number." }; }
+      return { ok: true };
     },
     submit: true
   };
@@ -234,7 +249,7 @@
         (step.tip ? '<div class="helper"><span class="helper-av">' + LOGO_MARK + '</span><p class="helper-text">' + esc(step.tip) + "</p></div>" : "") +
         '<button type="button" class="btn-continue js-continue">' + esc(step.cta || "Continue") + "</button>" +
         '<p class="q-error js-error" hidden></p>' +
-        '<p class="q-trust">Enquiring won’t affect your credit score.</p>' +
+        (step.trust || ('<p class="q-trust">' + CREDIT_ICON + " Enquiring won’t affect your credit score</p>")) +
       "</div>";
 
     applyPreselect(root, state.data);
@@ -296,6 +311,7 @@
   /* ---------------------------- submit ---------------------------- */
   function submit() {
     var d = state.data;
+    var fullName = [d.firstName, d.middleName, d.lastName].filter(Boolean).join(" ").trim();
     var payload = {
       loanType: state.product || "",
       loanAmount: d.loanAmount || null,
@@ -307,10 +323,14 @@
       residencyStatus: d.residencyStatus || "",
       livingSituation: d.livingSituation || "",
       carYear: d.carYear || null,
-      fullName: d.fullName || "",
+      fullName: fullName,
+      firstName: d.firstName || "",
+      middleName: d.middleName || "",
+      lastName: d.lastName || "",
+      dob: d.dob || "",
       email: d.email || "",
       mobile: d.mobile || "",
-      consent: !!d.consent,
+      consent: true,
       submittedAt: new Date().toISOString(),
       source: "easyasloans.com.au",
       pageUrl: location.href
