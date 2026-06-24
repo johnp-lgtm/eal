@@ -203,10 +203,9 @@ button { font-family: inherit; cursor: pointer; }
 .fcard:hover { border-color: var(--purple); }
 .fcard-ico {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 48px; height: 48px; border-radius: 8px;
-  background: var(--hero-bg); color: var(--purple);
+  width: 50px; height: 50px; color: var(--purple);
 }
-.fcard-ico svg { width: 30px; height: 30px; }
+.fcard-ico svg { width: 50px; height: 50px; }
 .fcard-label { font-weight: 800; font-size: 0.95rem; color: var(--ink); margin-top: auto; }
 
 /* Trust row */
