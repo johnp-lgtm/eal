@@ -48,7 +48,7 @@
           <span class="header-phone-label">Talk to a real person</span>
           <span class="header-phone-number">0402 083 863</span>
         </a>
-        <button type="button" class="btn btn-primary js-open-form">Get started</button>
+        <a class="btn btn-primary" href="apply.html">Get started</a>
       </div>
     </div>
   </header>
@@ -69,7 +69,7 @@
           </p>
 
           <div class="finance-cards">
-            <button type="button" class="fcard js-open-form" data-loan="Car loan">
+            <a class="fcard" href="apply.html?loan=car">
               <span class="fcard-ico">
                 <svg viewBox="0 0 48 48" aria-hidden="true">
                   <circle cx="31" cy="23" r="12" fill="#d9ccef" />
@@ -85,9 +85,9 @@
                 </svg>
               </span>
               <span class="fcard-label">Car Loan</span>
-            </button>
+            </a>
 
-            <button type="button" class="fcard js-open-form" data-loan="Personal loan">
+            <a class="fcard" href="apply.html?loan=personal">
               <span class="fcard-ico">
                 <svg viewBox="0 0 48 48" aria-hidden="true">
                   <circle cx="15" cy="18" r="10" fill="#d9ccef" />
@@ -100,9 +100,9 @@
                 </svg>
               </span>
               <span class="fcard-label">Personal Loan</span>
-            </button>
+            </a>
 
-            <button type="button" class="fcard js-open-form" data-loan="Business loan">
+            <a class="fcard" href="apply.html?loan=business">
               <span class="fcard-ico">
                 <svg viewBox="0 0 48 48" aria-hidden="true">
                   <circle cx="32" cy="29" r="11" fill="#d9ccef" />
@@ -115,9 +115,9 @@
                 </svg>
               </span>
               <span class="fcard-label">Business Loan</span>
-            </button>
+            </a>
 
-            <button type="button" class="fcard js-open-form" data-loan="Debt consolidation">
+            <a class="fcard" href="apply.html?loan=debt">
               <span class="fcard-ico">
                 <svg viewBox="0 0 48 48" aria-hidden="true">
                   <circle cx="16" cy="30" r="11" fill="#d9ccef" />
@@ -129,7 +129,7 @@
                 </svg>
               </span>
               <span class="fcard-label">Debt Consolidation</span>
-            </button>
+            </a>
           </div>
 
           <ul class="hero-trust">
@@ -315,7 +315,7 @@
         <h2 class="cta-title">Ready when you are.</h2>
         <p class="cta-text">Start your application now, or pick up the phone — whatever's easiest.</p>
         <div class="cta-actions">
-          <button type="button" class="btn btn-light btn-lg js-open-form">Start your application</button>
+          <a class="btn btn-light btn-lg" href="apply.html">Start your application</a>
           <a class="btn btn-outline-light btn-lg" href="tel:+61402083863">0402 083 863</a>
         </div>
       </div>
@@ -345,7 +345,7 @@
         <a href="#why">Why choose us</a>
         <a href="#process">How it works</a>
         <a href="#faq">FAQs</a>
-        <a href="#" class="js-open-form">Apply now</a>
+        <a href="apply.html">Apply now</a>
       </nav>
 
       <nav class="footer-col" aria-label="Legal">
@@ -376,162 +376,6 @@
       </div>
     </div>
   </footer>
-
-  <!-- ====================== FINANCE FORM MODAL ====================== -->
-  <div class="modal" id="finance-modal" role="dialog" aria-modal="true" aria-labelledby="finance-modal-title" hidden>
-    <div class="modal-overlay js-close-form" tabindex="-1"></div>
-    <div class="modal-panel" role="document">
-      <button type="button" class="modal-close js-close-form" aria-label="Close form">&times;</button>
-
-      <div class="modal-content js-form-content">
-        <div class="form-top">
-          <button type="button" class="form-back js-back" hidden>&larr; Back</button>
-          <span class="form-step-label js-step-label">Step 1 of 6</span>
-        </div>
-        <div class="form-progress"><div class="form-progress-bar js-progress"></div></div>
-
-        <form class="lead-form js-finance-form" novalidate>
-
-          <!-- Step 1: loan type -->
-          <section class="form-step is-active" data-step="loanType">
-            <h2 class="step-title" id="finance-modal-title">What can we help you finance?</h2>
-            <p class="step-sub">Takes about 30 seconds, and it won't affect your credit score.</p>
-            <div class="opt-grid">
-              <button type="button" class="opt js-choice" data-field="loanType" data-value="Car loan">
-                <svg class="opt-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M15 27 L19 18 H29 L34 27" />
-                  <rect x="6" y="27" width="36" height="8" rx="3" />
-                  <circle cx="16" cy="36.5" r="3.1" />
-                  <circle cx="32" cy="36.5" r="3.1" />
-                </svg>
-                <span class="opt-label">Car</span>
-              </button>
-              <button type="button" class="opt js-choice" data-field="loanType" data-value="Personal loan">
-                <svg class="opt-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <ellipse cx="24" cy="15" rx="13" ry="5" />
-                  <path d="M11 15 V25" />
-                  <path d="M37 15 V25" />
-                  <path d="M11 25 a13 5 0 0 0 26 0" />
-                  <path d="M11 20 a13 5 0 0 0 26 0" />
-                </svg>
-                <span class="opt-label">Personal</span>
-              </button>
-            </div>
-          </section>
-
-          <!-- Step 2: loan amount (slider) -->
-          <section class="form-step" data-step="loanAmount">
-            <h2 class="step-title">How much would you like to borrow?</h2>
-            <p class="step-sub">Drag the slider — a rough figure is fine.</p>
-            <div class="slider-value js-amount-out">$30,000</div>
-            <input type="range" class="slider js-slider" data-field="loanAmount" min="5000" max="150000" step="1000" value="30000" aria-label="Loan amount" />
-            <div class="slider-ends"><span>$5k</span><span>$150k+</span></div>
-            <div class="step-actions">
-              <button type="button" class="btn btn-primary btn-lg btn-block js-next">Continue</button>
-            </div>
-          </section>
-
-          <!-- Step 3: loan term (chips) -->
-          <section class="form-step" data-step="loanTerm">
-            <h2 class="step-title">Over how many years?</h2>
-            <p class="step-sub">Most loans run between 1 and 7 years.</p>
-            <div class="chip-grid">
-              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="1">1 year</button>
-              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="2">2 years</button>
-              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="3">3 years</button>
-              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="4">4 years</button>
-              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="5">5 years</button>
-              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="6">6 years</button>
-              <button type="button" class="chip js-choice" data-field="loanTerm" data-value="7">7 years</button>
-            </div>
-          </section>
-
-          <!-- Step 4: personal or business -->
-          <section class="form-step" data-step="use">
-            <h2 class="step-title">Is this for personal or business use?</h2>
-            <div class="choice-grid two">
-              <button type="button" class="choice js-choice" data-field="use" data-value="Personal">
-                <span class="choice-title">Personal</span>
-                <span class="choice-desc">For you or your household</span>
-              </button>
-              <button type="button" class="choice js-choice" data-field="use" data-value="Business">
-                <span class="choice-title">Business</span>
-                <span class="choice-desc">For your business or ABN</span>
-              </button>
-            </div>
-          </section>
-
-          <!-- Step 5: car year (slider) — only shown for car loans -->
-          <section class="form-step" data-step="carYear" data-conditional="Car loan">
-            <h2 class="step-title">What year is the car?</h2>
-            <p class="step-sub">A rough year is fine if you're still looking.</p>
-            <div class="slider-value js-year-out">2020</div>
-            <input type="range" class="slider js-slider" data-field="carYear" min="1990" max="2026" step="1" value="2020" aria-label="Car year" />
-            <div class="slider-ends"><span>1990</span><span class="js-year-max">2026</span></div>
-            <div class="step-actions">
-              <button type="button" class="btn btn-primary btn-lg btn-block js-next">Continue</button>
-            </div>
-          </section>
-
-          <!-- Step 6: state (chips) -->
-          <section class="form-step" data-step="state">
-            <h2 class="step-title">Which state are you in?</h2>
-            <p class="step-sub">So we match you with the right lenders.</p>
-            <div class="chip-grid states">
-              <button type="button" class="chip js-choice" data-field="state" data-value="SA">SA</button>
-              <button type="button" class="chip js-choice" data-field="state" data-value="NSW">NSW</button>
-              <button type="button" class="chip js-choice" data-field="state" data-value="VIC">VIC</button>
-              <button type="button" class="chip js-choice" data-field="state" data-value="QLD">QLD</button>
-              <button type="button" class="chip js-choice" data-field="state" data-value="WA">WA</button>
-              <button type="button" class="chip js-choice" data-field="state" data-value="TAS">TAS</button>
-              <button type="button" class="chip js-choice" data-field="state" data-value="ACT">ACT</button>
-              <button type="button" class="chip js-choice" data-field="state" data-value="NT">NT</button>
-            </div>
-          </section>
-
-          <!-- Step 7: contact details -->
-          <section class="form-step" data-step="details">
-            <h2 class="step-title">Last step — how do we reach you?</h2>
-            <p class="step-sub">We'll be in touch shortly. Enquiring won't affect your credit score.</p>
-            <!-- Honeypot: hidden from people, catches bots. Do not remove. -->
-            <input type="text" class="js-hp" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" />
-            <div class="field">
-              <label for="f-name">Full name <span class="req">*</span></label>
-              <input type="text" id="f-name" data-field="fullName" autocomplete="name" required />
-            </div>
-            <div class="field">
-              <label for="f-email">Email <span class="req">*</span></label>
-              <input type="email" id="f-email" data-field="email" autocomplete="email" required />
-            </div>
-            <div class="field">
-              <label for="f-mobile">Mobile <span class="req">*</span></label>
-              <input type="tel" id="f-mobile" data-field="mobile" autocomplete="tel" inputmode="tel" required />
-            </div>
-            <label class="field-check">
-              <input type="checkbox" class="js-consent" required />
-              <span>I'd like Easy As Loans to contact me about my enquiry. <span class="req">*</span></span>
-            </label>
-            <div class="step-actions">
-              <button type="submit" class="btn btn-primary btn-lg btn-block js-submit">Submit my application</button>
-            </div>
-            <p class="form-foot">We'll never share your details. This enquiry won't affect your credit score.</p>
-            <p class="form-error js-form-error" role="alert" hidden></p>
-          </section>
-
-        </form>
-      </div>
-
-      <!-- Success state (shown after submit) -->
-      <div class="modal-success js-form-success" hidden>
-        <div class="success-tick" aria-hidden="true">
-          <svg viewBox="0 0 52 52"><path class="logo-stroke" d="M14 27 l8 8 l16 -18" /></svg>
-        </div>
-        <h2 class="modal-title">Thanks — we've got it.</h2>
-        <p class="modal-sub">One of our team will be in touch very soon. If you'd rather talk now, give us a call on <a href="tel:+61402083863">0402 083 863</a>.</p>
-        <button type="button" class="btn btn-ghost js-close-form">Close</button>
-      </div>
-    </div>
-  </div>
 
   <script src="script.js"></script>
 </body>
