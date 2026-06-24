@@ -22,7 +22,7 @@
 <body>
 
   <!-- ============================ HEADER ============================ -->
-  <header class="site-header">
+  <header class="site-header site-header--hero js-header">
     <div class="container header-inner">
       <a href="#top" class="logo" aria-label="Easy As Loans home">
         <!-- Roofline mark (recreated from brand style guide) -->
@@ -36,12 +36,19 @@
         </span>
       </a>
 
+      <nav class="site-nav" aria-label="Primary">
+        <a href="#why">Why us</a>
+        <a href="#process">How it works</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#faq">FAQs</a>
+      </nav>
+
       <div class="header-actions">
         <a class="header-phone" href="tel:+61402083863">
           <span class="header-phone-label">Talk to a real person</span>
           <span class="header-phone-number">0402 083 863</span>
         </a>
-        <button type="button" class="btn btn-primary js-open-form">Apply now</button>
+        <button type="button" class="btn btn-primary js-open-form">Get started</button>
       </div>
     </div>
   </header>
@@ -52,27 +59,92 @@
     <section class="hero">
       <div class="container hero-inner">
         <div class="hero-text">
-          <p class="eyebrow">Adelaide finance brokers · 15+ years</p>
-          <h1 class="hero-title">Finance, made easy&nbsp;as.</h1>
-          <p class="hero-lead">
-            We're a small Adelaide team who get good people into the right loan —
-            quickly, honestly, and without hammering your credit file. No call
-            centres, no run-around. Just us, helping you every step of the way.
+          <h1 class="hero-title">Get your best<br />finance match,<br />easy&nbsp;as.</h1>
+
+          <p class="hero-prompt">
+            <svg class="prompt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-9l-5 4v-4H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />
+            </svg>
+            What are you looking to finance?
           </p>
-          <div class="hero-cta">
-            <button type="button" class="btn btn-primary btn-lg js-open-form">Start your application</button>
-            <a class="btn btn-ghost btn-lg" href="tel:+61402083863">Or call 0402 083 863</a>
+
+          <div class="finance-cards">
+            <button type="button" class="fcard js-open-form" data-loan="Car loan">
+              <span class="fcard-ico">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M15 27 L19 18 H29 L34 27" />
+                  <rect x="6" y="27" width="36" height="8" rx="3" />
+                  <circle cx="16" cy="36.5" r="3.1" />
+                  <circle cx="32" cy="36.5" r="3.1" />
+                </svg>
+              </span>
+              <span class="fcard-label">Car Loan</span>
+            </button>
+
+            <button type="button" class="fcard js-open-form" data-loan="Personal loan">
+              <span class="fcard-ico">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <ellipse cx="24" cy="15" rx="13" ry="5" />
+                  <path d="M11 15 V25" /><path d="M37 15 V25" />
+                  <path d="M11 25 a13 5 0 0 0 26 0" />
+                  <path d="M11 20 a13 5 0 0 0 26 0" />
+                </svg>
+              </span>
+              <span class="fcard-label">Personal Loan</span>
+            </button>
+
+            <button type="button" class="fcard js-open-form" data-loan="Business loan">
+              <span class="fcard-ico">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="7" y="17" width="34" height="22" rx="3" />
+                  <path d="M18 17 v-3 a2 2 0 0 1 2 -2 h8 a2 2 0 0 1 2 2 v3" />
+                  <path d="M7 27 h34" />
+                </svg>
+              </span>
+              <span class="fcard-label">Business Loan</span>
+            </button>
+
+            <button type="button" class="fcard js-open-form" data-loan="Debt consolidation">
+              <span class="fcard-ico">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M39 24 a15 15 0 1 1 -4.4 -10.6" />
+                  <path d="M39 9 v7 h-7" />
+                </svg>
+              </span>
+              <span class="fcard-label">Debt Consolidation</span>
+            </button>
           </div>
-          <p class="hero-note">Enquiring won't affect your credit score.</p>
+
+          <ul class="hero-trust">
+            <li>
+              <svg class="trust-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3 L5 14 h6 l-1 7 8-11 h-6 z" /></svg>
+              Approvals, fast
+            </li>
+            <li>
+              <svg class="trust-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 19 6 v5 c0 5-3.5 8-7 9-3.5-1-7-4-7-9 V6 z" /><path d="M9 12 l2 2 4-4" /></svg>
+              No impact on your credit score
+            </li>
+            <li>
+              <svg class="trust-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2" /><circle cx="17" cy="9.5" r="2.6" /><path d="M3.5 19 c0-3 2.5-5 5.5-5 s5.5 2 5.5 5" /><path d="M15 14.2 c2.4 .2 4.5 2 4.5 4.8" /></svg>
+              Real people, no call centres
+            </li>
+          </ul>
         </div>
+
         <div class="hero-media">
-          <img class="hero-img" src="assets/hero.jpg" alt="A happy couple driving their new car" />
+          <div class="hero-figure">
+            <span class="hero-square" aria-hidden="true"></span>
+            <svg class="hero-rays" viewBox="0 0 60 70" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" aria-hidden="true">
+              <path d="M52 6 L20 30" /><path d="M56 28 L26 42" /><path d="M54 52 L30 56" />
+            </svg>
+            <img class="hero-img" src="assets/hero.jpg" alt="A happy couple driving their new car" />
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ====================== REVIEWS / MARQUEE ====================== -->
-    <section class="reviews" aria-label="Customer reviews">
+    <section class="reviews" id="reviews" aria-label="Customer reviews">
       <div class="container reviews-head">
         <h2 class="section-title">Real customers. Real cars.</h2>
         <p class="section-sub">

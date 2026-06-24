@@ -20,6 +20,16 @@
      ----------------------------------------------------------------- */
   var LEAD_ENDPOINT = "/api/leads";
 
+  /* ------------------- Sticky header on the hero band ------------- */
+  var heroHeader = document.querySelector(".js-header");
+  if (heroHeader) {
+    var onScroll = function () {
+      heroHeader.classList.toggle("is-stuck", window.scrollY > 24);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+  }
+
   /* ----------------------------- Year ----------------------------- */
   var yearEl = document.querySelectorAll(".js-year");
   yearEl.forEach(function (el) { el.textContent = new Date().getFullYear(); });
@@ -178,13 +188,26 @@
   backBtn.addEventListener("click", goBack);
 
   /* --------------------------- Modal open/close ------------------- */
-  function openModal() {
+  function openModal(presetType) {
     lastFocused = document.activeElement;
     modal.hidden = false;
     document.body.classList.add("body-lock");
     formContent.hidden = false;
     successContent.hidden = true;
-    showStep(keyOf(flow()[0]));
+    if (presetType) {
+      // Came from a hero finance card — pre-select the type and skip step 1
+      lead.loanType = presetType;
+      var step1 = allSteps.filter(function (s) { return keyOf(s) === "loanType"; })[0];
+      if (step1) {
+        step1.querySelectorAll('.js-choice[data-field="loanType"]').forEach(function (b) {
+          b.classList.toggle("is-selected", b.getAttribute("data-value") === presetType);
+        });
+      }
+      var seq = flow();
+      showStep(keyOf(seq[Math.min(1, seq.length - 1)]));
+    } else {
+      showStep(keyOf(flow()[0]));
+    }
     document.addEventListener("keydown", onKeydown);
   }
 
@@ -207,7 +230,10 @@
   }
 
   document.querySelectorAll(".js-open-form").forEach(function (btn) {
-    btn.addEventListener("click", function (e) { e.preventDefault(); openModal(); });
+    btn.addEventListener("click", function (e) {
+      e.preventDefault();
+      openModal(btn.getAttribute("data-loan") || null);
+    });
   });
   modal.querySelectorAll(".js-close-form").forEach(function (btn) {
     btn.addEventListener("click", closeModal);
