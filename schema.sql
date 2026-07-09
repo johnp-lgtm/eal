@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS leads (
   consent     INTEGER,
   source      TEXT,
   page_url    TEXT,
-  status      TEXT NOT NULL DEFAULT 'New'
+  status      TEXT NOT NULL DEFAULT 'New',
+  details     TEXT   -- full submission as JSON (employment, residency, DOB, etc.)
 );
 
 CREATE INDEX IF NOT EXISTS idx_leads_created ON leads (created_at DESC);

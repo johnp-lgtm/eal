@@ -90,20 +90,63 @@ async function createLead({ request, env }) {
     status: "New"
   };
 
+  // Full submission captured as structured JSON — future-proof for any
+  // new form fields without further schema changes.
+  lead.details = JSON.stringify({
+    loanType: body.loanType || null,
+    loanAmount: toInt(body.loanAmount),
+    loanTerm: toInt(body.loanTerm),
+    use: body.use || null,
+    carYear: toInt(body.carYear),
+    state: body.state || null,
+    firstName: (body.firstName || "").trim(),
+    middleName: (body.middleName || "").trim(),
+    lastName: (body.lastName || "").trim(),
+    fullName: fullName,
+    dob: (body.dob || "").trim(),
+    employmentType: body.employmentType || null,
+    employmentDuration: body.employmentDuration || null,
+    residencyStatus: body.residencyStatus || null,
+    livingSituation: body.livingSituation || null,
+    email: email,
+    mobile: mobile,
+    submittedAt: body.submittedAt || null,
+    source: body.source || null,
+    pageUrl: body.pageUrl || null
+  });
+  // keep a copy on the object so the email can include everything
+  lead._extra = JSON.parse(lead.details);
+
   if (!env.DB) {
     return json({ error: "Database not configured" }, 500);
   }
 
-  await env.DB.prepare(
-    `INSERT INTO leads
-       (id, created_at, loan_type, loan_amount, loan_term, use_type, car_year,
-        state, full_name, email, mobile, consent, source, page_url, status)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
-  ).bind(
-    lead.id, lead.created_at, lead.loan_type, lead.loan_amount, lead.loan_term,
-    lead.use_type, lead.car_year, lead.state, lead.full_name, lead.email,
-    lead.mobile, lead.consent, lead.source, lead.page_url, lead.status
-  ).run();
+  try {
+    // Preferred insert (includes the details column)
+    await env.DB.prepare(
+      `INSERT INTO leads
+         (id, created_at, loan_type, loan_amount, loan_term, use_type, car_year,
+          state, full_name, email, mobile, consent, source, page_url, status, details)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+    ).bind(
+      lead.id, lead.created_at, lead.loan_type, lead.loan_amount, lead.loan_term,
+      lead.use_type, lead.car_year, lead.state, lead.full_name, lead.email,
+      lead.mobile, lead.consent, lead.source, lead.page_url, lead.status, lead.details
+    ).run();
+  } catch (e) {
+    // Fallback if the `details` column doesn't exist yet (migration not run):
+    // still save the core fields so no lead is ever lost.
+    await env.DB.prepare(
+      `INSERT INTO leads
+         (id, created_at, loan_type, loan_amount, loan_term, use_type, car_year,
+          state, full_name, email, mobile, consent, source, page_url, status)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+    ).bind(
+      lead.id, lead.created_at, lead.loan_type, lead.loan_amount, lead.loan_term,
+      lead.use_type, lead.car_year, lead.state, lead.full_name, lead.email,
+      lead.mobile, lead.consent, lead.source, lead.page_url, lead.status
+    ).run();
+  }
 
   // Email backup (best-effort: never block the lead on email failure)
   try { await emailLead(env, lead); } catch (e) { /* logged by platform */ }
@@ -139,6 +182,7 @@ async function updateLead({ request, env }) {
 async function emailLead(env, lead) {
   if (!env.RESEND_API_KEY || !env.LEAD_EMAIL_TO) { return; }
   const money = lead.loan_amount != null ? "$" + Number(lead.loan_amount).toLocaleString("en-AU") : "—";
+  const x = lead._extra || {};
   const lines = [
     "New lead from easyasloans.com.au",
     "",
@@ -149,7 +193,13 @@ async function emailLead(env, lead) {
     "Car year:     " + (lead.car_year != null ? lead.car_year : "—"),
     "State:        " + (lead.state || "—"),
     "",
+    "Employment:   " + (x.employmentType || "—"),
+    "Time there:   " + (x.employmentDuration || "—"),
+    "Residency:    " + (x.residencyStatus || "—"),
+    "Living:       " + (x.livingSituation || "—"),
+    "",
     "Name:         " + lead.full_name,
+    "Date of birth:" + (x.dob || "—"),
     "Email:        " + lead.email,
     "Mobile:       " + lead.mobile,
     "",

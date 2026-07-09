@@ -154,7 +154,21 @@
   function openDetail(id) {
     var l = leads.filter(function (x) { return x.id === id; })[0];
     if (!l) { return; }
+    var d = {};
+    try { d = l.details ? JSON.parse(l.details) : {}; } catch (e) { d = {}; }
     var statuses = ["New", "Contacted", "Qualified", "Won", "Lost"];
+
+    var employmentHtml = (d.employmentType || d.employmentDuration)
+      ? '<div class="detail-section"><h3>Employment</h3>' +
+          row("Employment", esc(d.employmentType || "—")) +
+          row("Time in role", esc(d.employmentDuration || "—")) +
+        '</div>' : "";
+    var residencyHtml = (d.residencyStatus || d.livingSituation)
+      ? '<div class="detail-section"><h3>Residency</h3>' +
+          row("Residency", esc(d.residencyStatus || "—")) +
+          row("Living situation", esc(d.livingSituation || "—")) +
+        '</div>' : "";
+
     detailEl.innerHTML =
       '<p class="detail-name">' + esc(l.full_name) + '</p>' +
       '<p class="detail-meta">Received ' + esc(fmtDate(l.created_at)) + '</p>' +
@@ -168,14 +182,19 @@
         row("State", esc(l.state || "—")) +
       '</div>' +
 
+      employmentHtml +
+      residencyHtml +
+
       '<div class="detail-section"><h3>Contact</h3>' +
         row("Email", '<a href="mailto:' + esc(l.email) + '">' + esc(l.email) + '</a>') +
         row("Mobile", '<a href="tel:' + esc(l.mobile) + '">' + esc(l.mobile) + '</a>') +
+        (d.dob ? row("Date of birth", esc(d.dob)) : "") +
         row("Consent", l.consent ? "Yes" : "No") +
       '</div>' +
 
       '<div class="detail-section"><h3>Source</h3>' +
         row("From", esc(l.source || "—")) +
+        (d.submittedAt ? row("Submitted", esc(fmtDate(d.submittedAt))) : "") +
         row("Lead ID", esc(l.id)) +
       '</div>' +
 
