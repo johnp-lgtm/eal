@@ -1,13 +1,21 @@
-# Security headers for all pages (Cloudflare Pages)
+# ===================================================================
+# Security headers for Easy As Loans (Cloudflare Pages)
+# ===================================================================
+
+# --- All pages -----------------------------------------------------
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://connect.facebook.net; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.facebook.com; connect-src 'self' https://www.facebook.com; frame-src https://www.facebook.com; base-uri 'none'; form-action 'self'; frame-ancestors 'self'; object-src 'none'
 
-# The admin dashboard must never be framed or indexed
+# --- Admin dashboard: stricter, and never framed or indexed ---------
+# The dashboard shows every lead's personal data, so it gets the
+# tightest policy: no third-party script, no off-site connections.
 /admin/*
   X-Frame-Options: DENY
   X-Robots-Tag: noindex, nofollow
   Referrer-Policy: no-referrer
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
