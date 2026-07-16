@@ -25,7 +25,8 @@ export async function onRequest(context) {
       default: return json({ error: "Method not allowed" }, 405);
     }
   } catch (err) {
-    return json({ error: "Server error", detail: String(err && err.message || err) }, 500);
+    // Never leak internal error detail to the client.
+    return json({ error: "Server error" }, 500);
   }
 }
 
@@ -54,17 +55,62 @@ function toInt(v) {
   return Number.isFinite(n) ? n : null;
 }
 
+// Trim, strip control characters, and cap length on any user-supplied string.
+function str(v, max) {
+  if (v === null || v === undefined) { return ""; }
+  var s = String(v).replace(/[\x00-\x1F\x7F]/g, " ").trim();
+  return s.slice(0, max || 200);
+}
+
+function clientIp(request) {
+  return request.headers.get("CF-Connecting-IP") ||
+         request.headers.get("X-Forwarded-For") || "unknown";
+}
+
+/* Simple D1-backed sliding-window rate limiter. Fails OPEN on any error so a
+   real lead is never lost to a limiter hiccup. */
+async function rateOk(env, key, limit, windowMs) {
+  if (!env.DB) { return true; }
+  try {
+    await env.DB.prepare(
+      "CREATE TABLE IF NOT EXISTS throttle (k TEXT PRIMARY KEY, n INTEGER, ts INTEGER)"
+    ).run();
+    const now = Date.now();
+    const row = await env.DB.prepare("SELECT n, ts FROM throttle WHERE k = ?").bind(key).first();
+    if (!row || (now - row.ts) > windowMs) {
+      await env.DB.prepare(
+        "INSERT INTO throttle (k, n, ts) VALUES (?, 1, ?) ON CONFLICT(k) DO UPDATE SET n = 1, ts = ?"
+      ).bind(key, now, now).run();
+      return true;
+    }
+    if (row.n >= limit) { return false; }
+    await env.DB.prepare("UPDATE throttle SET n = n + 1 WHERE k = ?").bind(key).run();
+    return true;
+  } catch (e) {
+    return true;
+  }
+}
+
 /* ----------------------------- create ---------------------------- */
 async function createLead({ request, env }) {
+  // Cap the request body size (defends against oversized-payload abuse).
+  const raw = await request.text();
+  if (raw.length > 20000) { return json({ error: "Payload too large" }, 413); }
   let body;
-  try { body = await request.json(); } catch (e) { return json({ error: "Invalid JSON" }, 400); }
+  try { body = JSON.parse(raw); } catch (e) { return json({ error: "Invalid JSON" }, 400); }
 
   // Honeypot: silently accept & drop obvious bots
   if (body.website || body.company_url) { return json({ ok: true }); }
 
-  const fullName = (body.fullName || "").trim();
-  const email = (body.email || "").trim();
-  const mobile = (body.mobile || "").trim();
+  // Rate limit: max 8 submissions per IP per hour. Fails open on limiter error.
+  const ip = clientIp(request);
+  if (!(await rateOk(env, "post:" + ip, 8, 3600000))) {
+    return json({ error: "Too many requests. Please try again later." }, 429);
+  }
+
+  const fullName = str(body.fullName, 120);
+  const email = str(body.email, 160);
+  const mobile = str(body.mobile, 40);
   if (!fullName || !email || !mobile) {
     return json({ error: "Missing required contact details" }, 400);
   }
@@ -75,46 +121,47 @@ async function createLead({ request, env }) {
   const lead = {
     id: crypto.randomUUID(),
     created_at: new Date().toISOString(),
-    loan_type: body.loanType || null,
+    loan_type: str(body.loanType, 40) || null,
     loan_amount: toInt(body.loanAmount),
     loan_term: toInt(body.loanTerm),
-    use_type: body.use || null,
+    use_type: str(body.use, 40) || null,
     car_year: toInt(body.carYear),
-    state: body.state || null,
+    state: str(body.state, 40) || null,
     full_name: fullName,
     email: email,
     mobile: mobile,
     consent: body.consent ? 1 : 0,
-    source: body.source || null,
-    page_url: body.pageUrl || null,
+    source: str(body.source, 80) || null,
+    page_url: str(body.pageUrl, 300) || null,
     status: "New"
   };
 
   // Full submission captured as structured JSON — future-proof for any
   // new form fields without further schema changes.
   lead.details = JSON.stringify({
-    loanType: body.loanType || null,
+    loanType: str(body.loanType, 40) || null,
     loanAmount: toInt(body.loanAmount),
     loanTerm: toInt(body.loanTerm),
-    use: body.use || null,
+    use: str(body.use, 40) || null,
     carYear: toInt(body.carYear),
-    state: body.state || null,
-    firstName: (body.firstName || "").trim(),
-    middleName: (body.middleName || "").trim(),
-    lastName: (body.lastName || "").trim(),
+    state: str(body.state, 40) || null,
+    firstName: str(body.firstName, 80),
+    middleName: str(body.middleName, 80),
+    lastName: str(body.lastName, 80),
     fullName: fullName,
-    dob: (body.dob || "").trim(),
-    employmentType: body.employmentType || null,
-    employmentDuration: body.employmentDuration || null,
-    residencyStatus: body.residencyStatus || null,
-    livingSituation: body.livingSituation || null,
-    abnDuration: body.abnDuration || null,
-    gstRegistered: body.gstRegistered || null,
+    dob: str(body.dob, 12),
+    employmentType: str(body.employmentType, 60) || null,
+    employmentDuration: str(body.employmentDuration, 60) || null,
+    residencyStatus: str(body.residencyStatus, 60) || null,
+    livingSituation: str(body.livingSituation, 60) || null,
+    abnDuration: str(body.abnDuration, 60) || null,
+    gstRegistered: str(body.gstRegistered, 20) || null,
     email: email,
     mobile: mobile,
-    submittedAt: body.submittedAt || null,
-    source: body.source || null,
-    pageUrl: body.pageUrl || null
+    submittedAt: str(body.submittedAt, 40) || null,
+    source: str(body.source, 80) || null,
+    pageUrl: str(body.pageUrl, 300) || null,
+    ip: clientIp(request)
   });
   // keep a copy on the object so the email can include everything
   lead._extra = JSON.parse(lead.details);
@@ -168,9 +215,19 @@ async function createLead({ request, env }) {
   return json({ ok: true, id: lead.id });
 }
 
+/* Gate an admin request. Successful auth is never penalised; each failure
+   consumes one slot and, past the threshold, the IP is blocked (429). */
+async function guardAdmin(request, env) {
+  if (isAuthed(request, env)) { return null; }
+  const under = await rateOk(env, "authfail:" + clientIp(request), 10, 900000);
+  return under ? json({ error: "Unauthorised" }, 401)
+               : json({ error: "Too many failed attempts. Try again later." }, 429);
+}
+
 /* ------------------------------ list ----------------------------- */
 async function listLeads({ request, env }) {
-  if (!isAuthed(request, env)) { return json({ error: "Unauthorised" }, 401); }
+  const blocked = await guardAdmin(request, env);
+  if (blocked) { return blocked; }
   if (!env.DB) { return json({ error: "Database not configured" }, 500); }
   const { results } = await env.DB.prepare(
     `SELECT * FROM leads ORDER BY created_at DESC LIMIT 1000`
@@ -180,7 +237,8 @@ async function listLeads({ request, env }) {
 
 /* ----------------------------- update ---------------------------- */
 async function updateLead({ request, env }) {
-  if (!isAuthed(request, env)) { return json({ error: "Unauthorised" }, 401); }
+  const blocked = await guardAdmin(request, env);
+  if (blocked) { return blocked; }
   let body;
   try { body = await request.json(); } catch (e) { return json({ error: "Invalid JSON" }, 400); }
   const allowed = ["New", "Contacted", "Qualified", "Won", "Lost"];
