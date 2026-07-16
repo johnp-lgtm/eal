@@ -163,10 +163,15 @@
           row("Employment", esc(d.employmentType || "—")) +
           row("Time in role", esc(d.employmentDuration || "—")) +
         '</div>' : "";
+    var businessHtml = (d.abnDuration || d.gstRegistered)
+      ? '<div class="detail-section"><h3>Business</h3>' +
+          row("ABN held for", esc(d.abnDuration || "—")) +
+          row("GST registered", esc(d.gstRegistered || "—")) +
+        '</div>' : "";
     var residencyHtml = (d.residencyStatus || d.livingSituation)
       ? '<div class="detail-section"><h3>Residency</h3>' +
           row("Residency", esc(d.residencyStatus || "—")) +
-          row("Living situation", esc(d.livingSituation || "—")) +
+          (d.livingSituation ? row("Living situation", esc(d.livingSituation)) : "") +
         '</div>' : "";
 
     detailEl.innerHTML =
@@ -183,6 +188,7 @@
       '</div>' +
 
       employmentHtml +
+      businessHtml +
       residencyHtml +
 
       '<div class="detail-section"><h3>Contact</h3>' +

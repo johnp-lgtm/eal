@@ -151,18 +151,50 @@
     submit: true
   };
 
-  /* car/business: placeholder step until the real steps are provided */
   var STEP_CAR_YEAR = {
     section: "Your car",
     title: "What year is the car?",
     sub: "A rough year is fine if you're still looking.",
     tip: "Not sure yet? Give us your best guess — we can fine-tune it later.",
     body: function (d) {
-      var yrs = years(1995, new Date().getFullYear() + 1).reverse().map(String);
+      var yrs = years(1995, new Date().getFullYear()).reverse().map(String);
       return selectField("carYear", "Select year", yrs);
     },
     wire: function (root, d) { presetSelects(root, d); },
     validate: function (root, d) { return d.carYear ? { ok: true } : { ok: false, msg: "Please choose a year." }; }
+  };
+
+  /* Business only: ABN age + GST registration */
+  var STEP_BUSINESS = {
+    section: "Business",
+    title: "A bit about your business",
+    tip: "This helps us match you with the right business lenders.",
+    body: function (d) {
+      return '<span class="q-label">How long have you had your ABN?</span>' +
+        '<div class="q-twocol">' +
+          selectField("abnYears", "Years", years(0, 30)) +
+          selectField("abnMonths", "Months", years(0, 11)) +
+        "</div>" +
+        '<span class="q-label">Are you registered for GST?</span>' +
+        optButtons("gstRegistered", ["Yes", "No"]);
+    },
+    wire: function (root, d) { presetSelects(root, d); },
+    validate: function (root, d) {
+      if (d.abnYears == null || d.abnYears === "" || d.abnMonths == null || d.abnMonths === "") { return { ok: false, msg: "Please tell us how long you've had your ABN." }; }
+      if (!d.gstRegistered) { return { ok: false, msg: "Please tell us if you're registered for GST." }; }
+      return { ok: true };
+    }
+  };
+
+  /* Residency status only (used by the business flow) */
+  var STEP_RESIDENCY_STATUS = {
+    section: "Residency",
+    title: "What is your residency status?",
+    tip: "On a visa? No problem — we work with lenders across every situation.",
+    body: function (d) {
+      return optButtons("residencyStatus", ["Australian Citizen", "Permanent resident", "Temporary visa"], "lastwide");
+    },
+    validate: function (root, d) { return d.residencyStatus ? { ok: true } : { ok: false, msg: "Please select your residency status." }; }
   };
 
   /* ------------------------------ flows --------------------------- */
@@ -170,14 +202,23 @@
     sections: ["Loan", "Employment", "Residency", "Final details"],
     steps: [STEP_AMOUNT, STEP_TERM, STEP_EMPLOYMENT, STEP_RESIDENCY, STEP_FINAL]
   };
-  // NOTE: car/business flow is a starting point — to be replaced with the
-  // real steps. Currently: amount, term, car year, then final details.
+  // Car / vehicle: adds car year, keeps the full employment + residency questions.
   var FLOW_CAR = {
-    sections: ["Loan", "Your car", "Final details"],
-    steps: [STEP_AMOUNT, STEP_TERM, STEP_CAR_YEAR, STEP_FINAL]
+    sections: ["Loan", "Your car", "Employment", "Residency", "Final details"],
+    steps: [STEP_AMOUNT, STEP_TERM, STEP_CAR_YEAR, STEP_EMPLOYMENT, STEP_RESIDENCY, STEP_FINAL]
+  };
+  // Business: amount, term, car year, ABN + GST, residency status, contact.
+  var FLOW_BUSINESS = {
+    sections: ["Loan", "Your car", "Business", "Residency", "Final details"],
+    steps: [STEP_AMOUNT, STEP_TERM, STEP_CAR_YEAR, STEP_BUSINESS, STEP_RESIDENCY_STATUS, STEP_FINAL]
   };
 
   var PRODUCTS = { car: "Car loan", business: "Business loan", personal: "Personal loan", debt: "Debt consolidation" };
+  function flowForLoan(l) {
+    if (l === "car") { return FLOW_CAR; }
+    if (l === "business") { return FLOW_BUSINESS; }
+    return FLOW_PERSONAL;
+  }
 
   /* ----------------------- small util builders -------------------- */
   function years(a, b) { var o = []; for (var i = a; i <= b; i++) { o.push(i); } return o; }
@@ -200,7 +241,7 @@
   var loanParam = (qs.get("loan") || "").toLowerCase();
   var state = {
     product: PRODUCTS[loanParam] || null,
-    flow: (loanParam === "car" || loanParam === "business") ? FLOW_CAR : (loanParam ? FLOW_PERSONAL : null),
+    flow: loanParam ? flowForLoan(loanParam) : null,
     data: {},
     index: 0
   };
@@ -229,7 +270,7 @@
       b.addEventListener("click", function () {
         var l = b.dataset.loan;
         state.product = PRODUCTS[l];
-        state.flow = (l === "car" || l === "business") ? FLOW_CAR : FLOW_PERSONAL;
+        state.flow = flowForLoan(l);
         state.index = 0;
         render();
       });
@@ -322,6 +363,8 @@
       employmentDuration: (d.empYears != null ? d.empYears + "y " : "") + (d.empMonths != null ? d.empMonths + "m" : ""),
       residencyStatus: d.residencyStatus || "",
       livingSituation: d.livingSituation || "",
+      abnDuration: (d.abnYears != null && d.abnYears !== "" ? d.abnYears + "y " : "") + (d.abnMonths != null && d.abnMonths !== "" ? d.abnMonths + "m" : ""),
+      gstRegistered: d.gstRegistered || "",
       carYear: d.carYear || null,
       fullName: fullName,
       firstName: d.firstName || "",
