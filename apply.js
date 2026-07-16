@@ -117,13 +117,20 @@
     }
   };
 
-  function idField(field, label, hint, type, placeholder, val) {
+  function idField(field, label, hint, type, placeholder, val, extra) {
     return '<div class="q-field idf">' +
       '<label for="a-' + field + '">' + esc(label) + "</label>" +
       (hint ? '<span class="q-hint">' + esc(hint) + "</span>" : "") +
       '<input class="q-input" id="a-' + field + '" type="' + (type || "text") + '" data-field="' + field + '"' +
-        ' placeholder="' + esc(placeholder || "") + '" value="' + esc(val || "") + '" />' +
+        ' placeholder="' + esc(placeholder || "") + '" value="' + esc(val || "") + '" ' + (extra || "") + " />" +
       "</div>";
+  }
+  // Auto-insert slashes as a date of birth is typed: 12112006 -> 12/11/2006
+  function formatDob(v) {
+    var digits = v.replace(/\D/g, "").slice(0, 8);
+    if (digits.length > 4) { return digits.slice(0, 2) + "/" + digits.slice(2, 4) + "/" + digits.slice(4); }
+    if (digits.length > 2) { return digits.slice(0, 2) + "/" + digits.slice(2); }
+    return digits;
   }
 
   var STEP_FINAL = {
@@ -136,7 +143,7 @@
       return idField("firstName", "First name", "As it appears on your ID", "text", "Enter first name", d.firstName) +
         idField("middleName", "Middle name (optional)", "If you have a middle name on your ID", "text", "Enter middle name", d.middleName) +
         idField("lastName", "Last name", "As it appears on your ID", "text", "Enter last name", d.lastName) +
-        idField("dob", "Date of birth", "As it appears on your ID", "text", "DD/MM/YYYY", d.dob) +
+        idField("dob", "Date of birth", "As it appears on your ID", "text", "DD/MM/YYYY", d.dob, 'inputmode="numeric" maxlength="10" autocomplete="bday"') +
         idField("email", "Email address", "We send your quote to this email address", "email", "Enter email address", d.email) +
         idField("mobile", "Mobile number", "You use this to login and retrieve your quote", "tel", "Enter mobile number", d.mobile);
     },
@@ -313,7 +320,14 @@
       state.data[t.dataset.field] = t.type === "checkbox" ? t.checked : t.value;
     });
     root.addEventListener("input", function (e) {
-      var t = e.target; if (t.dataset.field && t.classList.contains("q-input")) { state.data[t.dataset.field] = t.value.trim(); }
+      var t = e.target;
+      if (!t.dataset || !t.dataset.field || !t.classList.contains("q-input")) { return; }
+      if (t.dataset.field === "dob") {
+        // Don't fight the user while they're deleting characters
+        var deleting = e.inputType && e.inputType.indexOf("delete") !== -1;
+        if (!deleting) { t.value = formatDob(t.value); }
+      }
+      state.data[t.dataset.field] = t.value.trim();
     });
   }
 
