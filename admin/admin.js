@@ -215,12 +215,34 @@
       '<div class="detail-cta">' +
         '<a class="btn btn-primary" href="tel:' + esc(l.mobile) + '">Call</a>' +
         '<a class="btn btn-ghost" href="mailto:' + esc(l.email) + '">Email</a>' +
+      '</div>' +
+      '<div class="detail-danger">' +
+        '<button type="button" class="btn-delete js-delete">Delete lead</button>' +
       '</div>';
 
     detailEl.querySelector(".js-detail-status").addEventListener("change", function () {
       var newStatus = this.value;
       api("PATCH", { id: l.id, status: newStatus }).then(function (res) {
         if (res.ok) { l.status = newStatus; render(); }
+      });
+    });
+
+    detailEl.querySelector(".js-delete").addEventListener("click", function () {
+      if (!window.confirm("Permanently delete " + (l.full_name || "this lead") + "? This cannot be undone.")) { return; }
+      var btn = this;
+      btn.disabled = true; btn.textContent = "Deleting…";
+      api("DELETE", { id: l.id }).then(function (res) {
+        if (res.ok) {
+          leads = leads.filter(function (x) { return x.id !== l.id; });
+          drawer.hidden = true;
+          render();
+        } else {
+          btn.disabled = false; btn.textContent = "Delete lead";
+          window.alert("Could not delete this lead. Please try again.");
+        }
+      }).catch(function () {
+        btn.disabled = false; btn.textContent = "Delete lead";
+        window.alert("Could not delete this lead. Please try again.");
       });
     });
 

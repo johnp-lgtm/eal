@@ -21,6 +21,7 @@ export async function onRequest(context) {
       case "POST":  return await createLead(context);
       case "GET":   return await listLeads(context);
       case "PATCH": return await updateLead(context);
+      case "DELETE": return await deleteLead(context);
       case "OPTIONS": return new Response(null, { status: 204 });
       default: return json({ error: "Method not allowed" }, 405);
     }
@@ -253,6 +254,17 @@ async function updateLead({ request, env }) {
   }
   await env.DB.prepare(`UPDATE leads SET status = ? WHERE id = ?`)
     .bind(body.status, body.id).run();
+  return json({ ok: true });
+}
+
+/* ----------------------------- delete ---------------------------- */
+async function deleteLead({ request, env }) {
+  const blocked = await guardAdmin(request, env);
+  if (blocked) { return blocked; }
+  let body;
+  try { body = await request.json(); } catch (e) { return json({ error: "Invalid JSON" }, 400); }
+  if (!body.id) { return json({ error: "Missing id" }, 400); }
+  await env.DB.prepare(`DELETE FROM leads WHERE id = ?`).bind(body.id).run();
   return json({ ok: true });
 }
 

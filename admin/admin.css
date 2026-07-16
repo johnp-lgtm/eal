@@ -94,6 +94,16 @@ body.admin { background: var(--bg-alt); }
 .detail-cta .btn { border-radius: 2px; }
 .detail-cta { margin-top: 22px; display: flex; gap: 10px; }
 
+/* Destructive action, set apart from the primary CTAs */
+.detail-danger { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); }
+.btn-delete {
+  font-family: inherit; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+  color: #9a3535; background: #fff; border: 1px solid #e0b8b8; border-radius: 2px;
+  padding: 10px 16px;
+}
+.btn-delete:hover { background: #fbeeee; border-color: #c97b7b; }
+.btn-delete:disabled { opacity: 0.6; cursor: default; }
+
 @media (max-width: 640px) {
   .admin-toolbar { flex-direction: column; }
   .admin-table th:nth-child(4), .admin-table td:nth-child(4) { display: none; } /* hide Amount on small screens */
