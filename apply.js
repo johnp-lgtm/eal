@@ -96,6 +96,12 @@
       if (!d.employmentType) { return { ok: false, msg: "Please select your employment type." }; }
       if (d.empYears == null || d.empYears === "" || d.empMonths == null || d.empMonths === "") { return { ok: false, msg: "Please tell us how long you've been there." }; }
       return { ok: true };
+    },
+    // Outside criteria: unemployed, or casual with under 2 months in the job.
+    gate: function (d) {
+      if (d.employmentType === "Unemployed") { return true; }
+      if (d.employmentType === "Casual" && Number(d.empYears) === 0 && Number(d.empMonths) < 2) { return true; }
+      return false;
     }
   };
 
@@ -132,6 +138,16 @@
     if (digits.length > 2) { return digits.slice(0, 2) + "/" + digits.slice(2); }
     return digits;
   }
+  // Age in whole years from a DD/MM/YYYY string (null if unparseable)
+  function ageFromDob(s) {
+    var m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(s || "");
+    if (!m) { return null; }
+    var day = +m[1], mon = +m[2], yr = +m[3];
+    var now = new Date();
+    var age = now.getFullYear() - yr;
+    if ((now.getMonth() + 1) < mon || ((now.getMonth() + 1) === mon && now.getDate() < day)) { age--; }
+    return age;
+  }
 
   var STEP_FINAL = {
     section: "Final details",
@@ -155,6 +171,8 @@
       if (!d.mobile || d.mobile.replace(/\D/g, "").length < 8) { return { ok: false, msg: "Please enter a valid mobile number." }; }
       return { ok: true };
     },
+    // Outside criteria: applicant under 18.
+    gate: function (d) { var a = ageFromDob(d.dob); return a != null && a < 18; },
     submit: true
   };
 
@@ -337,8 +355,23 @@
     var err = root.querySelector(".js-error");
     if (!res.ok) { err.textContent = res.msg; err.hidden = false; return; }
     err.hidden = true;
+    if (step.gate && step.gate(state.data)) { showDecline(); return; }
     if (step.submit) { submit(); }
     else { state.index++; render(); }
+  }
+
+  function showDecline() {
+    stepsEl.innerHTML = "";
+    backBtn.style.visibility = "hidden";
+    if (mbFill) { mbFill.style.width = "100%"; }
+    root.innerHTML =
+      '<div class="apply-done">' +
+        "<h1>Sorry — we can't assist right now</h1>" +
+        "<p>Based on your answers, this falls outside our current lending criteria, so we're not able to help on this occasion.</p>" +
+        '<p>If your circumstances change, we\'d genuinely love to hear from you — you\'re welcome to call us on <a href="tel:+61402083863" style="color:var(--purple);font-weight:700">0402 083 863</a> for a chat.</p>' +
+        '<a class="btn-continue" href="index.html" style="display:block;text-decoration:none;text-align:center">Back to home</a>' +
+      "</div>";
+    window.scrollTo({ top: 0 });
   }
 
   function renderSidebar() {

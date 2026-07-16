@@ -232,7 +232,7 @@ async function emailLead(env, lead) {
       from: env.LEAD_EMAIL_FROM || "Easy As Loans <onboarding@resend.dev>",
       to: env.LEAD_EMAIL_TO.split(",").map(function (s) { return s.trim(); }).filter(Boolean),
       reply_to: lead.email,
-      subject: "New lead: " + lead.full_name + " — " + (lead.loan_type || "Enquiry"),
+      subject: "[NEW LEAD] " + lead.full_name + " — " + (lead.loan_type || "Enquiry"),
       text: lines.join("\n")
     })
   });
