@@ -123,9 +123,8 @@ async function createLead({ request, env }) {
     return json({ error: "Database not configured" }, 500);
   }
 
-  try {
-    // Preferred insert (includes the details column)
-    await env.DB.prepare(
+  function fullInsert() {
+    return env.DB.prepare(
       `INSERT INTO leads
          (id, created_at, loan_type, loan_amount, loan_term, use_type, car_year,
           state, full_name, email, mobile, consent, source, page_url, status, details)
@@ -135,10 +134,9 @@ async function createLead({ request, env }) {
       lead.use_type, lead.car_year, lead.state, lead.full_name, lead.email,
       lead.mobile, lead.consent, lead.source, lead.page_url, lead.status, lead.details
     ).run();
-  } catch (e) {
-    // Fallback if the `details` column doesn't exist yet (migration not run):
-    // still save the core fields so no lead is ever lost.
-    await env.DB.prepare(
+  }
+  function coreInsert() {
+    return env.DB.prepare(
       `INSERT INTO leads
          (id, created_at, loan_type, loan_amount, loan_term, use_type, car_year,
           state, full_name, email, mobile, consent, source, page_url, status)
@@ -148,6 +146,20 @@ async function createLead({ request, env }) {
       lead.use_type, lead.car_year, lead.state, lead.full_name, lead.email,
       lead.mobile, lead.consent, lead.source, lead.page_url, lead.status
     ).run();
+  }
+
+  try {
+    await fullInsert();
+  } catch (e) {
+    // The `details` column probably doesn't exist yet — create it once and
+    // retry, so the full submission is captured with no manual migration.
+    try {
+      await env.DB.prepare("ALTER TABLE leads ADD COLUMN details TEXT").run();
+      await fullInsert();
+    } catch (e2) {
+      // Last resort: still save the core fields so no lead is ever lost.
+      await coreInsert();
+    }
   }
 
   // Email backup (best-effort: never block the lead on email failure)
