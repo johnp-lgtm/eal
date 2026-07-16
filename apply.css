@@ -134,3 +134,6 @@ body.apply-page { background: #f4f3f8; }
   .apply-mobilebar .mb-fill { height: 100%; background: var(--purple); border-radius: 99px; transition: width .2s ease; }
   .apply-main { padding: 26px 0 70px; }
 }
+
+/* Real logo image in the top bar */
+.apply-top .logo-img { height: 46px; }

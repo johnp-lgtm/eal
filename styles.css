@@ -98,6 +98,10 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ------------------------------ Logo ----------------------------- */
 .logo { display: inline-flex; align-items: center; gap: 12px; }
+/* Real logo image */
+.logo-img { height: 54px; width: auto; display: block; }
+.logo-img.is-reversed { filter: brightness(0) invert(1); }
+.footer-brand .logo-img { height: 66px; margin-bottom: 4px; }
 .logo-mark { width: 52px; height: auto; }
 .logo-stroke {
   fill: none;
@@ -543,8 +547,8 @@ button { font-family: inherit; cursor: pointer; }
   .header-phone-label { display: none; }
   .header-actions { gap: 12px; }
   .header-phone-number { font-size: 1rem; }
-  .logo-easy { font-size: 1.45rem; }
-  .logo-mark { width: 44px; }
+  .site-header .logo-img { height: 44px; }
+  .footer-brand .logo-img { height: 56px; }
   .why-grid { grid-template-columns: 1fr; }
   .process-steps { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr; gap: 28px; }
