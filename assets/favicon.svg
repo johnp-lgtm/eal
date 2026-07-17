@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Easy As Loans">
-  <rect width="512" height="512" rx="104" fill="#48206E"/>
-  <g transform="translate(74,150) scale(1.74)" fill="none" stroke="#ffffff" stroke-width="8.5" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M8 92 L98 24 L126 47 L126 32 L146 32 L146 51 C166 68 188 74 204 64"/>
-    <path d="M8 101 C72 95 122 94 152 79 C172 69 190 68 204 64"/>
-  </g>
-</svg>
