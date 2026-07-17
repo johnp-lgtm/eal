@@ -430,12 +430,19 @@
 
     fetch(LEAD_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(payload) })
       .then(function (res) { if (!res.ok) { throw new Error("bad"); } return res.json().catch(function () { return {}; }); })
-      .then(showDone)
+      .then(function (data) { trackLead(); showDone(data); })
       .catch(function (err) {
         if (err instanceof TypeError) { showDone(); return; } // no backend (preview)
         if (btn) { btn.disabled = false; btn.textContent = "See my options"; }
         var e = root.querySelector(".js-error"); if (e) { e.textContent = "Sorry — something went wrong. Please call us on 0402 083 863."; e.hidden = false; }
       });
+  }
+
+  // Fire the Meta Pixel Lead event — only on a genuinely successful submission.
+  function trackLead() {
+    try {
+      if (window.fbq) { fbq("track", "Lead", { content_category: state.product || "Finance enquiry" }); }
+    } catch (e) { /* pixel not loaded — ignore */ }
   }
 
   function showDone() {
