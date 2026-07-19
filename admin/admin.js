@@ -23,6 +23,7 @@
   var leads = [];
   var sortKey = "created_at";
   var sortDir = "desc";
+  var flushNotes = null; // set while a lead drawer is open, to save pending notes on close
 
   function pw() { return sessionStorage.getItem(KEY) || ""; }
 
@@ -84,6 +85,11 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
+  // Turn a status label into a safe CSS class, e.g. "Attempted contact 1" -> "st-attempted-contact-1"
+  function statusClass(s) {
+    return "st-" + String(s || "New").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+  var STATUSES = ["New", "Attempted contact 1", "Attempted contact 2", "Attempted contact 3", "Converted"];
 
   function filtered() {
     var q = (searchEl.value || "").toLowerCase().trim();
@@ -116,7 +122,7 @@
         '<td>' + esc(l.loan_type || "—") + '</td>' +
         '<td class="num">' + esc(fmtMoney(l.loan_amount)) + '</td>' +
         '<td>' + esc(l.state || "—") + '</td>' +
-        '<td><span class="badge ' + esc(l.status || "New") + '">' + esc(l.status || "New") + '</span></td>' +
+        '<td><span class="badge ' + statusClass(l.status) + '">' + esc(l.status || "New") + '</span></td>' +
         '</tr>';
     }).join("");
 
@@ -156,7 +162,7 @@
     if (!l) { return; }
     var d = {};
     try { d = l.details ? JSON.parse(l.details) : {}; } catch (e) { d = {}; }
-    var statuses = ["New", "Contacted", "Qualified", "Won", "Lost"];
+    var statuses = STATUSES;
 
     var employmentHtml = (d.employmentType || d.employmentDuration)
       ? '<div class="detail-section"><h3>Employment</h3>' +
@@ -208,10 +214,16 @@
         '<label for="d-status">Status</label>' +
         '<select id="d-status" class="js-detail-status">' +
           statuses.map(function (s) {
-            return '<option value="' + s + '"' + (s === (l.status || "New") ? " selected" : "") + '>' + s + '</option>';
+            return '<option value="' + esc(s) + '"' + (s === (l.status || "New") ? " selected" : "") + '>' + esc(s) + '</option>';
           }).join("") +
         '</select>' +
       '</div>' +
+
+      '<div class="detail-section detail-notes">' +
+        '<h3>Notes <span class="notes-state js-notes-state"></span></h3>' +
+        '<textarea class="notes-input js-notes" placeholder="Add a note — e.g. \'Left voicemail 2pm, will try again tomorrow.\' Saves automatically.">' + esc(l.notes || "") + '</textarea>' +
+      '</div>' +
+
       '<div class="detail-cta">' +
         '<a class="btn btn-primary" href="tel:' + esc(l.mobile) + '">Call</a>' +
         '<a class="btn btn-ghost" href="mailto:' + esc(l.email) + '">Email</a>' +
@@ -226,6 +238,34 @@
         if (res.ok) { l.status = newStatus; render(); }
       });
     });
+
+    // Auto-saving notes: debounced while typing, flushed on blur.
+    var notesEl = detailEl.querySelector(".js-notes");
+    var noteState = detailEl.querySelector(".js-notes-state");
+    var saveTimer = null;
+    var lastSaved = notesEl.value;
+    function saveNotes() {
+      clearTimeout(saveTimer);
+      var val = notesEl.value;
+      if (val === lastSaved) { return; }
+      noteState.textContent = "Saving…";
+      api("PATCH", { id: l.id, notes: val }).then(function (res) {
+        if (res.ok) {
+          lastSaved = val; l.notes = val;
+          noteState.textContent = "Saved ✓";
+          setTimeout(function () { if (noteState) { noteState.textContent = ""; } }, 1600);
+        } else {
+          noteState.textContent = "Not saved — check connection";
+        }
+      }).catch(function () { noteState.textContent = "Not saved — check connection"; });
+    }
+    notesEl.addEventListener("input", function () {
+      noteState.textContent = "…";
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(saveNotes, 700);
+    });
+    notesEl.addEventListener("blur", saveNotes);
+    flushNotes = saveNotes;
 
     detailEl.querySelector(".js-delete").addEventListener("click", function () {
       if (!window.confirm("Permanently delete " + (l.full_name || "this lead") + "? This cannot be undone.")) { return; }
@@ -249,11 +289,15 @@
     drawer.hidden = false;
   }
 
+  function closeDrawer() {
+    if (flushNotes) { flushNotes(); flushNotes = null; }
+    drawer.hidden = true;
+  }
   document.querySelectorAll(".js-drawer-close").forEach(function (el) {
-    el.addEventListener("click", function () { drawer.hidden = true; });
+    el.addEventListener("click", closeDrawer);
   });
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && !drawer.hidden) { drawer.hidden = true; }
+    if (e.key === "Escape" && !drawer.hidden) { closeDrawer(); }
   });
 
   /* --------------------------- Boot ------------------------------- */

@@ -69,6 +69,12 @@ function str(v, max) {
   return s.slice(0, max || 200);
 }
 
+// Like str(), but preserves newlines/tabs so free-text notes keep their formatting.
+function noteStr(v, max) {
+  if (v === null || v === undefined) { return ""; }
+  return String(v).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "").slice(0, max || 10000);
+}
+
 function clientIp(request) {
   return request.headers.get("CF-Connecting-IP") ||
          request.headers.get("X-Forwarded-For") || "unknown";
@@ -248,12 +254,32 @@ async function updateLead({ request, env }) {
   if (blocked) { return blocked; }
   let body;
   try { body = await request.json(); } catch (e) { return json({ error: "Invalid JSON" }, 400); }
-  const allowed = ["New", "Contacted", "Qualified", "Won", "Lost"];
-  if (!body.id || allowed.indexOf(body.status) === -1) {
-    return json({ error: "Invalid id or status" }, 400);
+  if (!body.id) { return json({ error: "Missing id" }, 400); }
+
+  const allowed = ["New", "Attempted contact 1", "Attempted contact 2", "Attempted contact 3", "Converted"];
+  const sets = [], binds = [];
+  if (body.status !== undefined) {
+    if (allowed.indexOf(body.status) === -1) { return json({ error: "Invalid status" }, 400); }
+    sets.push("status = ?"); binds.push(body.status);
   }
-  await env.DB.prepare(`UPDATE leads SET status = ? WHERE id = ?`)
-    .bind(body.status, body.id).run();
+  if (body.notes !== undefined) {
+    sets.push("notes = ?"); binds.push(noteStr(body.notes, 10000));
+  }
+  if (!sets.length) { return json({ error: "Nothing to update" }, 400); }
+  binds.push(body.id);
+  const sql = "UPDATE leads SET " + sets.join(", ") + " WHERE id = ?";
+
+  try {
+    await env.DB.prepare(sql).bind(...binds).run();
+  } catch (e) {
+    // The notes column may not exist yet — create it once and retry.
+    if (body.notes !== undefined) {
+      try { await env.DB.prepare("ALTER TABLE leads ADD COLUMN notes TEXT").run(); } catch (e2) { /* already exists */ }
+      await env.DB.prepare(sql).bind(...binds).run();
+    } else {
+      throw e;
+    }
+  }
   return json({ ok: true });
 }
 

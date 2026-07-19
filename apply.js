@@ -97,10 +97,13 @@
       if (d.empYears == null || d.empYears === "" || d.empMonths == null || d.empMonths === "") { return { ok: false, msg: "Please tell us how long you've been there." }; }
       return { ok: true };
     },
-    // Outside criteria: unemployed, or casual with under 2 months in the job.
+    // Outside criteria: unemployed; Centrelink / Pension; casual under 2 months;
+    // or self-employed under 4 months.
     gate: function (d) {
       if (d.employmentType === "Unemployed") { return true; }
+      if (d.employmentType === "Centrelink / Pension") { return true; }
       if (d.employmentType === "Casual" && Number(d.empYears) === 0 && Number(d.empMonths) < 2) { return true; }
+      if (d.employmentType === "Self-employed" && Number(d.empYears) === 0 && Number(d.empMonths) < 4) { return true; }
       return false;
     }
   };

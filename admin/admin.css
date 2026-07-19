@@ -56,12 +56,12 @@ body.admin { background: var(--bg-alt); }
 .admin-table tbody tr:last-child td { border-bottom: none; }
 .admin-name { font-weight: 700; color: var(--ink); }
 
-.badge { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 0.76rem; font-weight: 700; border: 1px solid; }
-.badge.New        { color: #1d6fb8; border-color: #bcdcf2; background: #eef6fc; }
-.badge.Contacted  { color: #8a5a00; border-color: #f0dcae; background: #fcf5e6; }
-.badge.Qualified  { color: #5a3a86; border-color: #ddccef; background: #f4eefb; }
-.badge.Won        { color: #1d7a4d; border-color: #b6e0c8; background: #eaf7f0; }
-.badge.Lost       { color: #9a3535; border-color: #e6c3c3; background: #fbeeee; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 0.76rem; font-weight: 700; border: 1px solid; color: var(--grey); border-color: var(--border); background: #f4f4f4; }
+.badge.st-new                 { color: #1d6fb8; border-color: #bcdcf2; background: #eef6fc; }
+.badge.st-attempted-contact-1 { color: #8a5a00; border-color: #f0dcae; background: #fcf5e6; }
+.badge.st-attempted-contact-2 { color: #a35400; border-color: #f0cfa0; background: #fbeedd; }
+.badge.st-attempted-contact-3 { color: #9a3535; border-color: #e6c3c3; background: #fbeeee; }
+.badge.st-converted           { color: #1d7a4d; border-color: #b6e0c8; background: #eaf7f0; }
 
 .admin-empty { text-align: center; color: var(--muted); padding: 40px 0; }
 
@@ -93,6 +93,17 @@ body.admin { background: var(--bg-alt); }
 .drawer-panel { border-left: 1px solid #999; }
 .detail-cta .btn { border-radius: 2px; }
 .detail-cta { margin-top: 22px; display: flex; gap: 10px; }
+
+/* Auto-saving notes */
+.detail-notes { margin-top: 24px; }
+.detail-notes h3 { display: flex; align-items: center; gap: 8px; }
+.notes-state { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: none; letter-spacing: 0; }
+.notes-input {
+  width: 100%; min-height: 120px; resize: vertical; font-family: inherit; font-size: 0.92rem;
+  line-height: 1.5; color: var(--ink); padding: 12px 13px; border: 1px solid var(--border);
+  border-radius: 4px; background: #fff;
+}
+.notes-input:focus { outline: none; border-color: var(--purple); }
 
 /* Destructive action, set apart from the primary CTAs */
 .detail-danger { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); }
