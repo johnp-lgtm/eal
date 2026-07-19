@@ -121,6 +121,16 @@ async function createLead({ request, env }) {
     return json({ error: "Too many requests. Please try again later." }, 429);
   }
 
+  // Approximate location from Cloudflare's edge geolocation (no form field, no
+  // external IP lookup). request.cf is populated on the live edge.
+  const cf = request.cf || {};
+  const geo = {
+    country: str(cf.country, 8) || null,        // e.g. "AU"
+    region: str(cf.region, 60) || null,         // e.g. "South Australia"
+    regionCode: str(cf.regionCode, 8) || null,  // e.g. "SA"
+    city: str(cf.city, 80) || null              // e.g. "Adelaide"
+  };
+
   const fullName = str(body.fullName, 120);
   const email = str(body.email, 160);
   const mobile = str(body.mobile, 40);
@@ -139,7 +149,8 @@ async function createLead({ request, env }) {
     loan_term: toInt(body.loanTerm),
     use_type: str(body.use, 40) || null,
     car_year: toInt(body.carYear),
-    state: str(body.state, 40) || null,
+    // Form doesn't ask for state — fall back to the edge-detected region/code.
+    state: str(body.state, 40) || geo.regionCode || geo.region || null,
     full_name: fullName,
     email: email,
     mobile: mobile,
@@ -174,6 +185,10 @@ async function createLead({ request, env }) {
     submittedAt: str(body.submittedAt, 40) || null,
     source: str(body.source, 80) || null,
     pageUrl: str(body.pageUrl, 300) || null,
+    geoCity: geo.city,
+    geoRegion: geo.region,
+    geoRegionCode: geo.regionCode,
+    geoCountry: geo.country,
     ip: clientIp(request)
   });
   // keep a copy on the object so the email can include everything
@@ -308,6 +323,7 @@ async function emailLead(env, lead) {
     "Use:          " + (lead.use_type || "—"),
     "Car year:     " + (lead.car_year != null ? lead.car_year : "—"),
     "State:        " + (lead.state || "—"),
+    "Location:     " + ([x.geoCity, x.geoRegion, x.geoCountry].filter(Boolean).join(", ") || "—") + " (approx.)",
     "",
     "Employment:   " + (x.employmentType || "—"),
     "Time there:   " + (x.employmentDuration || "—"),

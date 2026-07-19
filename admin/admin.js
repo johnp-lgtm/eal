@@ -204,9 +204,16 @@
         row("Consent", l.consent ? "Yes" : "No") +
       '</div>' +
 
+      '<div class="detail-section"><h3>Location <span style="font-weight:600;text-transform:none;letter-spacing:0">(approx. from IP)</span></h3>' +
+        row("City", esc(d.geoCity || "—")) +
+        row("State / region", esc(d.geoRegion || d.geoRegionCode || "—")) +
+        row("Country", esc(d.geoCountry || "—")) +
+      '</div>' +
+
       '<div class="detail-section"><h3>Source</h3>' +
         row("From", esc(l.source || "—")) +
         (d.submittedAt ? row("Submitted", esc(fmtDate(d.submittedAt))) : "") +
+        (d.ip ? row("IP address", esc(d.ip)) : "") +
         row("Lead ID", esc(l.id)) +
       '</div>' +
 
