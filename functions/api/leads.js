@@ -141,6 +141,10 @@ async function createLead({ request, env }) {
     return json({ error: "Invalid email" }, 400);
   }
 
+  // Minimum loan size: we don't take enquiries under $10,000. Drop silently.
+  const amount = toInt(body.loanAmount);
+  if (amount != null && amount < 10000) { return json({ ok: true }); }
+
   const lead = {
     id: crypto.randomUUID(),
     created_at: new Date().toISOString(),

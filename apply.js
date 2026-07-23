@@ -25,7 +25,7 @@
 
   /* ----------------------------- helpers -------------------------- */
   function money(n) { return "$" + (Number(n) || 0).toLocaleString("en-AU"); }
-  function clampAmount(n) { return Math.min(150000, Math.max(2000, Math.round(n / 500) * 500)); }
+  function clampAmount(n) { return Math.min(150000, Math.max(10000, Math.round(n / 500) * 500)); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
   function optButtons(field, opts, classes) {
@@ -49,7 +49,7 @@
     body: function (d) {
       var v = d.loanAmount || 10000;
       return '<div class="amount-field"><input type="text" class="js-amount-input" inputmode="numeric" value="' + money(v) + '" aria-label="Loan amount" /></div>' +
-        '<input type="range" class="range js-amount-range" min="2000" max="150000" step="500" value="' + v + '" aria-label="Loan amount slider" />';
+        '<input type="range" class="range js-amount-range" min="10000" max="150000" step="500" value="' + v + '" aria-label="Loan amount slider" />';
     },
     wire: function (root, d) {
       if (!d.loanAmount) { d.loanAmount = 10000; }
@@ -61,7 +61,7 @@
       });
       input.addEventListener("blur", function () { d.loanAmount = clampAmount(d.loanAmount || 10000); input.value = money(d.loanAmount); range.value = d.loanAmount; });
     },
-    validate: function (root, d) { return d.loanAmount >= 2000 ? { ok: true } : { ok: false, msg: "Please enter an amount." }; }
+    validate: function (root, d) { return d.loanAmount >= 10000 ? { ok: true } : { ok: false, msg: "We assist with loans of $10,000 or more." }; }
   };
 
   var STEP_TERM = {
