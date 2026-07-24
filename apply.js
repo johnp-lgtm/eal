@@ -99,13 +99,11 @@
       if (d.empYears == null || d.empYears === "" || d.empMonths == null || d.empMonths === "") { return { ok: false, msg: "Please tell us how long you've been there." }; }
       return { ok: true };
     },
-    // Outside criteria: only Full-time, Part-time or Casual are accepted. Everyone
-    // else is declined (Self-employed, Contractor, Unemployed, Retired, Centrelink /
-    // Pension, disability/DSP, etc.), plus casual with under 2 months in the job.
+    // Outside criteria: retired, Centrelink / Pension and disability/DSP (and the
+    // unemployed) are declined. Full-time, Part-time, Casual, Self-employed and
+    // Contractor are all accepted.
     gate: function (d) {
-      if (["Full-time", "Part-time", "Casual"].indexOf(d.employmentType) === -1) { return true; }
-      if (d.employmentType === "Casual" && Number(d.empYears) === 0 && Number(d.empMonths) < 2) { return true; }
-      return false;
+      return ["Unemployed", "Retired", "Centrelink / Pension"].indexOf(d.employmentType) !== -1;
     }
   };
 
