@@ -99,13 +99,12 @@
       if (d.empYears == null || d.empYears === "" || d.empMonths == null || d.empMonths === "") { return { ok: false, msg: "Please tell us how long you've been there." }; }
       return { ok: true };
     },
-    // Outside criteria: unemployed; Centrelink / Pension; casual under 2 months;
-    // or self-employed under 4 months.
+    // Outside criteria: only Full-time, Part-time or Casual are accepted. Everyone
+    // else is declined (Self-employed, Contractor, Unemployed, Retired, Centrelink /
+    // Pension, disability/DSP, etc.), plus casual with under 2 months in the job.
     gate: function (d) {
-      if (d.employmentType === "Unemployed") { return true; }
-      if (d.employmentType === "Centrelink / Pension") { return true; }
+      if (["Full-time", "Part-time", "Casual"].indexOf(d.employmentType) === -1) { return true; }
       if (d.employmentType === "Casual" && Number(d.empYears) === 0 && Number(d.empMonths) < 2) { return true; }
-      if (d.employmentType === "Self-employed" && Number(d.empYears) === 0 && Number(d.empMonths) < 4) { return true; }
       return false;
     }
   };
@@ -113,7 +112,7 @@
   var STEP_RESIDENCY = {
     section: "Residency",
     title: "What is your residency status?",
-    tip: "On a visa or renting? No problem — we work with lenders across every situation.",
+    tip: "This helps us match you with the right lenders.",
     body: function (d) {
       var status = optButtons("residencyStatus", ["Australian Citizen", "Permanent resident", "Temporary visa"], "lastwide");
       return status +
@@ -125,7 +124,9 @@
       if (!d.residencyStatus) { return { ok: false, msg: "Please select your residency status." }; }
       if (!d.livingSituation) { return { ok: false, msg: "Please select your living situation." }; }
       return { ok: true };
-    }
+    },
+    // Outside criteria: temporary visa holders are declined.
+    gate: function (d) { return d.residencyStatus === "Temporary visa"; }
   };
 
   function idField(field, label, hint, type, placeholder, val, extra) {
