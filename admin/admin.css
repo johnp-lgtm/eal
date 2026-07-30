@@ -81,41 +81,32 @@ body.admin { background: #ffffff; }
 .col-body { padding: 0 10px 12px; display: flex; flex-direction: column; gap: 10px; min-height: 44px; }
 .col-empty { color: var(--muted); font-size: 0.8rem; text-align: center; padding: 14px 0; }
 
-/* Full column accents: New + all Attempted Contact = red, Converted = cyan */
+/* Column accent = coloured TOP BORDER only; columns stay neutral otherwise.
+   New + all Attempted Contact = red, Converted = cyan. */
 .col.st-new,
 .col.st-attempted-contact-1,
 .col.st-attempted-contact-2,
-.col.st-attempted-contact-3 {
-  background: #fcf1f0; border-color: #e6c4bf; border-top-color: #d33a2c;
-}
-.col.st-new .col-title,
-.col.st-attempted-contact-1 .col-title,
-.col.st-attempted-contact-2 .col-title,
-.col.st-attempted-contact-3 .col-title { color: #a82c22; }
-.col.st-new .col-count,
-.col.st-attempted-contact-1 .col-count,
-.col.st-attempted-contact-2 .col-count,
-.col.st-attempted-contact-3 .col-count { color: #b23025; border-color: #e0b3ad; }
-/* Red columns: red icon, outlined red amount pill, soft-pink time/state pills */
+.col.st-attempted-contact-3 { border-top-color: #e0695b; }
+.col.st-converted { border-top-color: #0aa2c4; }
+
+/* Card accents: coloured icon, coloured-outline amount pill (black text),
+   subtle-tint time/state pills (no border, grey/black text inside). */
 .col.st-new .lc-icon,
 .col.st-attempted-contact-1 .lc-icon,
 .col.st-attempted-contact-2 .lc-icon,
-.col.st-attempted-contact-3 .lc-icon { color: #d33a2c; }
+.col.st-attempted-contact-3 .lc-icon { color: #e0695b; }
 .col.st-new .lc-amount,
 .col.st-attempted-contact-1 .lc-amount,
 .col.st-attempted-contact-2 .lc-amount,
-.col.st-attempted-contact-3 .lc-amount { background: #fff; border-color: #dd8b81; color: #c0392b; }
+.col.st-attempted-contact-3 .lc-amount { border-color: #e0695b; }
 .col.st-new .lc-time, .col.st-new .lc-state,
 .col.st-attempted-contact-1 .lc-time, .col.st-attempted-contact-1 .lc-state,
 .col.st-attempted-contact-2 .lc-time, .col.st-attempted-contact-2 .lc-state,
-.col.st-attempted-contact-3 .lc-time, .col.st-attempted-contact-3 .lc-state { background: #f5e6e4; }
+.col.st-attempted-contact-3 .lc-time, .col.st-attempted-contact-3 .lc-state { background: #f9eae7; }
 
-.col.st-converted { background: #ecf6f9; border-color: #bcdfe8; border-top-color: #0aa2c4; }
-.col.st-converted .col-title { color: #0a7d97; }
-.col.st-converted .col-count { color: #0a7d97; border-color: #a6d5e0; }
 .col.st-converted .lc-icon { color: #0aa2c4; }
-.col.st-converted .lc-amount { background: #fff; border-color: #86c9da; color: #0a7d97; }
-.col.st-converted .lc-time, .col.st-converted .lc-state { background: #e4f1f5; }
+.col.st-converted .lc-amount { border-color: #0aa2c4; }
+.col.st-converted .lc-time, .col.st-converted .lc-state { background: #e6f2f5; }
 
 /* Lead card */
 .lead-card {
