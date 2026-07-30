@@ -106,6 +106,23 @@
   function detailsOf(l) { try { return l.details ? JSON.parse(l.details) : {}; } catch (e) { return {}; } }
   function lastEdited(l) { return l.updated_at || l.created_at; }
 
+  // Prefilled text — opens Messages/iMessage on the user's device with the
+  // customer's number and this message ready to send. Edit the template to taste.
+  var SMS_TEMPLATE = "Hi {first}, it's Easy As Loans about your finance enquiry — when's a good time for a quick chat?";
+  function smsNumber(m) {
+    var d = String(m || "").replace(/[^\d+]/g, "");
+    if (d.charAt(0) === "0") { return "+61" + d.slice(1); }   // 04xx… -> +614xx…
+    if (d.slice(0, 2) === "61") { return "+" + d; }
+    return d;
+  }
+  function smsBody(l) {
+    var d = detailsOf(l);
+    var first = d.firstName || String(l.full_name || "there").trim().split(" ")[0] || "there";
+    return SMS_TEMPLATE.replace("{first}", first);
+  }
+  function smsHref(l) { return "sms:" + smsNumber(l.mobile) + "&body=" + encodeURIComponent(smsBody(l)); }
+  function openMessage(l) { window.location.href = smsHref(l); }
+
   // Small inline icon for the loan type.
   function loanIcon(type) {
     var t = String(type || "").toLowerCase();
@@ -261,6 +278,7 @@
 
       '<div class="detail-cta">' +
         '<a class="btn btn-primary" href="tel:' + esc(l.mobile) + '">Call</a>' +
+        '<a class="btn btn-ghost" href="' + smsHref(l) + '">Text</a>' +
         '<a class="btn btn-ghost" href="mailto:' + esc(l.email) + '">Email</a>' +
       '</div>' +
       '<div class="detail-danger">' +
@@ -277,7 +295,11 @@
     detailEl.querySelector(".js-detail-status").addEventListener("change", function () {
       var newStatus = this.value;
       api("PATCH", { id: l.id, status: newStatus }).then(function (res) {
-        if (res.ok) { l.status = newStatus; touch(); }
+        if (res.ok) {
+          l.status = newStatus; touch();
+          // Moving into a contact-attempt stage pops a prefilled text.
+          if (newStatus.indexOf("Attempted contact") === 0) { openMessage(l); }
+        }
       });
     });
 
