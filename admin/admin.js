@@ -156,8 +156,9 @@
     emptyEl.hidden = leads.length !== 0;
 
     boardEl.innerHTML = STATUSES.map(function (status) {
+      // Oldest-edited (most overdue) at the top, freshly-edited sink to the bottom.
       var cards = visible.filter(function (l) { return effStatus(l) === status; })
-        .sort(function (a, b) { return String(lastEdited(b) || "").localeCompare(String(lastEdited(a) || "")); });
+        .sort(function (a, b) { return String(lastEdited(a) || "").localeCompare(String(lastEdited(b) || "")); });
       return '<section class="col ' + statusClass(status) + '">' +
         '<header class="col-head">' +
           '<span class="col-title">' + esc(status) + '</span>' +

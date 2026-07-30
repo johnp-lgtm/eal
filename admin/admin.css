@@ -81,12 +81,30 @@ body.admin { background: #ffffff; }
 .col-body { padding: 0 10px 12px; display: flex; flex-direction: column; gap: 10px; min-height: 44px; }
 .col-empty { color: var(--muted); font-size: 0.8rem; text-align: center; padding: 14px 0; }
 
-/* Column top-border accents: New neutral, all Attempted red, Converted cyan */
-.col.st-new                 { border-top-color: #d33a2c; }
-.col.st-attempted-contact-1 { border-top-color: #d33a2c; }
-.col.st-attempted-contact-2 { border-top-color: #d33a2c; }
-.col.st-attempted-contact-3 { border-top-color: #d33a2c; }
-.col.st-converted           { border-top-color: #0aa2c4; }
+/* Full column accents: New + all Attempted Contact = red, Converted = cyan */
+.col.st-new,
+.col.st-attempted-contact-1,
+.col.st-attempted-contact-2,
+.col.st-attempted-contact-3 {
+  background: #fcf1f0; border-color: #e6c4bf; border-top-color: #d33a2c;
+}
+.col.st-new .col-title,
+.col.st-attempted-contact-1 .col-title,
+.col.st-attempted-contact-2 .col-title,
+.col.st-attempted-contact-3 .col-title { color: #a82c22; }
+.col.st-new .col-count,
+.col.st-attempted-contact-1 .col-count,
+.col.st-attempted-contact-2 .col-count,
+.col.st-attempted-contact-3 .col-count { color: #b23025; border-color: #e0b3ad; }
+.col.st-new .lead-card,
+.col.st-attempted-contact-1 .lead-card,
+.col.st-attempted-contact-2 .lead-card,
+.col.st-attempted-contact-3 .lead-card { border-left: 3px solid #d33a2c; }
+
+.col.st-converted { background: #ecf6f9; border-color: #bcdfe8; border-top-color: #0aa2c4; }
+.col.st-converted .col-title { color: #0a7d97; }
+.col.st-converted .col-count { color: #0a7d97; border-color: #a6d5e0; }
+.col.st-converted .lead-card { border-left: 3px solid #0aa2c4; }
 
 /* Lead card */
 .lead-card {
