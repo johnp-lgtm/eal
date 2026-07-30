@@ -45,31 +45,11 @@
     </header>
 
     <div class="admin-toolbar">
-      <input type="search" class="admin-search js-search" placeholder="Search name, email, mobile, state…" />
-      <select class="admin-filter js-status-filter">
-        <option value="">All statuses</option>
-        <option value="New">New</option>
-        <option value="Attempted contact 1">Attempted contact 1</option>
-        <option value="Attempted contact 2">Attempted contact 2</option>
-        <option value="Attempted contact 3">Attempted contact 3</option>
-        <option value="Converted">Converted</option>
-      </select>
+      <input type="search" class="admin-search js-search" placeholder="Search by name or phone number…" />
     </div>
 
-    <div class="admin-tablewrap">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th data-sort="created_at" class="sortable">Received</th>
-            <th data-sort="full_name" class="sortable">Name</th>
-            <th data-sort="loan_type" class="sortable">Type</th>
-            <th data-sort="loan_amount" class="sortable num">Amount</th>
-            <th data-sort="state" class="sortable">State</th>
-            <th data-sort="status" class="sortable">Status</th>
-          </tr>
-        </thead>
-        <tbody class="js-rows"></tbody>
-      </table>
+    <div class="admin-boardwrap">
+      <div class="admin-board js-board"></div>
       <p class="admin-empty js-empty" hidden>No leads yet. They'll appear here as soon as someone completes the form.</p>
     </div>
   </div>

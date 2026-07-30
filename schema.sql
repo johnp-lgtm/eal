@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS leads (
   page_url    TEXT,
   status      TEXT NOT NULL DEFAULT 'New',
   details     TEXT,  -- full submission as JSON (employment, residency, DOB, etc.)
-  notes       TEXT   -- free-text notes added by staff in the dashboard
+  notes       TEXT,  -- free-text notes added by staff in the dashboard
+  updated_at  TEXT   -- last time the lead was edited (status/notes) in the dashboard
 );
 
 CREATE INDEX IF NOT EXISTS idx_leads_created ON leads (created_at DESC);

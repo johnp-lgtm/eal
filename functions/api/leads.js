@@ -287,19 +287,18 @@ async function updateLead({ request, env }) {
     sets.push("notes = ?"); binds.push(noteStr(body.notes, 10000));
   }
   if (!sets.length) { return json({ error: "Nothing to update" }, 400); }
+  // Every edit stamps the last-modified time (drives "edited X ago" in the dashboard).
+  sets.push("updated_at = ?"); binds.push(new Date().toISOString());
   binds.push(body.id);
   const sql = "UPDATE leads SET " + sets.join(", ") + " WHERE id = ?";
 
   try {
     await env.DB.prepare(sql).bind(...binds).run();
   } catch (e) {
-    // The notes column may not exist yet — create it once and retry.
-    if (body.notes !== undefined) {
-      try { await env.DB.prepare("ALTER TABLE leads ADD COLUMN notes TEXT").run(); } catch (e2) { /* already exists */ }
-      await env.DB.prepare(sql).bind(...binds).run();
-    } else {
-      throw e;
-    }
+    // The notes / updated_at columns may not exist yet — add them once and retry.
+    try { await env.DB.prepare("ALTER TABLE leads ADD COLUMN notes TEXT").run(); } catch (e2) { /* already exists */ }
+    try { await env.DB.prepare("ALTER TABLE leads ADD COLUMN updated_at TEXT").run(); } catch (e3) { /* already exists */ }
+    await env.DB.prepare(sql).bind(...binds).run();
   }
   return json({ ok: true });
 }
