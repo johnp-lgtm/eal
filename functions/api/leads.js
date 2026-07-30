@@ -49,11 +49,18 @@ function isAuthed(request, env) {
   if (!env.ADMIN_PASSWORD) { return false; }
   const header = request.headers.get("Authorization") || "";
   const token = header.replace(/^Bearer\s+/i, "");
-  // length-safe-ish comparison
-  if (token.length !== env.ADMIN_PASSWORD.length) { return false; }
-  let diff = 0;
-  for (let i = 0; i < token.length; i++) { diff |= token.charCodeAt(i) ^ env.ADMIN_PASSWORD.charCodeAt(i); }
-  return diff === 0;
+  const base = env.ADMIN_PASSWORD;
+  // Accept the base password plus per-user prefixes (Cristian / Daniela / John):
+  // C+base, D+base, J+base. Each is checked in constant-ish time.
+  const valid = [base, "C" + base, "D" + base, "J" + base];
+  let ok = false;
+  for (const v of valid) {
+    if (token.length !== v.length) { continue; }
+    let diff = 0;
+    for (let i = 0; i < token.length; i++) { diff |= token.charCodeAt(i) ^ v.charCodeAt(i); }
+    if (diff === 0) { ok = true; }
+  }
+  return ok;
 }
 
 function toInt(v) {

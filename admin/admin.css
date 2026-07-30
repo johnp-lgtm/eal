@@ -27,6 +27,7 @@ body.admin { background: #ffffff; }
 .admin-bar .logo-loans { color: rgba(255,255,255,.8); }
 .admin-title { font-weight: 700; color: rgba(255,255,255,.85); }
 .admin-bar-right { display: flex; align-items: center; gap: 10px; }
+.admin-user { font-size: 0.9rem; font-weight: 800; color: #fff; margin-right: 10px; }
 .admin-count { font-size: 0.85rem; color: rgba(255,255,255,.8); margin-right: 4px; }
 .admin-bar .btn-ghost { color: #fff; border-color: rgba(255,255,255,.45); background: transparent; }
 .admin-bar .btn-ghost:hover { background: rgba(255,255,255,.10); border-color: #fff; }

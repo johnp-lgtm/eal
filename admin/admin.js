@@ -26,6 +26,11 @@
 
   function pw() { return sessionStorage.getItem(KEY) || ""; }
 
+  // Which staff member is logged in — derived from the password's first letter.
+  // CEAL -> Cristian, DEAL -> Daniela, JEAL -> John (base password -> Cristian).
+  var AGENTS = { C: "Cristian", D: "Daniela", J: "John" };
+  function agentName() { return AGENTS[(pw().charAt(0) || "").toUpperCase()] || "Cristian"; }
+
   function api(method, body) {
     return fetch("/api/leads", {
       method: method,
@@ -38,7 +43,11 @@
   }
 
   /* ----------------------------- Auth ----------------------------- */
-  function showApp() { loginView.hidden = true; appView.hidden = false; }
+  function showApp() {
+    loginView.hidden = true; appView.hidden = false;
+    var u = document.querySelector(".js-user");
+    if (u) { u.textContent = "Hi, " + agentName(); }
+  }
   function showLogin() { appView.hidden = true; loginView.hidden = false; }
 
   loginForm.addEventListener("submit", function (e) {
@@ -110,9 +119,9 @@
   // stage-specific message. Edit the templates to taste.
   // {first} = customer first name, {loan} = their loan type (e.g. "car loan").
   var SMS_TEMPLATES = {
-    "Attempted contact 1": "Hey {first}, it's Cristian from Easy As Loans, just responding to your {loan} enquiry. Give me a call back when you're free!",
-    "Attempted contact 2": "Hey {first}, just following up to see if you're still looking into your finance options? We have access to over 50 different lenders, and are able to source the best interest rates tailored to your credit profile. Give me a call if you'd like a quote or have any questions. Thanks, Cristian from Easy As Loans 🙂",
-    "Attempted contact 3": "Hey {first}, it's Cristian from Easy As Loans. I've reached out a few times now and haven't heard back, so I'm going to assume you've gone in a different direction with this one. That's no worries, I'll go ahead and close your file down on my end for now. If I'm wrong though and you still need finance, feel free to reach out. Thanks!"
+    "Attempted contact 1": "Hey {first}, it's {agent} from Easy As Loans, just responding to your {loan} enquiry. Give me a call back when you're free!",
+    "Attempted contact 2": "Hey {first}, just following up to see if you're still looking into your finance options? We have access to over 50 different lenders, and are able to source the best interest rates tailored to your credit profile. Give me a call if you'd like a quote or have any questions. Thanks, {agent} from Easy As Loans 🙂",
+    "Attempted contact 3": "Hey {first}, it's {agent} from Easy As Loans. I've reached out a few times now and haven't heard back, so I'm going to assume you've gone in a different direction with this one. That's no worries, I'll go ahead and close your file down on my end for now. If I'm wrong though and you still need finance, feel free to reach out. Thanks!"
   };
   function smsNumber(m) {
     var d = String(m || "").replace(/[^\d+]/g, "");
@@ -126,7 +135,7 @@
     var tpl = SMS_TEMPLATES[st] || SMS_TEMPLATES["Attempted contact 1"];
     var d = detailsOf(l);
     var first = d.firstName || String(l.full_name || "there").trim().split(" ")[0] || "there";
-    return tpl.replace(/\{first\}/g, first).replace(/\{loan\}/g, loanPhrase(l));
+    return tpl.replace(/\{first\}/g, first).replace(/\{loan\}/g, loanPhrase(l)).replace(/\{agent\}/g, agentName());
   }
   function smsHref(l, status) { return "sms:" + smsNumber(l.mobile) + "&body=" + encodeURIComponent(smsBody(l, status)); }
   function openMessage(l, status) { window.location.href = smsHref(l, status); }
