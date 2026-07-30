@@ -106,22 +106,30 @@
   function detailsOf(l) { try { return l.details ? JSON.parse(l.details) : {}; } catch (e) { return {}; } }
   function lastEdited(l) { return l.updated_at || l.created_at; }
 
-  // Prefilled text — opens Messages/iMessage on the user's device with the
-  // customer's number and this message ready to send. Edit the template to taste.
-  var SMS_TEMPLATE = "Hi {first}, it's Easy As Loans about your finance enquiry — when's a good time for a quick chat?";
+  // Prefilled texts — opens Messages/iMessage with the customer's number and a
+  // stage-specific message. Edit the templates to taste.
+  // {first} = customer first name, {loan} = their loan type (e.g. "car loan").
+  var SMS_TEMPLATES = {
+    "Attempted contact 1": "Hey {first}, it's Cristian from Easy As Loans, just responding to your {loan} enquiry. Give me a call back when you're free!",
+    "Attempted contact 2": "Hey {first}, just following up to see if you're still looking into your finance options? We have access to over 50 different lenders, and are able to source the best interest rates tailored to your credit profile. Give me a call if you'd like a quote or have any questions. Thanks, Cristian from Easy As Loans 🙂",
+    "Attempted contact 3": "Hey {first}, it's Cristian from Easy As Loans. I've reached out a few times now and haven't heard back, so I'm going to assume you've gone in a different direction with this one. That's no worries, I'll go ahead and close your file down on my end for now. If I'm wrong though and you still need finance, feel free to reach out. Thanks!"
+  };
   function smsNumber(m) {
     var d = String(m || "").replace(/[^\d+]/g, "");
     if (d.charAt(0) === "0") { return "+61" + d.slice(1); }   // 04xx… -> +614xx…
     if (d.slice(0, 2) === "61") { return "+" + d; }
     return d;
   }
-  function smsBody(l) {
+  function loanPhrase(l) { var t = String(l.loan_type || "").trim(); return t ? t.toLowerCase() : "finance"; }
+  function smsBody(l, status) {
+    var st = status || l.status || "Attempted contact 1";
+    var tpl = SMS_TEMPLATES[st] || SMS_TEMPLATES["Attempted contact 1"];
     var d = detailsOf(l);
     var first = d.firstName || String(l.full_name || "there").trim().split(" ")[0] || "there";
-    return SMS_TEMPLATE.replace("{first}", first);
+    return tpl.replace(/\{first\}/g, first).replace(/\{loan\}/g, loanPhrase(l));
   }
-  function smsHref(l) { return "sms:" + smsNumber(l.mobile) + "&body=" + encodeURIComponent(smsBody(l)); }
-  function openMessage(l) { window.location.href = smsHref(l); }
+  function smsHref(l, status) { return "sms:" + smsNumber(l.mobile) + "&body=" + encodeURIComponent(smsBody(l, status)); }
+  function openMessage(l, status) { window.location.href = smsHref(l, status); }
 
   // Small inline icon for the loan type.
   function loanIcon(type) {
@@ -297,8 +305,8 @@
       api("PATCH", { id: l.id, status: newStatus }).then(function (res) {
         if (res.ok) {
           l.status = newStatus; touch();
-          // Moving into a contact-attempt stage pops a prefilled text.
-          if (newStatus.indexOf("Attempted contact") === 0) { openMessage(l); }
+          // Moving into a contact-attempt stage pops that stage's prefilled text.
+          if (newStatus.indexOf("Attempted contact") === 0) { openMessage(l, newStatus); }
         }
       });
     });
