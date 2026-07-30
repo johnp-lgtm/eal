@@ -82,7 +82,7 @@ body.admin { background: #ffffff; }
 .col-empty { color: var(--muted); font-size: 0.8rem; text-align: center; padding: 14px 0; }
 
 /* Column top-border accents: New neutral, all Attempted red, Converted cyan */
-.col.st-new                 { border-top-color: #9aa1ab; }
+.col.st-new                 { border-top-color: #d33a2c; }
 .col.st-attempted-contact-1 { border-top-color: #d33a2c; }
 .col.st-attempted-contact-2 { border-top-color: #d33a2c; }
 .col.st-attempted-contact-3 { border-top-color: #d33a2c; }
