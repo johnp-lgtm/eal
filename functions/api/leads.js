@@ -172,6 +172,8 @@ async function createLead({ request, env }) {
     loanTerm: toInt(body.loanTerm),
     use: str(body.use, 40) || null,
     carYear: toInt(body.carYear),
+    buyTimeframe: str(body.buyTimeframe, 40) || null,
+    creditRating: str(body.creditRating, 40) || null,
     state: str(body.state, 40) || null,
     firstName: str(body.firstName, 80),
     middleName: str(body.middleName, 80),

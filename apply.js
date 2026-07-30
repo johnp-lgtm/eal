@@ -219,27 +219,57 @@
   var STEP_RESIDENCY_STATUS = {
     section: "Residency",
     title: "What is your residency status?",
-    tip: "On a visa? No problem — we work with lenders across every situation.",
+    tip: "This helps us match you with the right lenders.",
     body: function (d) {
       return optButtons("residencyStatus", ["Australian Citizen", "Permanent resident", "Temporary visa"], "lastwide");
     },
-    validate: function (root, d) { return d.residencyStatus ? { ok: true } : { ok: false, msg: "Please select your residency status." }; }
+    validate: function (root, d) { return d.residencyStatus ? { ok: true } : { ok: false, msg: "Please select your residency status." }; },
+    // Outside criteria: temporary visa holders are declined.
+    gate: function (d) { return d.residencyStatus === "Temporary visa"; }
+  };
+
+  /* When are they buying? Filters out browsers — only near-term buyers proceed. */
+  var STEP_TIMEFRAME = {
+    section: "Loan",
+    title: "When are you looking to buy?",
+    sub: "This helps us line up your finance in time.",
+    tip: "Sooner the better — tell us your timing and we'll have your options ready when you are.",
+    body: function (d) {
+      return optButtons("buyTimeframe", ["This week", "This month", "1-3 months", "Just researching"], "lastwide");
+    },
+    validate: function (root, d) { return d.buyTimeframe ? { ok: true } : { ok: false, msg: "Please choose a timeframe." }; },
+    // Outside criteria: not buying in the near term.
+    gate: function (d) { return d.buyTimeframe === "1-3 months" || d.buyTimeframe === "Just researching"; }
+  };
+
+  /* Credit self-rating. Filters out below-average / poor credit. */
+  var STEP_CREDIT = {
+    section: "Employment",
+    title: "How would you rate your credit history?",
+    sub: "A rough idea is fine — it helps us match you to the right lender.",
+    tip: "Honest is best — it just helps us point you to lenders you'll actually qualify with.",
+    body: function (d) {
+      return optButtons("creditRating", ["Excellent", "Good", "Average", "Below average", "Poor"], "lastwide");
+    },
+    validate: function (root, d) { return d.creditRating ? { ok: true } : { ok: false, msg: "Please choose an option." }; },
+    // Outside criteria: below-average / poor credit.
+    gate: function (d) { return d.creditRating === "Below average" || d.creditRating === "Poor"; }
   };
 
   /* ------------------------------ flows --------------------------- */
   var FLOW_PERSONAL = {
     sections: ["Loan", "Employment", "Residency", "Final details"],
-    steps: [STEP_AMOUNT, STEP_TERM, STEP_EMPLOYMENT, STEP_RESIDENCY, STEP_FINAL]
+    steps: [STEP_AMOUNT, STEP_TERM, STEP_TIMEFRAME, STEP_EMPLOYMENT, STEP_CREDIT, STEP_RESIDENCY, STEP_FINAL]
   };
   // Car / vehicle: adds car year, keeps the full employment + residency questions.
   var FLOW_CAR = {
     sections: ["Loan", "Your car", "Employment", "Residency", "Final details"],
-    steps: [STEP_AMOUNT, STEP_TERM, STEP_CAR_YEAR, STEP_EMPLOYMENT, STEP_RESIDENCY, STEP_FINAL]
+    steps: [STEP_AMOUNT, STEP_TERM, STEP_TIMEFRAME, STEP_CAR_YEAR, STEP_EMPLOYMENT, STEP_CREDIT, STEP_RESIDENCY, STEP_FINAL]
   };
   // Business: amount, term, car year, ABN + GST, residency status, contact.
   var FLOW_BUSINESS = {
     sections: ["Loan", "Your car", "Business", "Residency", "Final details"],
-    steps: [STEP_AMOUNT, STEP_TERM, STEP_CAR_YEAR, STEP_BUSINESS, STEP_RESIDENCY_STATUS, STEP_FINAL]
+    steps: [STEP_AMOUNT, STEP_TERM, STEP_TIMEFRAME, STEP_CAR_YEAR, STEP_BUSINESS, STEP_RESIDENCY_STATUS, STEP_FINAL]
   };
 
   var PRODUCTS = { car: "Car loan", business: "Business loan", personal: "Personal loan", debt: "Debt consolidation" };
@@ -409,6 +439,8 @@
       loanAmount: d.loanAmount || null,
       loanTerm: d.loanTerm || null,
       use: (state.product === "Business loan") ? "Business" : "Personal",
+      buyTimeframe: d.buyTimeframe || "",
+      creditRating: d.creditRating || "",
       state: d.state || "",
       employmentType: d.employmentType || "",
       employmentDuration: (d.empYears != null ? d.empYears + "y " : "") + (d.empMonths != null ? d.empMonths + "m" : ""),

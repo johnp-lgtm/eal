@@ -189,6 +189,8 @@
         row("Amount", esc(fmtMoney(l.loan_amount))) +
         row("Term", l.loan_term != null ? esc(l.loan_term) + " years" : "—") +
         row("Use", esc(l.use_type || "—")) +
+        (d.buyTimeframe ? row("Buying", esc(d.buyTimeframe)) : "") +
+        (d.creditRating ? row("Credit (self-rated)", esc(d.creditRating)) : "") +
         (l.car_year != null ? row("Car year", esc(l.car_year)) : "") +
         row("State", esc(l.state || "—")) +
       '</div>' +
