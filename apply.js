@@ -235,11 +235,11 @@
     sub: "This helps us line up your finance in time.",
     tip: "Sooner the better — tell us your timing and we'll have your options ready when you are.",
     body: function (d) {
-      return optButtons("buyTimeframe", ["This week", "This month", "1-3 months", "Just researching"], "lastwide");
+      return optButtons("buyTimeframe", ["This week", "This month", "1-3 months", "Just looking"]);
     },
     validate: function (root, d) { return d.buyTimeframe ? { ok: true } : { ok: false, msg: "Please choose a timeframe." }; },
     // Outside criteria: not buying in the near term.
-    gate: function (d) { return d.buyTimeframe === "1-3 months" || d.buyTimeframe === "Just researching"; }
+    gate: function (d) { return d.buyTimeframe === "1-3 months" || d.buyTimeframe === "Just looking"; }
   };
 
   /* Credit self-rating. Filters out below-average / poor credit. */
