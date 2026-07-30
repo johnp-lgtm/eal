@@ -96,15 +96,19 @@ body.admin { background: #ffffff; }
 .col.st-attempted-contact-1 .col-count,
 .col.st-attempted-contact-2 .col-count,
 .col.st-attempted-contact-3 .col-count { color: #b23025; border-color: #e0b3ad; }
-.col.st-new .lead-card,
-.col.st-attempted-contact-1 .lead-card,
-.col.st-attempted-contact-2 .lead-card,
-.col.st-attempted-contact-3 .lead-card { border-left: 3px solid #d33a2c; }
+.col.st-new .lc-amount, .col.st-new .lc-time, .col.st-new .lc-state,
+.col.st-attempted-contact-1 .lc-amount, .col.st-attempted-contact-1 .lc-time, .col.st-attempted-contact-1 .lc-state,
+.col.st-attempted-contact-2 .lc-amount, .col.st-attempted-contact-2 .lc-time, .col.st-attempted-contact-2 .lc-state,
+.col.st-attempted-contact-3 .lc-amount, .col.st-attempted-contact-3 .lc-time, .col.st-attempted-contact-3 .lc-state {
+  background: #f7dbd7; border-color: #e8bcb5; color: #a82c22;
+}
 
 .col.st-converted { background: #ecf6f9; border-color: #bcdfe8; border-top-color: #0aa2c4; }
 .col.st-converted .col-title { color: #0a7d97; }
 .col.st-converted .col-count { color: #0a7d97; border-color: #a6d5e0; }
-.col.st-converted .lead-card { border-left: 3px solid #0aa2c4; }
+.col.st-converted .lc-amount, .col.st-converted .lc-time, .col.st-converted .lc-state {
+  background: #d6eef4; border-color: #a9d7e2; color: #0a7d97;
+}
 
 /* Lead card */
 .lead-card {
