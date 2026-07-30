@@ -96,19 +96,26 @@ body.admin { background: #ffffff; }
 .col.st-attempted-contact-1 .col-count,
 .col.st-attempted-contact-2 .col-count,
 .col.st-attempted-contact-3 .col-count { color: #b23025; border-color: #e0b3ad; }
-.col.st-new .lc-amount, .col.st-new .lc-time, .col.st-new .lc-state,
-.col.st-attempted-contact-1 .lc-amount, .col.st-attempted-contact-1 .lc-time, .col.st-attempted-contact-1 .lc-state,
-.col.st-attempted-contact-2 .lc-amount, .col.st-attempted-contact-2 .lc-time, .col.st-attempted-contact-2 .lc-state,
-.col.st-attempted-contact-3 .lc-amount, .col.st-attempted-contact-3 .lc-time, .col.st-attempted-contact-3 .lc-state {
-  background: #f7dbd7; border-color: #e8bcb5; color: #a82c22;
-}
+/* Red columns: red icon, outlined red amount pill, soft-pink time/state pills */
+.col.st-new .lc-icon,
+.col.st-attempted-contact-1 .lc-icon,
+.col.st-attempted-contact-2 .lc-icon,
+.col.st-attempted-contact-3 .lc-icon { color: #d33a2c; }
+.col.st-new .lc-amount,
+.col.st-attempted-contact-1 .lc-amount,
+.col.st-attempted-contact-2 .lc-amount,
+.col.st-attempted-contact-3 .lc-amount { background: #fff; border-color: #dd8b81; color: #c0392b; }
+.col.st-new .lc-time, .col.st-new .lc-state,
+.col.st-attempted-contact-1 .lc-time, .col.st-attempted-contact-1 .lc-state,
+.col.st-attempted-contact-2 .lc-time, .col.st-attempted-contact-2 .lc-state,
+.col.st-attempted-contact-3 .lc-time, .col.st-attempted-contact-3 .lc-state { background: #f5e6e4; }
 
 .col.st-converted { background: #ecf6f9; border-color: #bcdfe8; border-top-color: #0aa2c4; }
 .col.st-converted .col-title { color: #0a7d97; }
 .col.st-converted .col-count { color: #0a7d97; border-color: #a6d5e0; }
-.col.st-converted .lc-amount, .col.st-converted .lc-time, .col.st-converted .lc-state {
-  background: #d6eef4; border-color: #a9d7e2; color: #0a7d97;
-}
+.col.st-converted .lc-icon { color: #0aa2c4; }
+.col.st-converted .lc-amount { background: #fff; border-color: #86c9da; color: #0a7d97; }
+.col.st-converted .lc-time, .col.st-converted .lc-state { background: #e4f1f5; }
 
 /* Lead card */
 .lead-card {
@@ -117,7 +124,7 @@ body.admin { background: #ffffff; }
 }
 .lead-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,.12); border-color: #cbced4; }
 .lead-card:active { transform: translateY(1px); }
-.lc-top { display: flex; align-items: center; gap: 8px; }
+.lc-top { display: flex; align-items: center; gap: 8px; padding-bottom: 10px; border-bottom: 1px solid #ececf0; }
 .lc-icon { color: #5b616b; display: flex; flex: 0 0 auto; }
 .lc-icon .li { width: 20px; height: 20px; }
 .lc-name {
@@ -125,8 +132,8 @@ body.admin { background: #ffffff; }
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .lc-amount {
-  font-weight: 800; color: #2b2f36; font-size: 0.8rem; border: 1px solid #e0e2e6;
-  background: #f1f2f4; border-radius: 99px; padding: 2px 9px; white-space: nowrap; flex: 0 0 auto;
+  font-weight: 800; color: #2b2f36; font-size: 0.8rem; border: 1px solid #cdd0d5;
+  background: #fff; border-radius: 99px; padding: 2px 10px; white-space: nowrap; flex: 0 0 auto;
 }
 .lc-rows { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
 .lc-row { display: flex; justify-content: space-between; gap: 10px; font-size: 0.83rem; }
