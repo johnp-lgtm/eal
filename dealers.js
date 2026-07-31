@@ -1,10 +1,21 @@
-/* Easy As Loans — dealer page. Stat count-up + the partner form. */
+/* Easy As Loans — dealer page. Photo slideshow, stat count-up, split-bar reveal, partner form. */
 (function () {
   "use strict";
 
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- count-up for the stats (subtle) ---------- */
+  /* ---------- hero photo slideshow ---------- */
+  var slides = [].slice.call(document.querySelectorAll(".js-hero-slides .hero-img"));
+  if (slides.length > 1 && !reduce) {
+    var idx = 0;
+    setInterval(function () {
+      slides[idx].classList.remove("is-active");
+      idx = (idx + 1) % slides.length;
+      slides[idx].classList.add("is-active");
+    }, 3200);
+  }
+
+  /* ---------- count-up helper ---------- */
   function countUp(el) {
     var target = parseFloat(el.getAttribute("data-count")) || 0;
     var prefix = el.getAttribute("data-prefix") || "";
@@ -22,16 +33,34 @@
     requestAnimationFrame(tick);
   }
 
+  var hasIO = "IntersectionObserver" in window;
+
+  /* ---------- stat count-up ---------- */
   var stats = [].slice.call(document.querySelectorAll(".d-stat-num"));
-  if (stats.length && "IntersectionObserver" in window && !reduce) {
+  if (stats.length && hasIO && !reduce) {
     var io = new IntersectionObserver(function (entries, obs) {
       entries.forEach(function (en) {
         if (!en.isIntersecting) { return; }
-        countUp(en.target);
-        obs.unobserve(en.target);
+        countUp(en.target); obs.unobserve(en.target);
       });
     }, { threshold: 0.4 });
     stats.forEach(function (el) { el.textContent = "0"; io.observe(el); });
+  }
+
+  /* ---------- split-bar reveal ---------- */
+  var split = document.querySelector(".js-split");
+  if (split) {
+    var half = split.querySelector(".js-count-half");
+    function fire() {
+      split.classList.add("in");
+      if (half) { countUp(half); }
+    }
+    if (hasIO && !reduce) {
+      var so = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (en) { if (en.isIntersecting) { fire(); obs.unobserve(en.target); } });
+      }, { threshold: 0.3 });
+      so.observe(split);
+    } else { fire(); }
   }
 
   /* ---------- dealer partner form ---------- */
@@ -55,7 +84,7 @@
       monthlyVolume: form.monthlyVolume.value,
       currentFinance: form.currentFinance.value,
       message: form.message.value.trim(),
-      website: form.website.value, // honeypot
+      website: form.website.value,
       source: "dealers page"
     };
 
