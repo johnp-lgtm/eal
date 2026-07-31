@@ -1,0 +1,49 @@
+/* Easy As Loans — dealer partnerships page (uses brand vars from styles.css) */
+
+/* Hero */
+.d-hero { background: linear-gradient(180deg, #f6f3fb 0%, #ffffff 100%); padding: 62px 0 54px; }
+.d-kicker { text-transform: uppercase; letter-spacing: .08em; font-weight: 800; font-size: .82rem; color: var(--purple); margin-bottom: 14px; }
+.d-hero-title { font-size: clamp(2rem, 5.2vw, 3.2rem); font-weight: 900; line-height: 1.06; color: var(--ink); letter-spacing: -.01em; }
+.d-hero-sub { max-width: 620px; margin-top: 18px; font-size: 1.12rem; line-height: 1.55; color: var(--muted); }
+.d-hero-cta { margin-top: 26px; }
+.d-trust { list-style: none; padding: 0; margin: 30px 0 0; display: flex; flex-wrap: wrap; gap: 10px 24px; }
+.d-trust li { position: relative; padding-left: 24px; font-weight: 700; color: var(--ink); font-size: .95rem; }
+.d-trust li::before { content: "✓"; position: absolute; left: 0; color: var(--purple); font-weight: 900; }
+
+/* Pain band */
+.d-band { background: var(--purple); color: #fff; padding: 46px 0; text-align: center; }
+.d-band h2 { font-size: clamp(1.4rem, 3.5vw, 2rem); font-weight: 900; line-height: 1.2; color: #fff; }
+.d-band p { max-width: 680px; margin: 14px auto 0; color: rgba(255,255,255,.9); line-height: 1.6; font-size: 1.05rem; }
+
+/* Sections */
+.d-why { padding: 60px 0; }
+.d-how { padding: 60px 0; background: var(--bg-alt, #f6f5f9); }
+
+/* Form */
+.d-form-section { padding: 60px 0 84px; }
+.d-form-card { max-width: 620px; margin: 0 auto; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 36px 32px; box-shadow: 0 10px 34px rgba(28,16,44,.08); }
+.d-form-title { font-size: 1.7rem; font-weight: 900; color: var(--purple); text-align: center; }
+.d-form-sub { text-align: center; color: var(--muted); margin-top: 8px; margin-bottom: 24px; }
+.d-form { display: flex; flex-direction: column; gap: 16px; }
+.df-row { display: flex; gap: 16px; }
+.df-row .df-field { flex: 1; min-width: 0; }
+.df-field { display: flex; flex-direction: column; gap: 6px; }
+.df-field label { font-weight: 700; font-size: .92rem; color: var(--ink); }
+.df-input { font-family: inherit; font-size: 1rem; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; background: #fff; color: var(--ink); width: 100%; }
+.df-input:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 3px rgba(72,32,110,.12); }
+textarea.df-input { resize: vertical; }
+.df-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.df-error { color: #b23025; font-weight: 700; font-size: .92rem; text-align: center; }
+.df-fineprint { text-align: center; color: var(--muted); font-size: .82rem; margin-top: 2px; }
+
+/* Done state */
+.d-form-done { text-align: center; padding: 18px 0; }
+.d-tick { width: 62px; height: 62px; border-radius: 50%; background: #eaf7f0; color: #1d7a4d; font-size: 1.9rem; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.d-form-done h2 { font-size: 1.5rem; font-weight: 900; color: var(--purple); }
+.d-form-done p { color: var(--muted); margin-top: 10px; line-height: 1.6; }
+.d-form-done a { color: var(--purple); font-weight: 700; }
+
+@media (max-width: 560px) {
+  .df-row { flex-direction: column; gap: 16px; }
+  .d-form-card { padding: 28px 20px; }
+}
