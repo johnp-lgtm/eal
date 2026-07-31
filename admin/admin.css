@@ -109,6 +109,13 @@ body.admin { background: #ffffff; }
 .col.st-converted .lc-amount { border-color: #0aa2c4; }
 .col.st-converted .lc-time, .col.st-converted .lc-state { background: #e6f2f5; }
 
+/* Dealers column: green accent (a distinct category from the lead columns) */
+.col.st-dealers { border-top-color: #2e9e5b; }
+.col.st-dealers .lc-icon { color: #2e9e5b; }
+.col.st-dealers .lc-amount { border-color: #2e9e5b; }
+.col.st-dealers .lc-time, .col.st-dealers .lc-state { background: #e7f4ec; }
+.dealer-card .lc-state { font-size: .68rem; letter-spacing: .05em; color: #217a45; }
+
 /* Lead card */
 .lead-card {
   background: #fff; border: 1px solid #e0e2e6; border-radius: 9px; padding: 12px 12px 10px;
@@ -178,6 +185,7 @@ body.admin { background: #ffffff; }
 .notes-input:focus { outline: none; border-color: #2563eb; }
 
 /* Destructive action, set apart from the primary CTAs */
+.detail-msg { color: var(--ink); line-height: 1.55; white-space: pre-wrap; font-size: 0.95rem; }
 .detail-danger { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); }
 .btn-delete {
   font-family: inherit; font-weight: 700; font-size: 0.9rem; cursor: pointer;

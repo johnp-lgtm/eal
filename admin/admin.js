@@ -20,7 +20,8 @@
   var detailEl = document.querySelector(".js-detail");
 
   var leads = [];
-  var flushNotes = null; // set while a lead drawer is open, to save pending notes on close
+  var dealers = [];
+  var flushNotes = null; // set while a drawer is open, to save pending notes on close
 
   var STATUSES = ["New", "Attempted contact 1", "Attempted contact 2", "Attempted contact 3", "Converted"];
 
@@ -34,10 +35,14 @@
   function api(method, body) {
     return fetch("/api/leads", {
       method: method,
-      headers: {
-        "Authorization": "Bearer " + pw(),
-        "Content-Type": "application/json"
-      },
+      headers: { "Authorization": "Bearer " + pw(), "Content-Type": "application/json" },
+      body: body ? JSON.stringify(body) : undefined
+    });
+  }
+  function apiDealers(method, body) {
+    return fetch("/api/dealers", {
+      method: method,
+      headers: { "Authorization": "Bearer " + pw(), "Content-Type": "application/json" },
       body: body ? JSON.stringify(body) : undefined
     });
   }
@@ -70,12 +75,18 @@
   /* ----------------------------- Load ----------------------------- */
   function load() {
     return api("GET").then(function (res) {
-      if (res.status === 401) { return false; }
-      if (!res.ok) { return false; }
+      if (res.status === 401 || !res.ok) { return false; }
       return res.json().then(function (data) {
         leads = data.leads || [];
-        render();
-        return true;
+        // Dealer enquiries (separate table). Non-fatal if it fails.
+        return apiDealers("GET")
+          .then(function (dr) { return dr.ok ? dr.json() : { dealers: [] }; })
+          .catch(function () { return { dealers: [] }; })
+          .then(function (dd) {
+            dealers = dd.dealers || [];
+            render();
+            return true;
+          });
       });
     }).catch(function () { return false; });
   }
@@ -183,13 +194,43 @@
     '</article>';
   }
 
+  // A little storefront icon for dealer cards.
+  function dealerIcon() {
+    return '<svg class="li" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M4 9l1.2-3.4A1 1 0 0 1 6.15 5h11.7a1 1 0 0 1 .95.6L20 9"/><path d="M4 9v10a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9"/>' +
+      '<path d="M4 9a2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0 2 2 0 0 0 4 0"/><path d="M9 20v-5h6v5"/></svg>';
+  }
+  function dealerLastEdited(d) { return d.updated_at || d.created_at; }
+  function matchesDealer(d, q) {
+    if (!q) { return true; }
+    var hay = (d.dealership || "") + " " + (d.contact_name || "") + " " + String(d.mobile || "").replace(/\s/g, "") + " " + (d.email || "");
+    return hay.toLowerCase().indexOf(q) !== -1;
+  }
+  function dealerCardHtml(d) {
+    return '<article class="lead-card dealer-card" data-id="' + esc(d.id) + '">' +
+      '<div class="lc-top">' +
+        '<span class="lc-icon">' + dealerIcon() + '</span>' +
+        '<span class="lc-name">' + esc(d.dealership || "—") + '</span>' +
+        (d.monthly_volume ? '<span class="lc-amount">' + esc(d.monthly_volume) + '</span>' : '') +
+      '</div>' +
+      '<div class="lc-rows">' +
+        '<div class="lc-row"><span class="lc-k">Contact</span><span class="lc-v">' + esc(d.contact_name || "—") + '</span></div>' +
+        '<div class="lc-row"><span class="lc-k">Mobile</span><span class="lc-v">' + esc(d.mobile || "—") + '</span></div>' +
+      '</div>' +
+      '<div class="lc-foot">' +
+        '<span class="lc-time">' + esc(fmtAgo(dealerLastEdited(d))) + '</span>' +
+        '<span class="lc-state">DEALER</span>' +
+      '</div>' +
+    '</article>';
+  }
+
   function render() {
     var q = (searchEl.value || "").toLowerCase().trim();
     var visible = leads.filter(function (l) { return matchesSearch(l, q); });
     countEl.textContent = leads.length + (leads.length === 1 ? " lead" : " leads");
-    emptyEl.hidden = leads.length !== 0;
+    emptyEl.hidden = leads.length !== 0 || dealers.length !== 0;
 
-    boardEl.innerHTML = STATUSES.map(function (status) {
+    var cols = STATUSES.map(function (status) {
       // Oldest-edited (most overdue) at the top, freshly-edited sink to the bottom.
       var cards = visible.filter(function (l) { return effStatus(l) === status; })
         .sort(function (a, b) { return String(lastEdited(a) || "").localeCompare(String(lastEdited(b) || "")); });
@@ -202,13 +243,29 @@
           (cards.length ? cards.map(cardHtml).join("") : '<p class="col-empty">No leads</p>') +
         '</div>' +
       '</section>';
-    }).join("");
+    });
+
+    // Dealers column (separate table of B2B partner enquiries).
+    var dcards = dealers.filter(function (d) { return matchesDealer(d, q); })
+      .sort(function (a, b) { return String(dealerLastEdited(b) || "").localeCompare(String(dealerLastEdited(a) || "")); });
+    cols.push('<section class="col st-dealers">' +
+      '<header class="col-head">' +
+        '<span class="col-title">Dealers</span>' +
+        '<span class="col-count">' + dcards.length + '</span>' +
+      '</header>' +
+      '<div class="col-body">' +
+        (dcards.length ? dcards.map(dealerCardHtml).join("") : '<p class="col-empty">No dealer enquiries</p>') +
+      '</div>' +
+    '</section>');
+
+    boardEl.innerHTML = cols.join("");
   }
 
   boardEl.addEventListener("click", function (e) {
+    var dcard = e.target.closest(".dealer-card[data-id]");
+    if (dcard) { openDealerDetail(dcard.getAttribute("data-id")); return; }
     var card = e.target.closest(".lead-card[data-id]");
-    if (!card) { return; }
-    openDetail(card.getAttribute("data-id"));
+    if (card) { openDetail(card.getAttribute("data-id")); }
   });
   searchEl.addEventListener("input", render);
 
@@ -366,6 +423,90 @@
         btn.disabled = false; btn.textContent = "Delete lead";
         window.alert("Could not delete this lead. Please try again.");
       });
+    });
+
+    drawer.hidden = false;
+  }
+
+  /* -------------------------- Dealer detail ------------------------ */
+  function openDealerDetail(id) {
+    var dz = dealers.filter(function (x) { return x.id === id; })[0];
+    if (!dz) { return; }
+
+    detailEl.innerHTML =
+      '<p class="detail-name">' + esc(dz.dealership || "Dealer enquiry") + '</p>' +
+      '<p class="detail-meta">Received ' + esc(fmtDate(dz.created_at)) +
+        ' · <span class="js-edited">Edited ' + esc(fmtAgo(dz.updated_at || dz.created_at)) + '</span></p>' +
+
+      '<div class="detail-section"><h3>Dealer enquiry</h3>' +
+        row("Contact", esc(dz.contact_name || "—")) +
+        row("Cars / month", esc(dz.monthly_volume || "—")) +
+        row("Finance now", esc(dz.current_finance || "—")) +
+      '</div>' +
+
+      '<div class="detail-section"><h3>Contact</h3>' +
+        row("Email", '<a href="mailto:' + esc(dz.email) + '">' + esc(dz.email) + '</a>') +
+        row("Mobile", '<a href="tel:' + esc(dz.mobile) + '">' + esc(dz.mobile) + '</a>') +
+      '</div>' +
+
+      (dz.message ? '<div class="detail-section"><h3>Message</h3><p class="detail-msg">' + esc(dz.message) + '</p></div>' : '') +
+
+      '<div class="detail-section"><h3>Source</h3>' +
+        row("From", esc(dz.source || "dealers page")) +
+        (dz.ip ? row("IP address", esc(dz.ip)) : "") +
+        row("Enquiry ID", esc(dz.id)) +
+      '</div>' +
+
+      '<div class="detail-section detail-notes">' +
+        '<h3>Notes <span class="notes-state js-notes-state"></span></h3>' +
+        '<textarea class="notes-input js-notes" placeholder="Add a note — e.g. \'Called, keen, sends ~40 cars/mth. Sending agreement.\' Saves automatically.">' + esc(dz.notes || "") + '</textarea>' +
+      '</div>' +
+
+      '<div class="detail-cta">' +
+        '<a class="btn btn-primary" href="tel:' + esc(dz.mobile) + '">Call</a>' +
+        '<a class="btn btn-ghost" href="mailto:' + esc(dz.email) + '">Email</a>' +
+      '</div>' +
+      '<div class="detail-danger">' +
+        '<button type="button" class="btn-delete js-delete">Delete enquiry</button>' +
+      '</div>';
+
+    var editedEl = detailEl.querySelector(".js-edited");
+
+    // Auto-saving notes (via the dealer endpoint).
+    var notesEl = detailEl.querySelector(".js-notes");
+    var noteState = detailEl.querySelector(".js-notes-state");
+    var saveTimer = null;
+    var lastSaved = notesEl.value;
+    function saveNotes() {
+      clearTimeout(saveTimer);
+      var val = notesEl.value;
+      if (val === lastSaved) { return; }
+      noteState.textContent = "Saving…";
+      apiDealers("PATCH", { id: dz.id, notes: val }).then(function (res) {
+        if (res.ok) {
+          lastSaved = val; dz.notes = val; dz.updated_at = new Date().toISOString();
+          if (editedEl) { editedEl.textContent = "Edited just now"; }
+          noteState.textContent = "Saved ✓";
+          render();
+          setTimeout(function () { if (noteState) { noteState.textContent = ""; } }, 1600);
+        } else { noteState.textContent = "Not saved — check connection"; }
+      }).catch(function () { noteState.textContent = "Not saved — check connection"; });
+    }
+    notesEl.addEventListener("input", function () {
+      noteState.textContent = "…"; clearTimeout(saveTimer); saveTimer = setTimeout(saveNotes, 700);
+    });
+    notesEl.addEventListener("blur", saveNotes);
+    flushNotes = saveNotes;
+
+    detailEl.querySelector(".js-delete").addEventListener("click", function () {
+      if (!window.confirm("Permanently delete the enquiry from " + (dz.dealership || "this dealer") + "?")) { return; }
+      var btn = this; btn.disabled = true; btn.textContent = "Deleting…";
+      apiDealers("DELETE", { id: dz.id }).then(function (res) {
+        if (res.ok) {
+          dealers = dealers.filter(function (x) { return x.id !== dz.id; });
+          drawer.hidden = true; flushNotes = null; render();
+        } else { btn.disabled = false; btn.textContent = "Delete enquiry"; window.alert("Could not delete. Please try again."); }
+      }).catch(function () { btn.disabled = false; btn.textContent = "Delete enquiry"; window.alert("Could not delete. Please try again."); });
     });
 
     drawer.hidden = false;

@@ -9,12 +9,72 @@ export async function onRequest(context) {
   try {
     switch (request.method) {
       case "POST": return await createDealer(context);
+      case "GET": return await listDealers(context);
+      case "PATCH": return await updateDealer(context);
+      case "DELETE": return await deleteDealer(context);
       case "OPTIONS": return new Response(null, { status: 204 });
       default: return json({ error: "Method not allowed" }, 405);
     }
   } catch (e) {
     return json({ error: "Server error" }, 500);
   }
+}
+
+/* ----------------------------- auth ------------------------------ */
+function isAuthed(request, env) {
+  if (!env.ADMIN_PASSWORD) { return false; }
+  const token = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
+  const base = env.ADMIN_PASSWORD;
+  const valid = [base, "C" + base, "D" + base, "J" + base]; // shared + Cristian/Daniela/John
+  let ok = false;
+  for (const v of valid) {
+    if (token.length !== v.length) { continue; }
+    let diff = 0;
+    for (let i = 0; i < token.length; i++) { diff |= token.charCodeAt(i) ^ v.charCodeAt(i); }
+    if (diff === 0) { ok = true; }
+  }
+  return ok;
+}
+function guard(request, env) { return isAuthed(request, env) ? null : json({ error: "Unauthorized" }, 401); }
+
+async function listDealers({ request, env }) {
+  const blocked = guard(request, env); if (blocked) { return blocked; }
+  try {
+    const res = await env.DB.prepare("SELECT * FROM dealers ORDER BY created_at DESC LIMIT 1000").all();
+    return json({ dealers: res.results || [] });
+  } catch (e) {
+    return json({ dealers: [] }); // table may not exist yet
+  }
+}
+
+async function updateDealer({ request, env }) {
+  const blocked = guard(request, env); if (blocked) { return blocked; }
+  let body;
+  try { body = await request.json(); } catch (e) { return json({ error: "Invalid JSON" }, 400); }
+  if (!body.id) { return json({ error: "Missing id" }, 400); }
+  const sets = [], binds = [];
+  if (body.notes !== undefined) { sets.push("notes = ?"); binds.push(noteStr(body.notes, 10000)); }
+  if (!sets.length) { return json({ error: "Nothing to update" }, 400); }
+  sets.push("updated_at = ?"); binds.push(new Date().toISOString());
+  binds.push(body.id);
+  const sql = "UPDATE dealers SET " + sets.join(", ") + " WHERE id = ?";
+  try {
+    await env.DB.prepare(sql).bind(...binds).run();
+  } catch (e) {
+    try { await env.DB.prepare("ALTER TABLE dealers ADD COLUMN notes TEXT").run(); } catch (e2) { /* exists */ }
+    try { await env.DB.prepare("ALTER TABLE dealers ADD COLUMN updated_at TEXT").run(); } catch (e3) { /* exists */ }
+    await env.DB.prepare(sql).bind(...binds).run();
+  }
+  return json({ ok: true });
+}
+
+async function deleteDealer({ request, env }) {
+  const blocked = guard(request, env); if (blocked) { return blocked; }
+  let body;
+  try { body = await request.json(); } catch (e) { return json({ error: "Invalid JSON" }, 400); }
+  if (!body.id) { return json({ error: "Missing id" }, 400); }
+  await env.DB.prepare("DELETE FROM dealers WHERE id = ?").bind(body.id).run();
+  return json({ ok: true });
 }
 
 function json(data, status) {
