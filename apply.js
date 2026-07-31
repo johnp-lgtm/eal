@@ -62,8 +62,8 @@
       input.addEventListener("blur", function () { d.loanAmount = clampAmount(d.loanAmount || 40000); input.value = money(d.loanAmount); range.value = d.loanAmount; });
     },
     validate: function (root, d) { return d.loanAmount >= 2000 ? { ok: true } : { ok: false, msg: "Please enter an amount." }; },
-    // Outside criteria: finance under $30,000 is declined on continue.
-    gate: function (d) { return d.loanAmount != null && d.loanAmount < 30000; }
+    // Outside criteria: finance under $20,000 is declined on continue.
+    gate: function (d) { return d.loanAmount != null && d.loanAmount < 20000; }
   };
 
   var STEP_TERM = {
