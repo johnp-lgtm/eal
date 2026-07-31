@@ -1,16 +1,16 @@
-/* Easy As Loans — dealer page. Scroll reveals, stat count-up, and the partner form. */
+/* Easy As Loans — dealer page. Stat count-up + the partner form. */
 (function () {
   "use strict";
 
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- count-up for the stats ---------- */
+  /* ---------- count-up for the stats (subtle) ---------- */
   function countUp(el) {
     var target = parseFloat(el.getAttribute("data-count")) || 0;
     var prefix = el.getAttribute("data-prefix") || "";
     var suffix = el.getAttribute("data-suffix") || "";
     if (reduce) { el.textContent = prefix + target + suffix; return; }
-    var dur = 1300, start = null;
+    var dur = 1200, start = null;
     function tick(ts) {
       if (start === null) { start = ts; }
       var p = Math.min((ts - start) / dur, 1);
@@ -22,25 +22,16 @@
     requestAnimationFrame(tick);
   }
 
-  /* ---------- reveal on scroll ---------- */
-  var reveals = [].slice.call(document.querySelectorAll(".reveal"));
-  var stats = [].slice.call(document.querySelectorAll(".dl-stat-num"));
-
-  if ("IntersectionObserver" in window && !reduce) {
+  var stats = [].slice.call(document.querySelectorAll(".d-stat-num"));
+  if (stats.length && "IntersectionObserver" in window && !reduce) {
     var io = new IntersectionObserver(function (entries, obs) {
       entries.forEach(function (en) {
         if (!en.isIntersecting) { return; }
-        en.target.classList.add("is-visible");
-        var nums = en.target.querySelectorAll ? en.target.querySelectorAll(".dl-stat-num") : [];
-        [].forEach.call(nums, countUp);
+        countUp(en.target);
         obs.unobserve(en.target);
       });
-    }, { threshold: 0.15, rootMargin: "0px 0px -8% 0px" });
-    reveals.forEach(function (el) { io.observe(el); });
-  } else {
-    // No observer support (or reduced motion): show everything, set final stat values.
-    reveals.forEach(function (el) { el.classList.add("is-visible"); });
-    stats.forEach(countUp);
+    }, { threshold: 0.4 });
+    stats.forEach(function (el) { el.textContent = "0"; io.observe(el); });
   }
 
   /* ---------- dealer partner form ---------- */

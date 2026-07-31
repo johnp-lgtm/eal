@@ -22,164 +22,138 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="dealers.css" />
 </head>
-<body class="dealers">
+<body>
   <header class="site-header">
     <div class="container header-inner">
       <a href="index.html" class="logo" aria-label="Easy As Loans home"><img class="logo-img" src="assets/logo.png" alt="Easy As Loans" /></a>
       <div class="header-actions">
-        <a href="#partner" class="d-nav-cta">Become a partner</a>
+        <a class="btn btn-primary" href="#partner">Become a partner</a>
       </div>
     </div>
   </header>
 
   <main>
     <!-- HERO -->
-    <section class="dl-hero">
-      <span class="dl-blob dl-blob-1" aria-hidden="true"></span>
-      <span class="dl-blob dl-blob-2" aria-hidden="true"></span>
-      <div class="container dl-hero-inner">
-        <p class="dl-kicker reveal">For used car dealers</p>
-        <h1 class="dl-hero-title reveal">Sell more cars.<br /><span class="dl-accent">Get paid to do it.</span></h1>
-        <p class="dl-hero-sub reveal">
-          We finance your customers across 50+ lenders, get more of them approved, and pay you
-          half our commission on every deal. You sell the car and look like a pro. We handle the rest.
-        </p>
-        <div class="dl-hero-actions reveal">
-          <a href="#partner" class="dl-btn dl-btn-solid">Become a partner</a>
-          <a href="tel:+61402083863" class="dl-btn dl-btn-ghost">Call 0402 083 863</a>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="d-kicker">For used car dealers</p>
+          <h1 class="hero-title">Sell more cars.<br />Get paid to do it.</h1>
+          <p class="d-hero-sub">
+            We finance your customers across 50+ lenders, get more of them approved, and pay you
+            half our commission on every deal. You sell the car and look like a pro. We handle the rest.
+          </p>
+          <div class="d-cta-row">
+            <a href="#partner" class="btn btn-primary btn-lg">Become a partner</a>
+            <a href="tel:+61402083863" class="btn btn-ghost btn-lg">Call 0402 083 863</a>
+          </div>
+          <ul class="hero-trust">
+            <li><svg class="trust-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>50+ lenders competing</li>
+            <li><svg class="trust-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>Half our commission, to you</li>
+            <li><svg class="trust-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>We answer after hours</li>
+          </ul>
         </div>
-        <p class="dl-hero-note reveal">15+ years. $50M+ settled. Real Adelaide brokers who answer the phone.</p>
+        <div class="hero-media">
+          <div class="hero-figure">
+            <span class="hero-square" aria-hidden="true"></span>
+            <svg class="hero-rays" viewBox="0 0 60 70" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round" aria-hidden="true">
+              <path d="M52 6 L20 30" /><path d="M56 28 L26 42" /><path d="M54 52 L30 56" />
+            </svg>
+            <img class="hero-img" src="assets/reviews/review-1.jpg" alt="An Easy As Loans customer with their new car" />
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- STATS -->
-    <section class="dl-stats">
-      <div class="container dl-stats-grid">
-        <div class="dl-stat reveal"><span class="dl-stat-num" data-count="15" data-suffix="+">0</span><span class="dl-stat-label">Years experience</span></div>
-        <div class="dl-stat reveal"><span class="dl-stat-num" data-prefix="$" data-count="50" data-suffix="M+">0</span><span class="dl-stat-label">Settled in NAF</span></div>
-        <div class="dl-stat reveal"><span class="dl-stat-num" data-count="50" data-suffix="+">0</span><span class="dl-stat-label">Lenders on panel</span></div>
-        <div class="dl-stat reveal"><span class="dl-stat-num" data-count="50" data-suffix="%">0</span><span class="dl-stat-label">Commission to you</span></div>
-      </div>
-    </section>
-
-    <!-- PROBLEM -->
-    <section class="dl-problem">
-      <div class="container dl-narrow reveal">
-        <h2 class="dl-h2">No finance means you're losing money on every car.</h2>
-        <p class="dl-lead">
-          When a customer can't get finance on the spot, you lose the sale and the profit that
-          comes with it. And if you already have a broker, there's a good chance they're leaving
-          money on the table by running every deal through the same lender.
-        </p>
+    <section class="d-stats">
+      <div class="container d-stats-grid">
+        <div class="d-stat"><span class="d-stat-num" data-count="15" data-suffix="+">15+</span><span class="d-stat-label">Years experience</span></div>
+        <div class="d-stat"><span class="d-stat-num" data-prefix="$" data-count="50" data-suffix="M+">$50M+</span><span class="d-stat-label">Settled in NAF</span></div>
+        <div class="d-stat"><span class="d-stat-num" data-count="50" data-suffix="+">50+</span><span class="d-stat-label">Lenders on panel</span></div>
+        <div class="d-stat"><span class="d-stat-num" data-count="50" data-suffix="%">50%</span><span class="d-stat-label">Commission to you</span></div>
       </div>
     </section>
 
     <!-- BENEFITS -->
-    <section class="dl-benefits">
+    <section class="why">
       <div class="container">
-        <div class="dl-section-head reveal">
-          <span class="dl-eyebrow">Why dealers partner with us</span>
-          <h2 class="dl-h2">Built to make your yard more money.</h2>
-        </div>
-        <div class="dl-grid">
-          <article class="dl-card reveal">
-            <span class="dl-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-            </span>
-            <h3>We pull more out of every deal</h3>
+        <h2 class="section-title">Why dealers partner with us</h2>
+        <p class="section-sub">More approvals, faster deals, less admin for your team, and a cut of every deal you send us.</p>
+        <div class="why-grid">
+          <article class="why-item">
+            <h3 class="why-heading">We pull more out of every deal</h3>
             <p>Most brokers run every deal through the same one or two lenders. We know which of our 50+ lenders to go to, so each deal is structured to earn more. Your current broker is leaving money on the table.</p>
           </article>
-
-          <article class="dl-card dl-card-feature reveal">
-            <span class="dl-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5 5 19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-            </span>
-            <h3>You get paid on every deal</h3>
+          <article class="why-item">
+            <h3 class="why-heading">You get paid on every deal</h3>
             <p>We pay a strong referral fee. Half the commission we earn goes straight back to you, on every single deal you send us.</p>
           </article>
-
-          <article class="dl-card reveal">
-            <span class="dl-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.2"/><circle cx="5" cy="17" r="2.6"/><circle cx="19" cy="17" r="2.6"/><path d="M12 10.2v3M9.6 15l-2 .6M14.4 15l2 .6"/></svg>
-            </span>
-            <h3>We find a home for everyone</h3>
+          <article class="why-item">
+            <h3 class="why-heading">We find a home for everyone</h3>
             <p>Prime, near prime, ABN and first time buyers. With 50+ lenders we get more of your customers across the line, so fewer deals fall over.</p>
           </article>
-
-          <article class="dl-card reveal">
-            <span class="dl-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-            </span>
-            <h3>Fast, and around when you are</h3>
-            <p>We're regular Aussie blokes who actually pick up the phone. Nights, weekends, after hours. Your deals don't sit until Monday.</p>
+          <article class="why-item">
+            <h3 class="why-heading">Fast, and around when you are</h3>
+            <p>We are regular Aussie blokes who actually pick up the phone. Nights, weekends, after hours. Your deals do not sit until Monday.</p>
           </article>
-
-          <article class="dl-card reveal">
-            <span class="dl-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.2 4.1 1 5.8L12 16.9 6.7 19.2l1-5.8L3.5 9.2l5.9-.9z"/></svg>
-            </span>
-            <h3>We make you look good</h3>
+          <article class="why-item">
+            <h3 class="why-heading">We make you look good</h3>
             <p>We handle the finance professionally from the first call to settlement. The customer stays with you, drives away happy, and you look like the hero.</p>
           </article>
-
-          <article class="dl-card reveal">
-            <span class="dl-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.4-3 7.6-7 8.9C8 18.6 5 15.4 5 11V6z"/><path d="M9 12l2 2 4-4"/></svg>
-            </span>
-            <h3>15 years. $50M+ settled.</h3>
-            <p>We've been doing this a long time and settled over $50 million in car finance. You're partnering with people who know the game.</p>
+          <article class="why-item">
+            <h3 class="why-heading">15 years. $50M+ settled.</h3>
+            <p>We have been doing this a long time and settled over $50 million in car finance. You are partnering with people who know the game.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <!-- REFERRAL FEE HIGHLIGHT -->
-    <section class="dl-referral">
-      <div class="container dl-referral-inner reveal">
-        <div class="dl-referral-badge">50<span>/</span>50</div>
-        <div class="dl-referral-text">
+    <!-- REFERRAL FEE -->
+    <section class="d-ref">
+      <div class="container d-ref-inner">
+        <div class="d-ref-badge">50<span>/</span>50</div>
+        <div class="d-ref-text">
           <h2>Get paid on every deal you send us.</h2>
-          <p>We split our commission with you 50/50. The more cars you move, the more you earn on the finance too. It's finance income you're leaving on the table right now.</p>
-          <a href="#partner" class="dl-btn dl-btn-solid">Start earning on finance</a>
+          <p>We split our commission with you 50/50. The more cars you move, the more you earn on the finance too. It is finance income you are leaving on the table right now.</p>
+          <a href="#partner" class="btn btn-light btn-lg">Start earning on finance</a>
         </div>
       </div>
     </section>
 
     <!-- HOW IT WORKS -->
-    <section class="dl-how">
+    <section class="process">
       <div class="container">
-        <div class="dl-section-head reveal">
-          <span class="dl-eyebrow">How it works</span>
-          <h2 class="dl-h2">Three steps. We do the heavy lifting.</h2>
-        </div>
-        <div class="dl-steps">
-          <div class="dl-step reveal">
-            <span class="dl-step-num">01</span>
-            <h3>Send us the deal</h3>
+        <h2 class="section-title">How it works</h2>
+        <p class="section-sub">Three steps, and we do the heavy lifting.</p>
+        <ol class="process-steps">
+          <li class="process-step">
+            <span class="process-num">01</span>
+            <h3 class="process-heading">Send us the deal</h3>
             <p>Refer your customer or send their details, whatever suits your yard.</p>
-          </div>
-          <div class="dl-step reveal">
-            <span class="dl-step-num">02</span>
-            <h3>We handle it</h3>
+          </li>
+          <li class="process-step">
+            <span class="process-num">02</span>
+            <h3 class="process-heading">We handle it</h3>
             <p>We call them, complete the application, and get them approved across our 50+ lenders.</p>
-          </div>
-          <div class="dl-step reveal">
-            <span class="dl-step-num">03</span>
-            <h3>You get paid</h3>
+          </li>
+          <li class="process-step">
+            <span class="process-num">03</span>
+            <h3 class="process-heading">You get paid</h3>
             <p>Once it settles and the car is sold, we pay you half our commission. Easy and fast.</p>
-          </div>
-        </div>
+          </li>
+        </ol>
       </div>
     </section>
 
     <!-- PARTNER FORM -->
-    <section class="dl-form-section" id="partner">
+    <section class="d-formwrap" id="partner">
       <div class="container">
-        <div class="dl-form-card reveal">
-          <h2 class="dl-form-title">Let's talk partnership</h2>
-          <p class="dl-form-sub">Tell us about your yard and we'll be in touch within one business day.</p>
+        <div class="d-form-card">
+          <h2 class="d-form-title">Let's talk partnership</h2>
+          <p class="d-form-sub">Tell us about your yard and we'll be in touch within one business day.</p>
 
-          <form class="dl-form js-dealer-form" novalidate>
+          <form class="d-form js-dealer-form" novalidate>
             <div class="df-field">
               <label for="d-dealership">Dealership name</label>
               <input class="df-input" id="d-dealership" name="dealership" type="text" autocomplete="organization" required />
@@ -231,15 +205,13 @@
               <input id="d-website" name="website" type="text" tabindex="-1" autocomplete="off" />
             </div>
 
-            <button type="submit" class="dl-btn dl-btn-solid dl-btn-block js-dealer-submit">Become a partner</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block js-dealer-submit">Become a partner</button>
             <p class="df-error js-dealer-error" hidden></p>
             <p class="df-fineprint">No cost to partner. Australian Credit Licence (ACL) 477976.</p>
           </form>
 
-          <div class="dl-form-done js-dealer-done" hidden>
-            <div class="dl-tick" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-            </div>
+          <div class="d-form-done js-dealer-done" hidden>
+            <div class="d-tick" aria-hidden="true">✓</div>
             <h2>Thanks, we've got it.</h2>
             <p>One of our team will be in touch within one business day to talk through how a partnership works for your yard. If you'd rather chat now, call us on <a href="tel:+61402083863">0402 083 863</a>.</p>
           </div>
