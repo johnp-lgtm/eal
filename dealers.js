@@ -72,6 +72,14 @@
 
   function showError(msg) { errEl.textContent = msg; errEl.hidden = false; }
 
+  // Fire the Meta Pixel CompleteRegistration event — dealer conversions, kept
+  // separate from the consumer Lead event so Meta optimises the two audiences apart.
+  function trackDealer() {
+    try {
+      if (window.fbq) { fbq("track", "CompleteRegistration", { content_category: "Dealer partner enquiry" }); }
+    } catch (e) { /* pixel not loaded — ignore */ }
+  }
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     errEl.hidden = true;
@@ -107,11 +115,12 @@
       if (!res.ok) { throw new Error("bad"); }
       return res.json().catch(function () { return {}; });
     }).then(function () {
+      trackDealer();
       form.hidden = true;
       doneEl.hidden = false;
       window.scrollTo({ top: Math.max(0, doneEl.getBoundingClientRect().top + window.scrollY - 130), behavior: "smooth" });
     }).catch(function (err) {
-      if (err instanceof TypeError) { form.hidden = true; doneEl.hidden = false; return; }
+      if (err instanceof TypeError) { trackDealer(); form.hidden = true; doneEl.hidden = false; return; }
       btn.disabled = false; btn.textContent = "Become a partner";
       showError("Sorry, something went wrong. Please call us on 0402 083 863.");
     });
