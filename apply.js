@@ -25,7 +25,7 @@
 
   /* ----------------------------- helpers -------------------------- */
   function money(n) { return "$" + (Number(n) || 0).toLocaleString("en-AU"); }
-  function clampAmount(n) { return Math.min(150000, Math.max(2000, Math.round(n / 500) * 500)); }
+  function clampAmount(n) { return Math.min(250000, Math.max(2000, Math.round(n / 500) * 500)); }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
   function optButtons(field, opts, classes) {
@@ -47,23 +47,23 @@
     sub: "You can always change this later.",
     tip: "Pop in roughly how much you're after — a ballpark is fine, you can change it later.",
     body: function (d) {
-      var v = d.loanAmount || 10000;
+      var v = d.loanAmount || 40000;
       return '<div class="amount-field"><input type="text" class="js-amount-input" inputmode="numeric" value="' + money(v) + '" aria-label="Loan amount" /></div>' +
-        '<input type="range" class="range js-amount-range" min="2000" max="150000" step="500" value="' + v + '" aria-label="Loan amount slider" />';
+        '<input type="range" class="range js-amount-range" min="2000" max="250000" step="500" value="' + v + '" aria-label="Loan amount slider" />';
     },
     wire: function (root, d) {
-      if (!d.loanAmount) { d.loanAmount = 10000; }
+      if (!d.loanAmount) { d.loanAmount = 40000; }
       var input = root.querySelector(".js-amount-input"), range = root.querySelector(".js-amount-range");
       range.addEventListener("input", function () { d.loanAmount = clampAmount(+range.value); input.value = money(d.loanAmount); });
       input.addEventListener("input", function () {
         var n = parseInt(input.value.replace(/[^\d]/g, ""), 10);
         if (!isNaN(n)) { d.loanAmount = n; range.value = clampAmount(n); }
       });
-      input.addEventListener("blur", function () { d.loanAmount = clampAmount(d.loanAmount || 10000); input.value = money(d.loanAmount); range.value = d.loanAmount; });
+      input.addEventListener("blur", function () { d.loanAmount = clampAmount(d.loanAmount || 40000); input.value = money(d.loanAmount); range.value = d.loanAmount; });
     },
     validate: function (root, d) { return d.loanAmount >= 2000 ? { ok: true } : { ok: false, msg: "Please enter an amount." }; },
-    // Outside criteria: loans under $10,000 are declined on continue.
-    gate: function (d) { return d.loanAmount != null && d.loanAmount < 10000; }
+    // Outside criteria: finance under $30,000 is declined on continue.
+    gate: function (d) { return d.loanAmount != null && d.loanAmount < 30000; }
   };
 
   var STEP_TERM = {
