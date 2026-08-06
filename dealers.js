@@ -72,11 +72,11 @@
 
   function showError(msg) { errEl.textContent = msg; errEl.hidden = false; }
 
-  // Fire the Meta Pixel CompleteRegistration event — dealer conversions, kept
-  // separate from the consumer Lead event so Meta optimises the two audiences apart.
+  // Fire the standard Meta Pixel Lead event on a completed dealer enquiry, so the
+  // dealer campaign can optimise for "Leads" like any basic conversion campaign.
   function trackDealer() {
     try {
-      if (window.fbq) { fbq("track", "CompleteRegistration", { content_category: "Dealer partner enquiry" }); }
+      if (window.fbq) { fbq("track", "Lead", { content_category: "Dealer partner enquiry" }); }
     } catch (e) { /* pixel not loaded — ignore */ }
   }
 
