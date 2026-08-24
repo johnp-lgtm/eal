@@ -658,8 +658,13 @@ button { font-family: inherit; cursor: pointer; }
   .choice { min-height: 0; padding: 18px; }
   .step-title { font-size: 1.25rem; }
   .slider-value { font-size: 1.9rem; }
-  .finance-cards { grid-template-columns: 1fr 1fr; }
-  .finance-cards--three { grid-template-columns: repeat(3, 1fr); }
+  .finance-cards, .finance-cards--three { grid-template-columns: 1fr; gap: 12px; }
+  .fcard {
+    aspect-ratio: auto; flex-direction: row; align-items: center; justify-content: flex-start;
+    gap: 18px; text-align: left; padding: 16px 20px;
+  }
+  .fcard-img { height: 46px; }
+  .fcard-label { font-size: 1.05rem; }
   .hero-trust { flex-direction: column; gap: 12px; }
   .lenders-grid { gap: 16px 30px; }
   .lender { font-size: 1.1rem; }
