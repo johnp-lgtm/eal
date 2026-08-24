@@ -210,18 +210,20 @@ button { font-family: inherit; cursor: pointer; }
 /* Illustrated icon images */
 .fcard-img { height: 58px; width: auto; max-width: 100%; object-fit: contain; }
 .fcard {
-  display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 14px;
-  padding: 16px 14px; aspect-ratio: 1 / 1;
-  background: var(--white); border: 1px solid var(--border); border-radius: 6px;
-  font-family: inherit; cursor: pointer; text-align: left;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  padding: 20px 14px; aspect-ratio: 1 / 1;
+  background: var(--white); border: 1px solid #efeaf1; border-radius: 16px;
+  box-shadow: 0 8px 22px rgba(44,32,64,.09);
+  font-family: inherit; cursor: pointer; text-align: center;
+  transition: box-shadow .16s ease, transform .16s ease;
 }
-.fcard:hover { border-color: var(--purple); }
+.fcard:hover { box-shadow: 0 14px 30px rgba(44,32,64,.16); transform: translateY(-3px); }
 .fcard-ico {
   display: inline-flex; align-items: center; justify-content: center;
   width: 50px; height: 50px; color: var(--purple);
 }
 .fcard-ico svg { width: 50px; height: 50px; }
-.fcard-label { font-weight: 800; font-size: 0.95rem; color: var(--ink); margin-top: auto; }
+.fcard-label { font-weight: 800; font-size: 0.95rem; color: var(--ink); margin-top: 0; }
 
 /* Trust row */
 .hero-trust {
@@ -229,7 +231,7 @@ button { font-family: inherit; cursor: pointer; }
   display: flex; flex-wrap: wrap; gap: 12px 26px;
 }
 .hero-trust li { display: flex; align-items: center; gap: 9px; font-size: 0.92rem; font-weight: 600; color: var(--grey); }
-.trust-ico { height: 26px; width: auto; color: var(--purple); flex: 0 0 auto; }
+.trust-ico { height: 22px; width: auto; color: var(--purple); flex: 0 0 auto; }
 
 /* Figure: photo + purple square + accent rays */
 .hero-media { display: flex; justify-content: flex-end; }
