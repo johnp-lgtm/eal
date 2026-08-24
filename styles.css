@@ -27,7 +27,7 @@
   --maxw: 1140px;
   --pad: 24px;
   --font: "Mulish", Arial, "Helvetica Neue", Helvetica, sans-serif;
-  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
 }
 
 /* ----------------------------- Reset ----------------------------- */
@@ -206,6 +206,9 @@ button { font-family: inherit; cursor: pointer; }
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
   margin-top: 14px;
 }
+.finance-cards--three { grid-template-columns: repeat(3, 1fr); }
+/* Illustrated icon images (drop-in replacement for the inline SVGs) */
+.fcard-img { width: 56px; height: 56px; object-fit: contain; }
 .fcard {
   display: flex; flex-direction: column; align-items: flex-start; gap: 18px;
   padding: 16px 14px; min-height: 132px;
@@ -654,6 +657,7 @@ button { font-family: inherit; cursor: pointer; }
   .step-title { font-size: 1.25rem; }
   .slider-value { font-size: 1.9rem; }
   .finance-cards { grid-template-columns: 1fr 1fr; }
+  .finance-cards--three { grid-template-columns: repeat(3, 1fr); }
   .hero-trust { flex-direction: column; gap: 12px; }
   .lenders-grid { gap: 16px 30px; }
   .lender { font-size: 1.1rem; }
