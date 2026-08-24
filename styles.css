@@ -210,8 +210,8 @@ button { font-family: inherit; cursor: pointer; }
 /* Illustrated icon images */
 .fcard-img { height: 58px; width: auto; max-width: 100%; object-fit: contain; }
 .fcard {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 18px;
-  padding: 16px 14px; min-height: 132px;
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 14px;
+  padding: 16px 14px; aspect-ratio: 1 / 1;
   background: var(--white); border: 1px solid var(--border); border-radius: 6px;
   font-family: inherit; cursor: pointer; text-align: left;
 }
