@@ -250,13 +250,8 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* ----------------------------- Reviews --------------------------- */
-.reviews { padding: clamp(56px, 8vw, 90px) 0; background: #ece4f6; overflow: hidden; }
+.reviews { padding: clamp(56px, 8vw, 90px) 0; background: var(--white); overflow: hidden; }
 .reviews-head { margin-bottom: 44px; }
-.reviews-stars { color: var(--purple); letter-spacing: 0.06em; }
-.reviews-stats { display: flex; flex-wrap: wrap; gap: 24px 48px; margin-top: 30px; }
-.rstat { display: flex; flex-direction: column; }
-.rstat-num { font-size: clamp(1.7rem, 3.2vw, 2.3rem); font-weight: 800; color: var(--purple); letter-spacing: -0.02em; line-height: 1; }
-.rstat-label { margin-top: 7px; font-size: 0.82rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
 
 .marquee {
   position: relative;
@@ -284,13 +279,12 @@ button { font-family: inherit; cursor: pointer; }
   height: 384px;
   flex: 0 0 auto;
   background: var(--white);
-  padding: 10px;
   border: none;
   border-radius: 16px;
-  box-shadow: 0 16px 34px rgba(44, 32, 64, 0.14);
+  box-shadow: 0 14px 30px rgba(44, 32, 64, 0.12);
   overflow: hidden;
 }
-.review-photo { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 9px; }
+.review-photo { width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* --------------------------- Why choose -------------------------- */
 .why { padding: clamp(56px, 8vw, 96px) 0; }
@@ -505,7 +499,7 @@ button { font-family: inherit; cursor: pointer; }
 .footer-contact a { color: rgba(255,255,255,.85); transition: color .15s ease; }
 .footer-contact a:hover { color: var(--white); }
 .footer-col { display: flex; flex-direction: column; gap: 12px; }
-.footer-h { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,.45); font-weight: 800; margin-bottom: 8px; }
+.footer-h { font-size: 0.92rem; letter-spacing: 0; color: rgba(255,255,255,.55); font-weight: 800; margin-bottom: 8px; }
 .footer-col a { color: rgba(255,255,255,.8); transition: color .15s ease; }
 .footer-col a:hover { color: var(--white); }
 .footer-static { color: rgba(255,255,255,.6); }
