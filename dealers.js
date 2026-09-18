@@ -122,7 +122,7 @@
     }).catch(function (err) {
       if (err instanceof TypeError) { trackDealer(); form.hidden = true; doneEl.hidden = false; return; }
       btn.disabled = false; btn.textContent = "Become a partner";
-      showError("Sorry, something went wrong. Please call us on 0402 083 863.");
+      showError("Sorry, something went wrong. Please call us on " + ((window.EAL_PHONE && window.EAL_PHONE.display) || "0402 083 863") + ".");
     });
   });
 })();

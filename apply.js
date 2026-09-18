@@ -14,6 +14,9 @@
 
   var LEAD_ENDPOINT = "/api/leads";
 
+  // Chosen phone number for this page load (set by phone.js), with a fallback.
+  function phoneInfo() { return window.EAL_PHONE || { display: "0402 083 863", tel: "+61402083863" }; }
+
   var LOGO_MARK =
     '<svg viewBox="0 0 210 120" aria-hidden="true">' +
     '<path class="logo-stroke" style="stroke:#48206e;stroke-width:7;fill:none;stroke-linecap:round;stroke-linejoin:round" d="M8 92 L98 24 L126 47 L126 32 L146 32 L146 51 C166 68 188 74 204 64"/>' +
@@ -402,7 +405,7 @@
       '<div class="apply-done">' +
         "<h1>Sorry — we can't assist right now</h1>" +
         "<p>Based on your answers, this falls outside our current lending criteria, so we're not able to help on this occasion.</p>" +
-        '<p>If your circumstances change, we\'d genuinely love to hear from you — you\'re welcome to call us on <a href="tel:+61402083863" style="color:var(--purple);font-weight:700">0402 083 863</a> for a chat.</p>' +
+        '<p>If your circumstances change, we\'d genuinely love to hear from you — you\'re welcome to call us on <a href="tel:' + phoneInfo().tel + '" style="color:var(--purple);font-weight:700">' + phoneInfo().display + '</a> for a chat.</p>' +
         '<a class="btn-continue" href="index.html" style="display:block;text-decoration:none;text-align:center">Back to home</a>' +
       "</div>";
     window.scrollTo({ top: 0 });
@@ -470,7 +473,7 @@
       .catch(function (err) {
         if (err instanceof TypeError) { showDone(); return; } // no backend (preview)
         if (btn) { btn.disabled = false; btn.textContent = "See my options"; }
-        var e = root.querySelector(".js-error"); if (e) { e.textContent = "Sorry — something went wrong. Please call us on 0402 083 863."; e.hidden = false; }
+        var e = root.querySelector(".js-error"); if (e) { e.textContent = "Sorry — something went wrong. Please call us on " + phoneInfo().display + "."; e.hidden = false; }
       });
   }
 
@@ -489,7 +492,7 @@
       '<div class="apply-done">' +
         '<div class="success-tick"><svg viewBox="0 0 52 52"><path class="logo-stroke" d="M14 27 l8 8 l16 -18" /></svg></div>' +
         "<h1>Thanks — we've got it.</h1>" +
-        "<p>One of our team will be in touch very soon with your options. If you'd rather talk now, call us on <a href=\"tel:+61402083863\" style=\"color:var(--purple);font-weight:700\">0402 083 863</a>.</p>" +
+        "<p>One of our team will be in touch very soon with your options. If you'd rather talk now, call us on <a href=\"tel:" + phoneInfo().tel + "\" style=\"color:var(--purple);font-weight:700\">" + phoneInfo().display + "</a>.</p>" +
         '<a class="btn-continue" href="index.html" style="display:block;text-decoration:none;text-align:center">Back to home</a>' +
       "</div>";
     window.scrollTo({ top: 0 });
