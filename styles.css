@@ -346,15 +346,17 @@ button { font-family: inherit; cursor: pointer; }
 .steps-cta-note { font-size: 0.9rem; color: var(--muted); font-style: italic; font-weight: 400; }
 
 /* ---------------------------- Lender wall ------------------------ */
-.lenders { background: var(--white); padding: clamp(40px, 6vw, 66px) 0; border-bottom: 1px solid var(--line); }
-.lenders-kicker { text-align: center; font-weight: 700; font-size: 0.98rem; letter-spacing: .02em; color: var(--muted); }
-.lenders-grid {
-  margin: 30px auto 0; max-width: 920px;
-  display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
-  gap: 20px 46px;
-}
-.lender { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.02em; color: #a8a4b0; white-space: nowrap; }
-.lenders-foot { text-align: center; margin-top: 28px; color: var(--muted); font-size: 0.95rem; }
+.lenders { background: var(--white); padding: clamp(44px, 6vw, 70px) 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow: hidden; }
+.lenders-kicker { text-align: center; font-weight: 700; font-size: 1rem; color: var(--muted); margin-bottom: 34px; }
+.logo-rows { display: flex; flex-direction: column; gap: 18px; }
+.logo-row { overflow: hidden; width: 100%; }
+.logo-track { display: flex; width: max-content; align-items: center; }
+.logo-track--left { animation: logos-left 75s linear infinite; }
+.logo-track--right { animation: logos-right 75s linear infinite; }
+@keyframes logos-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes logos-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+.logo-cell { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; height: 54px; padding: 0 clamp(20px, 3vw, 42px); }
+.logo-cell img { height: 34px; width: auto; max-width: 150px; object-fit: contain; }
 
 /* ------------------------ Problem / solution --------------------- */
 .contrast { padding: clamp(56px, 8vw, 96px) 0; background: var(--white); }
@@ -642,7 +644,7 @@ button { font-family: inherit; cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .marquee-track { animation: none; }
+  .marquee-track, .logo-track { animation: none; }
 }
 
 /* ---------------------------- Responsive ------------------------- */
@@ -689,8 +691,8 @@ button { font-family: inherit; cursor: pointer; }
   .step { grid-template-columns: 50px 1fr; gap: 15px; }
   .step-ico svg, .step-ico img { width: 48px; height: 48px; }
   .step-h { font-size: 1.02rem; }
-  .lenders-grid { gap: 16px 30px; }
-  .lender { font-size: 1.1rem; }
+  .logo-cell { height: 46px; padding: 0 22px; }
+  .logo-cell img { height: 28px; max-width: 120px; }
   .calc-freq { grid-template-columns: 1fr; }
 }
 @media (max-width: 380px) {
