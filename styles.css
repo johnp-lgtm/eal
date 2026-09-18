@@ -360,8 +360,7 @@ button { font-family: inherit; cursor: pointer; }
 .lenders-title { text-align: center; margin-bottom: 36px; }
 .lenders-cta { margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
 .lenders-cta-note { font-style: italic; font-weight: 400; color: var(--muted); font-size: 0.95rem; }
-.btn-mint { background: #5ccf96; color: var(--ink-strong); border-color: #5ccf96; border-radius: 999px; padding: 15px 34px; }
-.btn-mint:hover { background: #4bc389; border-color: #4bc389; }
+.lenders-btn { border-radius: 999px; padding: 15px 34px; }
 
 /* ------------------------ Problem / solution --------------------- */
 .contrast { padding: clamp(56px, 8vw, 96px) 0; background: var(--white); }
