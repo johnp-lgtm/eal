@@ -517,7 +517,7 @@ button { font-family: inherit; cursor: pointer; }
 .footer-contact a { color: rgba(255,255,255,.85); transition: color .15s ease; }
 .footer-contact a:hover { color: var(--white); }
 .footer-col { display: flex; flex-direction: column; gap: 12px; }
-.footer-h { font-size: 0.92rem; letter-spacing: 0; color: rgba(255,255,255,.55); font-weight: 800; margin-bottom: 8px; }
+.footer-h { font-size: 0.92rem; letter-spacing: 0; color: var(--white); font-weight: 800; margin-bottom: 8px; }
 .footer-col a { color: rgba(255,255,255,.8); transition: color .15s ease; }
 .footer-col a:hover { color: var(--white); }
 .footer-static { color: rgba(255,255,255,.6); }
