@@ -256,13 +256,13 @@ button { font-family: inherit; cursor: pointer; }
 .reviews-head--center .section-sub { margin-left: auto; margin-right: auto; }
 
 /* Staggered wall of customer photos, scrolling infinitely left */
-.wall-row { overflow: hidden; width: 100%; height: 560px; }
-.wall-track { display: flex; gap: 20px; width: max-content; align-items: center; height: 100%; animation: logos-left 90s linear infinite; }
-.wall-col { display: flex; flex-direction: column; gap: 20px; flex: 0 0 auto; }
-.wall-card { width: 232px; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 34px rgba(44,32,64,.16); background: var(--purple-tint); }
+.wall-row { overflow: hidden; width: 100%; height: 560px; --card-w: 232px; }
+.wall-track { display: flex; gap: 12px; width: max-content; align-items: center; height: 100%; animation: logos-left 90s linear infinite; }
+.wall-col { display: flex; flex-direction: column; gap: 12px; flex: 0 0 auto; width: var(--card-w); }
+.wall-card { width: var(--card-w); border-radius: 20px; overflow: hidden; box-shadow: 0 16px 34px rgba(44,32,64,.16); background: var(--purple-tint); }
 .wall-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .wall-card--tall { height: 440px; }
-.wall-card--short { height: 210px; }
+.wall-card--short { height: 215px; }
 /* vertical stagger per column */
 .wall-col:nth-child(4n+1) { transform: translateY(-34px); }
 .wall-col:nth-child(4n+2) { transform: translateY(38px); }
@@ -730,12 +730,12 @@ button { font-family: inherit; cursor: pointer; }
   .step-h { font-size: 1.02rem; }
   .logo-cell { height: 46px; padding: 0 22px; }
   .logo-cell img { height: 28px; max-width: 120px; }
-  .wall-row { height: 400px; }
-  .wall-track { gap: 14px; }
-  .wall-col { gap: 14px; }
-  .wall-card { width: 168px; border-radius: 16px; }
+  .wall-row { height: 400px; --card-w: 168px; }
+  .wall-track { gap: 10px; }
+  .wall-col { gap: 10px; }
+  .wall-card { border-radius: 16px; }
   .wall-card--tall { height: 314px; }
-  .wall-card--short { height: 150px; }
+  .wall-card--short { height: 152px; }
   .wall-col:nth-child(4n+1) { transform: translateY(-22px); }
   .wall-col:nth-child(4n+2) { transform: translateY(26px); }
   .wall-col:nth-child(4n+3) { transform: translateY(10px); }
