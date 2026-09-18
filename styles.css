@@ -255,19 +255,19 @@ button { font-family: inherit; cursor: pointer; }
 .reviews-head--center { text-align: center; max-width: 640px; margin-left: auto; margin-right: auto; }
 .reviews-head--center .section-sub { margin-left: auto; margin-right: auto; }
 
-/* Single flowing river of circular customer photos */
-.river-row { overflow: hidden; width: 100%; height: 330px; }
-.river-track { display: flex; gap: clamp(18px, 2.4vw, 30px); width: max-content; align-items: center; height: 100%; animation: logos-left 95s linear infinite; }
-.river-item { flex: 0 0 auto; width: 150px; height: 150px; border-radius: 50%; overflow: hidden; background: var(--purple-tint); box-shadow: 0 12px 28px rgba(44,32,64,.16); }
-.river-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-/* varied sizes */
-.river-item:nth-child(3n+1) { width: 194px; height: 194px; }
-.river-item:nth-child(3n+2) { width: 118px; height: 118px; }
-/* varied vertical offsets so they mesh into one flowing band */
-.river-item:nth-child(4n+1) { transform: translateY(-34px); }
-.river-item:nth-child(4n+2) { transform: translateY(30px); }
-.river-item:nth-child(4n+3) { transform: translateY(-10px); }
-.river-item:nth-child(4n)   { transform: translateY(44px); }
+/* Staggered wall of customer photos, scrolling infinitely left */
+.wall-row { overflow: hidden; width: 100%; height: 560px; }
+.wall-track { display: flex; gap: 20px; width: max-content; align-items: center; height: 100%; animation: logos-left 90s linear infinite; }
+.wall-col { display: flex; flex-direction: column; gap: 20px; flex: 0 0 auto; }
+.wall-card { width: 232px; border-radius: 20px; overflow: hidden; box-shadow: 0 16px 34px rgba(44,32,64,.16); background: var(--purple-tint); }
+.wall-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wall-card--tall { height: 440px; }
+.wall-card--short { height: 210px; }
+/* vertical stagger per column */
+.wall-col:nth-child(4n+1) { transform: translateY(-34px); }
+.wall-col:nth-child(4n+2) { transform: translateY(38px); }
+.wall-col:nth-child(4n+3) { transform: translateY(14px); }
+.wall-col:nth-child(4n)   { transform: translateY(-22px); }
 
 .reviews-cta { margin-top: 46px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
 
@@ -730,14 +730,16 @@ button { font-family: inherit; cursor: pointer; }
   .step-h { font-size: 1.02rem; }
   .logo-cell { height: 46px; padding: 0 22px; }
   .logo-cell img { height: 28px; max-width: 120px; }
-  .river-row { height: 230px; }
-  .river-item { width: 108px; height: 108px; }
-  .river-item:nth-child(3n+1) { width: 138px; height: 138px; }
-  .river-item:nth-child(3n+2) { width: 84px; height: 84px; }
-  .river-item:nth-child(4n+1) { transform: translateY(-22px); }
-  .river-item:nth-child(4n+2) { transform: translateY(20px); }
-  .river-item:nth-child(4n+3) { transform: translateY(-6px); }
-  .river-item:nth-child(4n)   { transform: translateY(28px); }
+  .wall-row { height: 400px; }
+  .wall-track { gap: 14px; }
+  .wall-col { gap: 14px; }
+  .wall-card { width: 168px; border-radius: 16px; }
+  .wall-card--tall { height: 314px; }
+  .wall-card--short { height: 150px; }
+  .wall-col:nth-child(4n+1) { transform: translateY(-22px); }
+  .wall-col:nth-child(4n+2) { transform: translateY(26px); }
+  .wall-col:nth-child(4n+3) { transform: translateY(10px); }
+  .wall-col:nth-child(4n)   { transform: translateY(-14px); }
   .calc-freq { grid-template-columns: 1fr; }
 }
 @media (max-width: 380px) {
