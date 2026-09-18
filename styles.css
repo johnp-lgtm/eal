@@ -373,8 +373,8 @@ button { font-family: inherit; cursor: pointer; }
 .logo-rows { display: flex; flex-direction: column; gap: 18px; }
 .logo-row { overflow: hidden; width: 100%; }
 .logo-track { display: flex; width: max-content; align-items: center; }
-.logo-track--left { animation: logos-left 75s linear infinite; }
-.logo-track--right { animation: logos-right 75s linear infinite; }
+.logo-track--left { animation: logos-left 42s linear infinite; }
+.logo-track--right { animation: logos-right 42s linear infinite; }
 @keyframes logos-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @keyframes logos-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 .logo-cell { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; height: 54px; padding: 0 clamp(20px, 3vw, 42px); }
@@ -728,6 +728,8 @@ button { font-family: inherit; cursor: pointer; }
   .step { grid-template-columns: 50px 1fr; gap: 15px; }
   .step-ico svg, .step-ico img { width: 48px; height: 48px; }
   .step-h { font-size: 1.02rem; }
+  .logo-track--left { animation-duration: 24s; }
+  .logo-track--right { animation-duration: 24s; }
   .logo-cell { height: 46px; padding: 0 22px; }
   .logo-cell img { height: 28px; max-width: 120px; }
   .wall-row { height: 400px; --card-w: 168px; }
