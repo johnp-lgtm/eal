@@ -357,6 +357,11 @@ button { font-family: inherit; cursor: pointer; }
 @keyframes logos-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 .logo-cell { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; height: 54px; padding: 0 clamp(20px, 3vw, 42px); }
 .logo-cell img { height: 34px; width: auto; max-width: 150px; object-fit: contain; }
+.lenders-title { text-align: center; margin-bottom: 36px; }
+.lenders-cta { margin-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.lenders-cta-note { font-style: italic; font-weight: 400; color: var(--muted); font-size: 0.95rem; }
+.btn-mint { background: #5ccf96; color: var(--ink-strong); border-color: #5ccf96; border-radius: 999px; padding: 15px 34px; }
+.btn-mint:hover { background: #4bc389; border-color: #4bc389; }
 
 /* ------------------------ Problem / solution --------------------- */
 .contrast { padding: clamp(56px, 8vw, 96px) 0; background: var(--white); }
