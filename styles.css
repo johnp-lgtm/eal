@@ -343,7 +343,7 @@ button { font-family: inherit; cursor: pointer; }
 .step-h { font-size: 1.05rem; font-weight: 400; color: var(--ink); line-height: 1.5; }
 .step-n { color: var(--purple); font-weight: 800; margin-right: 5px; }
 .steps-cta { margin-top: 50px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.steps-cta-note { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+.steps-cta-note { font-size: 0.9rem; color: var(--muted); font-style: italic; }
 
 /* ---------------------------- Lender wall ------------------------ */
 .lenders { background: var(--white); padding: clamp(40px, 6vw, 66px) 0; border-bottom: 1px solid var(--line); }
