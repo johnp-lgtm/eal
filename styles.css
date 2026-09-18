@@ -337,10 +337,10 @@ button { font-family: inherit; cursor: pointer; }
 .steps-layout { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 60px); align-items: center; margin-top: 46px; }
 .steps-media img { width: 100%; height: auto; }
 .steps-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 30px; }
-.step { display: grid; grid-template-columns: 54px 1fr; gap: 18px; align-items: start; text-align: left; }
+.step { display: grid; grid-template-columns: 60px 1fr; gap: 18px; align-items: start; text-align: left; }
 .step-ico { color: var(--purple); }
-.step-ico svg { width: 50px; height: 50px; }
-.step-h { font-size: 1.12rem; font-weight: 700; color: var(--ink); line-height: 1.42; }
+.step-ico svg, .step-ico img { width: 56px; height: 56px; object-fit: contain; }
+.step-h { font-size: 1.05rem; font-weight: 400; color: var(--ink); line-height: 1.5; }
 .step-n { color: var(--purple); font-weight: 800; margin-right: 5px; }
 .steps-cta { margin-top: 50px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .steps-cta-note { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
@@ -686,9 +686,9 @@ button { font-family: inherit; cursor: pointer; }
   .fcard-label { font-size: 1.05rem; }
   .hero-trust { flex-direction: column; gap: 12px; }
   .steps-grid { gap: 24px; }
-  .step { grid-template-columns: 46px 1fr; gap: 15px; }
-  .step-ico svg { width: 44px; height: 44px; }
-  .step-h { font-size: 1.05rem; }
+  .step { grid-template-columns: 52px 1fr; gap: 15px; }
+  .step-ico svg, .step-ico img { width: 48px; height: 48px; }
+  .step-h { font-size: 1.02rem; }
   .lenders-grid { gap: 16px 30px; }
   .lender { font-size: 1.1rem; }
   .calc-freq { grid-template-columns: 1fr; }
