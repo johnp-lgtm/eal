@@ -155,6 +155,7 @@ button { font-family: inherit; cursor: pointer; }
   gap: 18px;
 }
 .header-actions { display: flex; align-items: center; gap: 18px; }
+.header-cta-mob { display: none; }
 .header-phone { display: flex; flex-direction: column; text-align: right; line-height: 1.2; }
 .header-phone-label { font-size: 0.72rem; color: var(--muted); letter-spacing: .02em; }
 .header-phone-number { font-size: 1.15rem; font-weight: 800; color: var(--purple); }
@@ -177,7 +178,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* ------------------------------ Hero ----------------------------- */
 .hero {
-  background: var(--hero-bg);
+  background: var(--white);
   padding: clamp(28px, 4vw, 52px) 0 clamp(56px, 8vw, 96px);
 }
 .hero-inner {
@@ -659,6 +660,8 @@ button { font-family: inherit; cursor: pointer; }
   .header-phone-label { display: none; }
   .header-actions { gap: 12px; }
   .header-phone-number { font-size: 1rem; }
+  .header-cta-desk { display: none; }
+  .header-cta-mob { display: inline-flex; padding: 10px 15px; font-size: 0.9rem; }
   .site-header .logo-img { height: 44px; }
   .footer-brand .logo-img { height: 56px; }
   .why-grid { grid-template-columns: 1fr; }
@@ -688,6 +691,7 @@ button { font-family: inherit; cursor: pointer; }
   .lender { font-size: 1.1rem; }
   .calc-freq { grid-template-columns: 1fr; }
 }
-@media (max-width: 420px) {
-  .header-actions .btn-primary { display: none; } /* keep header clean; phone + hero CTA remain */
+@media (max-width: 380px) {
+  .header-phone-number { font-size: 0.92rem; }
+  .header-cta-mob { padding: 9px 12px; font-size: 0.85rem; }
 }
