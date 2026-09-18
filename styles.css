@@ -257,7 +257,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Staggered wall of customer photos, scrolling infinitely left */
 .wall-row { overflow: hidden; width: 100%; height: 560px; --card-w: 232px; }
-.wall-track { display: flex; gap: 12px; width: max-content; align-items: center; height: 100%; animation: logos-left 90s linear infinite; }
+.wall-track { display: flex; gap: 12px; width: max-content; align-items: center; height: 100%; animation: logos-left 48s linear infinite; }
 .wall-col { display: flex; flex-direction: column; gap: 12px; flex: 0 0 auto; width: var(--card-w); }
 .wall-card { width: var(--card-w); border-radius: 20px; overflow: hidden; box-shadow: 0 16px 34px rgba(44,32,64,.16); background: var(--purple-tint); }
 .wall-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -733,7 +733,7 @@ button { font-family: inherit; cursor: pointer; }
   .logo-cell { height: 46px; padding: 0 22px; }
   .logo-cell img { height: 28px; max-width: 120px; }
   .wall-row { height: 400px; --card-w: 168px; }
-  .wall-track { gap: 10px; }
+  .wall-track { gap: 10px; animation-duration: 34s; }
   .wall-col { gap: 10px; }
   .wall-card { border-radius: 16px; }
   .wall-card--tall { height: 314px; }
