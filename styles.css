@@ -249,7 +249,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 
 /* ----------------------------- Reviews --------------------------- */
-.reviews { padding: clamp(56px, 8vw, 90px) 0; background: var(--bg-alt); overflow: hidden; }
+.reviews { padding: clamp(56px, 8vw, 90px) 0; background: #ece4f6; overflow: hidden; }
 .reviews-head { margin-bottom: 40px; }
 
 .marquee {
