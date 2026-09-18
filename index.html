@@ -68,7 +68,6 @@
       <nav class="site-nav" aria-label="Primary">
         <a href="#process">How it works</a>
         <a href="#lenders">Lenders</a>
-        <a href="#calculator">Calculator</a>
         <a href="#reviews">Reviews</a>
         <a href="#faq">FAQs</a>
       </nav>
@@ -247,52 +246,6 @@
       </div>
     </section>
 
-    <!-- ========================= CALCULATOR ========================= -->
-    <section class="calc" id="calculator">
-      <div class="container">
-        <div class="calc-head">
-          <h2 class="section-title">See what it could cost</h2>
-          <p class="section-sub">Move the sliders for a quick repayment estimate. When you're ready, we'll personalise the rate to your situation across 50+ lenders.</p>
-        </div>
-
-        <div class="calc-card">
-          <div class="calc-controls">
-            <div class="calc-field">
-              <div class="calc-label-row"><label for="calc-amount">Loan amount</label><output class="calc-out" id="calc-amount-out">$40,000</output></div>
-              <input class="calc-slider js-calc" id="calc-amount" type="range" min="5000" max="200000" step="1000" value="40000" />
-              <div class="calc-ends"><span>$5k</span><span>$200k</span></div>
-            </div>
-            <div class="calc-field">
-              <div class="calc-label-row"><label for="calc-term">Loan term</label><output class="calc-out" id="calc-term-out">5 years</output></div>
-              <input class="calc-slider js-calc" id="calc-term" type="range" min="1" max="7" step="1" value="5" />
-              <div class="calc-ends"><span>1 yr</span><span>7 yrs</span></div>
-            </div>
-            <div class="calc-field">
-              <div class="calc-label-row"><label for="calc-rate">Interest rate <span class="calc-muted">(example)</span></label><output class="calc-out" id="calc-rate-out">7.5% p.a.</output></div>
-              <input class="calc-slider js-calc" id="calc-rate" type="range" min="5" max="20" step="0.1" value="7.5" />
-              <div class="calc-ends"><span>5%</span><span>20%</span></div>
-            </div>
-            <div class="calc-field">
-              <span class="calc-label">Repayment frequency</span>
-              <div class="calc-freq" role="group" aria-label="Repayment frequency">
-                <button type="button" class="calc-freq-btn is-active js-freq" data-freq="weekly">Weekly</button>
-                <button type="button" class="calc-freq-btn js-freq" data-freq="fortnightly">Fortnightly</button>
-                <button type="button" class="calc-freq-btn js-freq" data-freq="monthly">Monthly</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="calc-result">
-            <span class="calc-result-label">Estimated <span class="js-freq-word">weekly</span> repayment</span>
-            <span class="calc-result-num" id="calc-repayment">$0</span>
-            <span class="calc-result-sub">Example rate of <span id="calc-rate-echo">7.5%</span> p.a. over <span id="calc-term-echo">5 years</span>.</span>
-            <a class="btn btn-primary btn-lg btn-block" href="apply.html">Personalise my rate</a>
-            <p class="calc-disclaimer">Estimate only, for illustration. Your actual rate and repayments depend on the lender and your circumstances. This is not a quote or an offer of credit.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ====================== REVIEWS / MARQUEE ====================== -->
     <section class="reviews" id="reviews" aria-label="Customer reviews">
       <div class="container reviews-head">
@@ -393,7 +346,6 @@
         <h4 class="footer-h">Explore</h4>
         <a href="#process">How it works</a>
         <a href="#lenders">Lenders</a>
-        <a href="#calculator">Calculator</a>
         <a href="#faq">FAQs</a>
         <a href="apply.html">Apply now</a>
       </nav>
@@ -419,6 +371,5 @@
   </footer>
 
   <script src="script.js"></script>
-  <script src="calculator.js"></script>
 </body>
 </html>
