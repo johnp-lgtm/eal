@@ -501,7 +501,7 @@
       mobile: d.mobile || "",
       consent: true,
       submittedAt: new Date().toISOString(),
-      source: "easyasloans.com.au",
+      source: window.EAL_SOURCE || "Direct",
       pageUrl: location.href
     };
     var btn = root.querySelector(".js-continue");

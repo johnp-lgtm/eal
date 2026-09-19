@@ -155,6 +155,9 @@
   function loanIcon(type) {
     var t = String(type || "").toLowerCase();
     var open = '<svg class="li" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">';
+    if (t.indexOf("refinance") !== -1 || t.indexOf("refi") !== -1) {
+      return open + '<path d="M4.5 11a7.5 7.5 0 0 1 12.8-4.3L20 9"/><path d="M20 4.5V9h-4.5"/><path d="M19.5 13a7.5 7.5 0 0 1-12.8 4.3L4 15"/><path d="M4 19.5V15h4.5"/></svg>';
+    }
     if (t.indexOf("car") !== -1) {
       return open + '<path d="M5 13l1.4-4.2A2 2 0 0 1 8.3 7.4h7.4a2 2 0 0 1 1.9 1.4L19 13"/><path d="M4 17v-3.2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1V17a1 1 0 0 1-1 1h-1"/><path d="M6 18H5a1 1 0 0 1-1-1"/><circle cx="7.5" cy="17.5" r="1.6"/><circle cx="16.5" cy="17.5" r="1.6"/></svg>';
     }
@@ -203,9 +206,9 @@
         '</div>' +
         '<div class="lc-rows">' +
           lcRow("Mobile", l.mobile, IC.phone) +
-          lcRow("Owner", agentName(), IC.person) +
+          lcRow("Owner", l.owner || "Unassigned", IC.person) +
           lcRow("App. Status", effStatus(l), IC.doc) +
-          lcRow("Referrer", l.source || "Website", IC.tag) +
+          lcRow("Referrer", l.source || "Direct", IC.tag) +
         '</div>' +
         '<div class="lc-foot">' +
           '<span class="lc-time">' + esc(fmtAgo(lastEdited(l))) + '</span>' +
@@ -214,9 +217,9 @@
       '</div>' +
       '<div class="lc-actions">' +
         '<a class="lc-act" href="tel:' + esc(l.mobile) + '" title="Call" aria-label="Call">' + IC.phone + '</a>' +
-        '<a class="lc-act" href="' + smsHref(l) + '" title="Text" aria-label="Text">' + IC.sms + '</a>' +
+        '<button type="button" class="lc-act js-note" data-id="' + esc(l.id) + '" data-kind="lead" title="Add note" aria-label="Add note">' + IC.sms + '</button>' +
         '<a class="lc-act" href="mailto:' + esc(l.email) + '" title="Email" aria-label="Email">' + IC.mail + '</a>' +
-        '<button type="button" class="lc-act js-openlead" data-id="' + esc(l.id) + '" title="Open" aria-label="Open">' + IC.edit + '</button>' +
+        '<button type="button" class="lc-act js-status" data-id="' + esc(l.id) + '" title="Change status" aria-label="Change status">' + IC.edit + '</button>' +
       '</div>' +
     '</article>';
   }
@@ -253,6 +256,7 @@
       '</div>' +
       '<div class="lc-actions">' +
         '<a class="lc-act" href="tel:' + esc(d.mobile) + '" title="Call" aria-label="Call">' + IC.phone + '</a>' +
+        '<button type="button" class="lc-act js-note" data-id="' + esc(d.id) + '" data-kind="dealer" title="Add note" aria-label="Add note">' + IC.sms + '</button>' +
         '<a class="lc-act" href="mailto:' + esc(d.email) + '" title="Email" aria-label="Email">' + IC.mail + '</a>' +
         '<button type="button" class="lc-act js-openlead" data-id="' + esc(d.id) + '" title="Open" aria-label="Open">' + IC.edit + '</button>' +
       '</div>' +
@@ -297,16 +301,111 @@
   }
 
   boardEl.addEventListener("click", function (e) {
-    // Action-strip links (call / text / email) navigate on their own — don't
-    // open the drawer. The "open" button and the rest of the card do.
-    var act = e.target.closest(".lc-act");
-    if (act && !act.classList.contains("js-openlead")) { return; }
+    // Quick actions: status pen and note bubble open a card popover.
+    var statusBtn = e.target.closest(".js-status");
+    if (statusBtn) { e.stopPropagation(); openStatusPop(statusBtn); return; }
+    var noteBtn = e.target.closest(".js-note");
+    if (noteBtn) { e.stopPropagation(); openNotePop(noteBtn); return; }
+    // The "open" pen (dealer cards) opens the full drawer.
+    var openBtn = e.target.closest(".js-openlead");
+    if (openBtn) {
+      var dc = openBtn.closest(".dealer-card");
+      if (dc) { openDealerDetail(dc.getAttribute("data-id")); }
+      else { var lc = openBtn.closest(".lead-card"); if (lc) { openDetail(lc.getAttribute("data-id")); } }
+      return;
+    }
+    // Other action links (call / email) navigate on their own — don't open the drawer.
+    if (e.target.closest(".lc-act")) { return; }
     var dcard = e.target.closest(".dealer-card[data-id]");
     if (dcard) { openDealerDetail(dcard.getAttribute("data-id")); return; }
     var card = e.target.closest(".lead-card[data-id]");
     if (card) { openDetail(card.getAttribute("data-id")); }
   });
   searchEl.addEventListener("input", render);
+
+  /* --------------------------- Card popovers ----------------------- */
+  // A single floating panel reused for the status picker and the quick-note
+  // box. Lives on <body> so a board re-render never rips it out.
+  var pop = document.createElement("div");
+  pop.className = "lc-pop"; pop.hidden = true;
+  document.body.appendChild(pop);
+
+  function closePop() { pop.hidden = true; pop.innerHTML = ""; }
+  function openPop(anchor, html, wire) {
+    pop.innerHTML = html; pop.hidden = false;
+    var r = anchor.getBoundingClientRect();
+    var pw = pop.offsetWidth, ph = pop.offsetHeight;
+    var left = r.right + 8;
+    if (left + pw > window.innerWidth - 8) { left = r.left - pw - 8; }
+    if (left < 8) { left = 8; }
+    var top = r.top;
+    if (top + ph > window.innerHeight - 8) { top = window.innerHeight - ph - 8; }
+    if (top < 8) { top = 8; }
+    pop.style.left = (left + window.scrollX) + "px";
+    pop.style.top = (top + window.scrollY) + "px";
+    if (wire) { wire(pop); }
+  }
+  document.addEventListener("click", function (e) {
+    if (pop.hidden) { return; }
+    if (e.target.closest(".lc-pop")) { return; }
+    closePop();
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !pop.hidden) { closePop(); }
+  });
+  window.addEventListener("resize", closePop);
+
+  function openStatusPop(btn) {
+    var l = leads.filter(function (x) { return x.id === btn.getAttribute("data-id"); })[0];
+    if (!l) { return; }
+    var html = '<div class="pop-head">Set status</div>' +
+      STATUSES.map(function (s) {
+        return '<button type="button" class="pop-item' + (s === effStatus(l) ? " is-current" : "") + '" data-status="' + esc(s) + '">' +
+          '<span class="pop-dot ' + statusClass(s) + '"></span>' + esc(s) + '</button>';
+      }).join("");
+    openPop(btn, html, function (p) {
+      p.querySelectorAll(".pop-item").forEach(function (it) {
+        it.addEventListener("click", function () {
+          var ns = this.getAttribute("data-status");
+          api("PATCH", { id: l.id, status: ns }).then(function (res) {
+            if (!res.ok) { return; }
+            l.status = ns; l.updated_at = new Date().toISOString();
+            if (ns !== "New" && !l.owner) { l.owner = agentName(); }  // auto-assign on first contact
+            closePop(); render();
+            // Moving into a contact-attempt stage pops the prefilled text.
+            if (ns.indexOf("Attempted contact") === 0) { openMessage(l, ns); }
+          });
+        });
+      });
+    });
+  }
+
+  function openNotePop(btn) {
+    var kind = btn.getAttribute("data-kind");
+    var list = kind === "dealer" ? dealers : leads;
+    var item = list.filter(function (x) { return x.id === btn.getAttribute("data-id"); })[0];
+    if (!item) { return; }
+    var html = '<div class="pop-head">Notes</div>' +
+      '<textarea class="pop-notes" placeholder="Add a note — saves to this lead.">' + esc(item.notes || "") + '</textarea>' +
+      '<div class="pop-actions"><span class="pop-state js-pop-state"></span><button type="button" class="pop-save">Save</button></div>';
+    openPop(btn, html, function (p) {
+      var ta = p.querySelector(".pop-notes");
+      var st = p.querySelector(".js-pop-state");
+      ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+      p.querySelector(".pop-save").addEventListener("click", function () {
+        var val = ta.value;
+        st.textContent = "Saving…";
+        var fn = kind === "dealer" ? apiDealers : api;
+        fn("PATCH", { id: item.id, notes: val }).then(function (res) {
+          if (res.ok) {
+            item.notes = val; item.updated_at = new Date().toISOString();
+            st.textContent = "Saved ✓"; render();
+            setTimeout(closePop, 650);
+          } else { st.textContent = "Not saved — check connection"; }
+        }).catch(function () { st.textContent = "Not saved — check connection"; });
+      });
+    });
+  }
 
   /* ---------------------------- Detail ---------------------------- */
   function row(k, v) {
@@ -382,6 +481,12 @@
             return '<option value="' + esc(s) + '"' + (s === effStatus(l) ? " selected" : "") + '>' + esc(s) + '</option>';
           }).join("") +
         '</select>' +
+        '<label for="d-owner">Owner</label>' +
+        '<select id="d-owner" class="js-detail-owner">' +
+          ['', 'Cristian', 'Daniela', 'John'].map(function (o) {
+            return '<option value="' + esc(o) + '"' + (o === (l.owner || "") ? " selected" : "") + '>' + (o || "Unassigned") + '</option>';
+          }).join("") +
+        '</select>' +
       '</div>' +
 
       '<div class="detail-section detail-notes">' +
@@ -409,10 +514,24 @@
       var newStatus = this.value;
       api("PATCH", { id: l.id, status: newStatus }).then(function (res) {
         if (res.ok) {
-          l.status = newStatus; touch();
+          l.status = newStatus;
+          // Auto-assign owner on first contact (mirrors the server).
+          if (newStatus !== "New" && !l.owner) {
+            l.owner = agentName();
+            var os = detailEl.querySelector(".js-detail-owner");
+            if (os) { os.value = l.owner; }
+          }
+          touch();
           // Moving into a contact-attempt stage pops that stage's prefilled text.
           if (newStatus.indexOf("Attempted contact") === 0) { openMessage(l, newStatus); }
         }
+      });
+    });
+
+    detailEl.querySelector(".js-detail-owner").addEventListener("change", function () {
+      var newOwner = this.value;
+      api("PATCH", { id: l.id, owner: newOwner }).then(function (res) {
+        if (res.ok) { l.owner = newOwner; touch(); }
       });
     });
 

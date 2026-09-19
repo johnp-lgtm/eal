@@ -63,6 +63,20 @@ function isAuthed(request, env) {
   return ok;
 }
 
+// Which staff member is acting, from the Bearer token's prefix
+// (C/D/J + base password). Base password alone -> Cristian.
+function agentFromToken(request, env) {
+  const header = request.headers.get("Authorization") || "";
+  const token = header.replace(/^Bearer\s+/i, "");
+  const base = env.ADMIN_PASSWORD || "";
+  const map = { C: "Cristian", D: "Daniela", J: "John" };
+  if (base && token.length === base.length + 1) {
+    const p = token.charAt(0).toUpperCase();
+    if (map[p] && token.slice(1) === base) { return map[p]; }
+  }
+  return "Cristian";
+}
+
 function toInt(v) {
   if (v === null || v === undefined || v === "") { return null; }
   const n = parseInt(String(v).replace(/[^\d-]/g, ""), 10);
@@ -288,10 +302,20 @@ async function updateLead({ request, env }) {
   if (!body.id) { return json({ error: "Missing id" }, 400); }
 
   const allowed = ["New", "Attempted contact 1", "Attempted contact 2", "Attempted contact 3", "Converted"];
+  const owners = ["Cristian", "Daniela", "John", ""];
   const sets = [], binds = [];
   if (body.status !== undefined) {
     if (allowed.indexOf(body.status) === -1) { return json({ error: "Invalid status" }, 400); }
     sets.push("status = ?"); binds.push(body.status);
+    // Auto-assign on first contact: whoever moves a lead off "New" takes
+    // ownership, if it isn't already owned. Explicit owner (below) wins.
+    if (body.status !== "New" && body.owner === undefined) {
+      sets.push("owner = COALESCE(owner, ?)"); binds.push(agentFromToken(request, env));
+    }
+  }
+  if (body.owner !== undefined) {
+    if (owners.indexOf(body.owner) === -1) { return json({ error: "Invalid owner" }, 400); }
+    sets.push("owner = ?"); binds.push(body.owner || null);
   }
   if (body.notes !== undefined) {
     sets.push("notes = ?"); binds.push(noteStr(body.notes, 10000));
@@ -308,6 +332,7 @@ async function updateLead({ request, env }) {
     // The notes / updated_at columns may not exist yet — add them once and retry.
     try { await env.DB.prepare("ALTER TABLE leads ADD COLUMN notes TEXT").run(); } catch (e2) { /* already exists */ }
     try { await env.DB.prepare("ALTER TABLE leads ADD COLUMN updated_at TEXT").run(); } catch (e3) { /* already exists */ }
+    try { await env.DB.prepare("ALTER TABLE leads ADD COLUMN owner TEXT").run(); } catch (e4) { /* already exists */ }
     await env.DB.prepare(sql).bind(...binds).run();
   }
   return json({ ok: true });
