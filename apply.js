@@ -259,6 +259,13 @@
     gate: function (d) { return d.creditRating === "Below average" || d.creditRating === "Poor"; }
   };
 
+  /* Refinance: how much is left on the current loan (reuses amount mechanics) */
+  var STEP_REFI_AMOUNT = Object.assign({}, STEP_AMOUNT, {
+    title: "How much is left on your current loan?",
+    sub: "A rough figure is fine — you can change it later.",
+    tip: "Give us a ballpark of your current balance and we'll see if we can beat your rate."
+  });
+
   /* ------------------------------ flows --------------------------- */
   var FLOW_PERSONAL = {
     sections: ["Loan", "Employment", "Residency", "Final details"],
@@ -269,16 +276,16 @@
     sections: ["Loan", "Your car", "Employment", "Residency", "Final details"],
     steps: [STEP_AMOUNT, STEP_TERM, STEP_TIMEFRAME, STEP_CAR_YEAR, STEP_EMPLOYMENT, STEP_CREDIT, STEP_RESIDENCY, STEP_FINAL]
   };
-  // Business: amount, term, car year, ABN + GST, residency status, contact.
-  var FLOW_BUSINESS = {
-    sections: ["Loan", "Your car", "Business", "Residency", "Final details"],
-    steps: [STEP_AMOUNT, STEP_TERM, STEP_TIMEFRAME, STEP_CAR_YEAR, STEP_BUSINESS, STEP_RESIDENCY_STATUS, STEP_FINAL]
+  // Refinance: current balance, new term, employment, credit, residency, contact.
+  var FLOW_REFINANCE = {
+    sections: ["Loan", "Employment", "Residency", "Final details"],
+    steps: [STEP_REFI_AMOUNT, STEP_TERM, STEP_EMPLOYMENT, STEP_CREDIT, STEP_RESIDENCY, STEP_FINAL]
   };
 
-  var PRODUCTS = { car: "Car loan", business: "Business loan", personal: "Personal loan", debt: "Debt consolidation" };
+  var PRODUCTS = { car: "Car loan", refinance: "Refinance", personal: "Personal loan", debt: "Debt consolidation" };
   function flowForLoan(l) {
     if (l === "car") { return FLOW_CAR; }
-    if (l === "business") { return FLOW_BUSINESS; }
+    if (l === "refinance") { return FLOW_REFINANCE; }
     return FLOW_PERSONAL;
   }
 
@@ -318,7 +325,7 @@
   /* --------------------------- chooser ---------------------------- */
   var CHOICES = [
     { loan: "car", label: "Car Loan" }, { loan: "personal", label: "Personal Loan" },
-    { loan: "business", label: "Business Loan" }, { loan: "debt", label: "Debt Consolidation" }
+    { loan: "refinance", label: "Refinance" }, { loan: "debt", label: "Debt Consolidation" }
   ];
   function renderChooser() {
     stepsEl.innerHTML = "";
@@ -349,7 +356,7 @@
         '<h1 class="q-title">' + esc(step.title) + "</h1>" +
         (step.sub ? '<p class="q-sub">' + esc(step.sub) + "</p>" : "") +
         '<div class="q-body">' + step.body(state.data) + "</div>" +
-        (step.tip ? '<div class="helper"><span class="helper-av">' + LOGO_MARK + '</span><p class="helper-text">' + esc(step.tip) + "</p></div>" : "") +
+        (step.tip ? '<div class="helper"><p class="helper-text">' + esc(step.tip) + "</p></div>" : "") +
         '<button type="button" class="btn-continue js-continue">' + esc(step.cta || "Continue") + "</button>" +
         '<p class="q-error js-error" hidden></p>' +
         (step.trust || ('<p class="q-trust">' + CREDIT_ICON + " Enquiring won’t affect your credit score</p>")) +
@@ -441,7 +448,7 @@
       loanType: state.product || "",
       loanAmount: d.loanAmount || null,
       loanTerm: d.loanTerm || null,
-      use: (state.product === "Business loan") ? "Business" : "Personal",
+      use: (state.product === "Refinance") ? "Refinance" : "Personal",
       buyTimeframe: d.buyTimeframe || "",
       creditRating: d.creditRating || "",
       state: d.state || "",
