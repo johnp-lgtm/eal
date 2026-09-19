@@ -272,8 +272,8 @@
   var STEP_REFI_CURRENT = {
     section: "Loan",
     title: "What's your current rate and repayments?",
-    sub: "Roughly is fine, it just helps us see how much we could save you.",
-    tip: "Even a ballpark helps us work out your potential saving before we dig in.",
+    sub: "Please enter these accurately so we can work out exactly how much you could save.",
+    tip: "The more accurate these figures are, the more precisely we can calculate your saving.",
     body: function (d) {
       return '<div class="q-field idf"><label for="a-currentRate">Current interest rate</label>' +
         '<span class="q-hint">Your current annual rate, e.g. 9.5</span>' +
