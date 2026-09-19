@@ -174,22 +174,49 @@
     return hay.toLowerCase().indexOf(q) !== -1;
   }
 
+  // Small line icons used on the cards (trailing row hints + action strip).
+  var IC = {
+    phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h3l1.5 4-2 1.4a12 12 0 0 0 5.6 5.6l1.4-2 4 1.5v3a1.5 1.5 0 0 1-1.6 1.5A16.5 16.5 0 0 1 5 5.1 1.5 1.5 0 0 1 6.5 3.5z"/></svg>',
+    person: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 19.5a6.5 6.5 0 0 1 13 0"/></svg>',
+    doc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h7L18 8v12.5H6z"/><path d="M13 3.5V8h5"/><path d="M8.5 12.5h7M8.5 15.5h7"/></svg>',
+    tag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5h7l9 9-6.5 6.5-9-9z"/><circle cx="8" cy="8.5" r="1.4"/></svg>',
+    sms: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5h16v11H8.5L4 20z"/><path d="M8.5 11h7M8.5 8.5h7"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 5.5L20 7"/></svg>',
+    edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 5.5l3 3M4 20l1-4L16 5a1.5 1.5 0 0 1 2.1 0l.9.9a1.5 1.5 0 0 1 0 2.1L8 19z"/></svg>'
+  };
+
+  // One card row: bold label, value, trailing hint icon.
+  function lcRow(k, v, icon) {
+    return '<div class="lc-row"><span class="lc-k">' + esc(k) + '</span>' +
+      '<span class="lc-v">' + esc(v || "—") + '</span>' +
+      '<span class="lc-ri">' + icon + '</span></div>';
+  }
+
   /* --------------------------- Rendering -------------------------- */
   function cardHtml(l) {
-    var d = detailsOf(l);
     return '<article class="lead-card" data-id="' + esc(l.id) + '">' +
-      '<div class="lc-top">' +
-        '<span class="lc-icon" title="' + esc(l.loan_type || "") + '">' + loanIcon(l.loan_type) + '</span>' +
-        '<span class="lc-name">' + esc(l.full_name || "—") + '</span>' +
-        '<span class="lc-amount">' + esc(fmtMoney(l.loan_amount)) + '</span>' +
+      '<div class="lc-main">' +
+        '<div class="lc-top">' +
+          '<span class="lc-icon" title="' + esc(l.loan_type || "") + '">' + loanIcon(l.loan_type) + '</span>' +
+          '<span class="lc-name">' + esc(l.full_name || "—") + '</span>' +
+          '<span class="lc-amount">' + esc(fmtMoney(l.loan_amount)) + '</span>' +
+        '</div>' +
+        '<div class="lc-rows">' +
+          lcRow("Mobile", l.mobile, IC.phone) +
+          lcRow("Owner", agentName(), IC.person) +
+          lcRow("App. Status", effStatus(l), IC.doc) +
+          lcRow("Referrer", l.source || "Website", IC.tag) +
+        '</div>' +
+        '<div class="lc-foot">' +
+          '<span class="lc-time">' + esc(fmtAgo(lastEdited(l))) + '</span>' +
+          '<span class="lc-state">' + esc(l.state || "—") + '</span>' +
+        '</div>' +
       '</div>' +
-      '<div class="lc-rows">' +
-        '<div class="lc-row"><span class="lc-k">Mobile</span><span class="lc-v">' + esc(l.mobile || "—") + '</span></div>' +
-        '<div class="lc-row"><span class="lc-k">Living</span><span class="lc-v">' + esc(d.livingSituation || "—") + '</span></div>' +
-      '</div>' +
-      '<div class="lc-foot">' +
-        '<span class="lc-time">' + esc(fmtAgo(lastEdited(l))) + '</span>' +
-        '<span class="lc-state">' + esc(l.state || "—") + '</span>' +
+      '<div class="lc-actions">' +
+        '<a class="lc-act" href="tel:' + esc(l.mobile) + '" title="Call" aria-label="Call">' + IC.phone + '</a>' +
+        '<a class="lc-act" href="' + smsHref(l) + '" title="Text" aria-label="Text">' + IC.sms + '</a>' +
+        '<a class="lc-act" href="mailto:' + esc(l.email) + '" title="Email" aria-label="Email">' + IC.mail + '</a>' +
+        '<button type="button" class="lc-act js-openlead" data-id="' + esc(l.id) + '" title="Open" aria-label="Open">' + IC.edit + '</button>' +
       '</div>' +
     '</article>';
   }
@@ -208,18 +235,26 @@
   }
   function dealerCardHtml(d) {
     return '<article class="lead-card dealer-card" data-id="' + esc(d.id) + '">' +
-      '<div class="lc-top">' +
-        '<span class="lc-icon">' + dealerIcon() + '</span>' +
-        '<span class="lc-name">' + esc(d.dealership || "—") + '</span>' +
-        (d.monthly_volume ? '<span class="lc-amount">' + esc(d.monthly_volume) + '</span>' : '') +
+      '<div class="lc-main">' +
+        '<div class="lc-top">' +
+          '<span class="lc-icon">' + dealerIcon() + '</span>' +
+          '<span class="lc-name">' + esc(d.dealership || "—") + '</span>' +
+          (d.monthly_volume ? '<span class="lc-amount">' + esc(d.monthly_volume) + '</span>' : '') +
+        '</div>' +
+        '<div class="lc-rows">' +
+          lcRow("Contact", d.contact_name, IC.person) +
+          lcRow("Mobile", d.mobile, IC.phone) +
+          lcRow("Cars/mth", d.monthly_volume, IC.doc) +
+        '</div>' +
+        '<div class="lc-foot">' +
+          '<span class="lc-time">' + esc(fmtAgo(dealerLastEdited(d))) + '</span>' +
+          '<span class="lc-state">DEALER</span>' +
+        '</div>' +
       '</div>' +
-      '<div class="lc-rows">' +
-        '<div class="lc-row"><span class="lc-k">Contact</span><span class="lc-v">' + esc(d.contact_name || "—") + '</span></div>' +
-        '<div class="lc-row"><span class="lc-k">Mobile</span><span class="lc-v">' + esc(d.mobile || "—") + '</span></div>' +
-      '</div>' +
-      '<div class="lc-foot">' +
-        '<span class="lc-time">' + esc(fmtAgo(dealerLastEdited(d))) + '</span>' +
-        '<span class="lc-state">DEALER</span>' +
+      '<div class="lc-actions">' +
+        '<a class="lc-act" href="tel:' + esc(d.mobile) + '" title="Call" aria-label="Call">' + IC.phone + '</a>' +
+        '<a class="lc-act" href="mailto:' + esc(d.email) + '" title="Email" aria-label="Email">' + IC.mail + '</a>' +
+        '<button type="button" class="lc-act js-openlead" data-id="' + esc(d.id) + '" title="Open" aria-label="Open">' + IC.edit + '</button>' +
       '</div>' +
     '</article>';
   }
@@ -262,6 +297,10 @@
   }
 
   boardEl.addEventListener("click", function (e) {
+    // Action-strip links (call / text / email) navigate on their own — don't
+    // open the drawer. The "open" button and the rest of the card do.
+    var act = e.target.closest(".lc-act");
+    if (act && !act.classList.contains("js-openlead")) { return; }
     var dcard = e.target.closest(".dealer-card[data-id]");
     if (dcard) { openDealerDetail(dcard.getAttribute("data-id")); return; }
     var card = e.target.closest(".lead-card[data-id]");
