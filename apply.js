@@ -252,6 +252,7 @@
     title: "How would you rate your credit history?",
     sub: "A rough idea is fine, it helps us match you to the right lender.",
     tip: "Honest is best, it just helps us point you to lenders you'll actually qualify with.",
+    autoAdvance: true,
     body: function (d) {
       return optButtons("creditRating", ["Excellent", "Good", "Average", "Below average", "Poor"], "lastwide");
     },
@@ -326,7 +327,7 @@
   /* --------------------------- chooser ---------------------------- */
   var CHOICES = [
     { loan: "car", label: "Car Loan" }, { loan: "personal", label: "Personal Loan" },
-    { loan: "refinance", label: "Refinance" }, { loan: "debt", label: "Debt Consolidation" }
+    { loan: "refinance", label: "Refinance" }
   ];
   function renderChooser() {
     stepsEl.innerHTML = "";
