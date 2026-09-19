@@ -88,7 +88,7 @@
   var STEP_EMPLOYMENT = {
     section: "Employment",
     title: "What is your current employment type?",
-    tip: "We can assist with casual, self employed and even Centrelink income.",
+    tip: "We can assist with casual, contract and self employed income too.",
     body: function (d) {
       return selectField("employmentType", "Select option", ["Full-time", "Part-time", "Casual", "Self-employed", "Contractor", "Unemployed", "Retired", "Centrelink / Pension"]) +
         '<span class="q-label">How long have you been in your current employment?</span>' +
