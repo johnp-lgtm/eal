@@ -268,6 +268,31 @@
     tip: "Give us a ballpark of your current balance and we'll see if we can beat your rate."
   });
 
+  /* Refinance only: what they're currently paying, so we can show a saving */
+  var STEP_REFI_CURRENT = {
+    section: "Loan",
+    title: "What's your current rate and repayments?",
+    sub: "Roughly is fine, it just helps us see how much we could save you.",
+    tip: "Even a ballpark helps us work out your potential saving before we dig in.",
+    body: function (d) {
+      return '<div class="q-field idf"><label for="a-currentRate">Current interest rate</label>' +
+        '<span class="q-hint">Your current annual rate, e.g. 9.5</span>' +
+        '<input class="q-input" id="a-currentRate" type="text" inputmode="decimal" data-field="currentRate" placeholder="Enter rate %" value="' + esc(d.currentRate || "") + '" /></div>' +
+        '<span class="q-label">Current repayments</span>' +
+        '<div class="q-twocol">' +
+          '<input class="q-input" type="text" inputmode="numeric" data-field="currentRepayment" placeholder="Amount $" value="' + esc(d.currentRepayment || "") + '" />' +
+          selectField("repaymentFreq", "Frequency", ["Weekly", "Fortnightly", "Monthly"]) +
+        "</div>";
+    },
+    wire: function (root, d) { presetSelects(root, d); },
+    validate: function (root, d) {
+      if (!d.currentRate) { return { ok: false, msg: "Please enter your current interest rate." }; }
+      if (!d.currentRepayment) { return { ok: false, msg: "Please enter your current repayments." }; }
+      if (!d.repaymentFreq) { return { ok: false, msg: "Please choose a repayment frequency." }; }
+      return { ok: true };
+    }
+  };
+
   /* ------------------------------ flows --------------------------- */
   var FLOW_PERSONAL = {
     sections: ["Loan", "Employment", "Residency", "Final details"],
@@ -281,7 +306,7 @@
   // Refinance: current balance, new term, employment, credit, residency, contact.
   var FLOW_REFINANCE = {
     sections: ["Loan", "Employment", "Residency", "Final details"],
-    steps: [STEP_REFI_AMOUNT, STEP_TERM, STEP_EMPLOYMENT, STEP_CREDIT, STEP_RESIDENCY, STEP_FINAL]
+    steps: [STEP_REFI_AMOUNT, STEP_REFI_CURRENT, STEP_TERM, STEP_EMPLOYMENT, STEP_CREDIT, STEP_RESIDENCY, STEP_FINAL]
   };
 
   var PRODUCTS = { car: "Car loan", refinance: "Refinance", personal: "Personal loan", debt: "Debt consolidation" };
@@ -456,6 +481,9 @@
       use: (state.product === "Refinance") ? "Refinance" : "Personal",
       buyTimeframe: d.buyTimeframe || "",
       creditRating: d.creditRating || "",
+      currentRate: d.currentRate || "",
+      currentRepayment: d.currentRepayment || "",
+      repaymentFreq: d.repaymentFreq || "",
       state: d.state || "",
       employmentType: d.employmentType || "",
       employmentDuration: (d.empYears != null ? d.empYears + "y " : "") + (d.empMonths != null ? d.empMonths + "m" : ""),
