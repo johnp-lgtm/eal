@@ -48,7 +48,7 @@
     section: "Loan",
     title: "How much do you want to borrow?",
     sub: "You can always change this later.",
-    tip: "Pop in roughly how much you're after — a ballpark is fine, you can change it later.",
+    tip: "Pop in roughly how much you're after. A ballpark is fine, you can change it later.",
     body: function (d) {
       var v = d.loanAmount || 40000;
       return '<div class="amount-field"><input type="text" class="js-amount-input" inputmode="numeric" value="' + money(v) + '" aria-label="Loan amount" /></div>' +
@@ -73,7 +73,8 @@
     section: "Loan",
     title: "How long do you want to have the loan for?",
     sub: "You can always change this later.",
-    tip: "A longer term can lower your repayments, but you may pay more interest over the life of the loan.",
+    tip: "A longer term can lower your repayments. A lot of our lenders have no early exit penalties.",
+    autoAdvance: true,
     body: function (d) {
       var html = optButtons("loanTerm", [
         { value: 1, label: "1 year" }, { value: 2, label: "2 years" }, { value: 3, label: "3 years" },
@@ -87,7 +88,7 @@
   var STEP_EMPLOYMENT = {
     section: "Employment",
     title: "What is your current employment type?",
-    tip: "Casual, contract or self-employed are all welcome — this just helps us match the right lenders.",
+    tip: "We can assist with casual, self employed and even Centrelink income.",
     body: function (d) {
       return selectField("employmentType", "Select option", ["Full-time", "Part-time", "Casual", "Self-employed", "Contractor", "Unemployed", "Retired", "Centrelink / Pension"]) +
         '<span class="q-label">How long have you been in your current employment?</span>' +
@@ -187,7 +188,7 @@
     section: "Your car",
     title: "What year is the car?",
     sub: "A rough year is fine if you're still looking.",
-    tip: "Not sure yet? Give us your best guess — we can fine-tune it later.",
+    tip: "Not sure yet? Give us your best guess, we can fine-tune it later.",
     body: function (d) {
       var yrs = years(1995, new Date().getFullYear()).reverse().map(String);
       return selectField("carYear", "Select year", yrs);
@@ -236,7 +237,7 @@
     section: "Loan",
     title: "When are you looking to buy?",
     sub: "This helps us line up your finance in time.",
-    tip: "Sooner the better — tell us your timing and we'll have your options ready when you are.",
+    tip: "Sooner the better, tell us your timing and we'll have your options ready when you are.",
     body: function (d) {
       return optButtons("buyTimeframe", ["This week", "This month", "1-3 months", "Just looking"]);
     },
@@ -249,8 +250,8 @@
   var STEP_CREDIT = {
     section: "Employment",
     title: "How would you rate your credit history?",
-    sub: "A rough idea is fine — it helps us match you to the right lender.",
-    tip: "Honest is best — it just helps us point you to lenders you'll actually qualify with.",
+    sub: "A rough idea is fine, it helps us match you to the right lender.",
+    tip: "Honest is best, it just helps us point you to lenders you'll actually qualify with.",
     body: function (d) {
       return optButtons("creditRating", ["Excellent", "Good", "Average", "Below average", "Poor"], "lastwide");
     },
@@ -262,19 +263,19 @@
   /* Refinance: how much is left on the current loan (reuses amount mechanics) */
   var STEP_REFI_AMOUNT = Object.assign({}, STEP_AMOUNT, {
     title: "How much is left on your current loan?",
-    sub: "A rough figure is fine — you can change it later.",
+    sub: "A rough figure is fine, you can change it later.",
     tip: "Give us a ballpark of your current balance and we'll see if we can beat your rate."
   });
 
   /* ------------------------------ flows --------------------------- */
   var FLOW_PERSONAL = {
     sections: ["Loan", "Employment", "Residency", "Final details"],
-    steps: [STEP_AMOUNT, STEP_TERM, STEP_TIMEFRAME, STEP_EMPLOYMENT, STEP_CREDIT, STEP_RESIDENCY, STEP_FINAL]
+    steps: [STEP_AMOUNT, STEP_TERM, STEP_EMPLOYMENT, STEP_CREDIT, STEP_RESIDENCY, STEP_FINAL]
   };
   // Car / vehicle: adds car year, keeps the full employment + residency questions.
   var FLOW_CAR = {
     sections: ["Loan", "Your car", "Employment", "Residency", "Final details"],
-    steps: [STEP_AMOUNT, STEP_TERM, STEP_TIMEFRAME, STEP_CAR_YEAR, STEP_EMPLOYMENT, STEP_CREDIT, STEP_RESIDENCY, STEP_FINAL]
+    steps: [STEP_AMOUNT, STEP_TERM, STEP_CAR_YEAR, STEP_EMPLOYMENT, STEP_CREDIT, STEP_RESIDENCY, STEP_FINAL]
   };
   // Refinance: current balance, new term, employment, credit, residency, contact.
   var FLOW_REFINANCE = {
@@ -331,7 +332,7 @@
     stepsEl.innerHTML = "";
     backBtn.style.visibility = "hidden";
     root.innerHTML = '<div class="q"><h1 class="q-title">What are you looking to finance?</h1>' +
-      '<p class="q-sub">Pick one to get started — it only takes a minute.</p>' +
+      '<p class="q-sub">Pick one to get started, it only takes a minute.</p>' +
       '<div class="q-body"><div class="optrow">' +
       CHOICES.map(function (c) { return '<button type="button" class="opt-btn js-choose" data-loan="' + c.loan + '">' + c.label + "</button>"; }).join("") +
       "</div></div></div>";
@@ -357,14 +358,15 @@
         (step.sub ? '<p class="q-sub">' + esc(step.sub) + "</p>" : "") +
         '<div class="q-body">' + step.body(state.data) + "</div>" +
         (step.tip ? '<div class="helper"><p class="helper-text">' + esc(step.tip) + "</p></div>" : "") +
-        '<button type="button" class="btn-continue js-continue">' + esc(step.cta || "Continue") + "</button>" +
+        (step.autoAdvance ? "" : '<button type="button" class="btn-continue js-continue">' + esc(step.cta || "Continue") + "</button>") +
         '<p class="q-error js-error" hidden></p>' +
         (step.trust || ('<p class="q-trust">' + CREDIT_ICON + " Enquiring won’t affect your credit score</p>")) +
       "</div>";
 
     applyPreselect(root, state.data);
     if (step.wire) { step.wire(root, state.data); }
-    root.querySelector(".js-continue").addEventListener("click", onContinue);
+    var contBtn = root.querySelector(".js-continue");
+    if (contBtn) { contBtn.addEventListener("click", onContinue); }
     renderSidebar();
     window.scrollTo({ top: 0, behavior: "auto" });
   }
@@ -376,6 +378,8 @@
       var f = b.dataset.field;
       root.querySelectorAll('.opt-btn[data-field="' + f + '"]').forEach(function (x) { x.classList.toggle("is-selected", x === b); });
       state.data[f] = isNaN(+b.dataset.value) ? b.dataset.value : +b.dataset.value;
+      var step = state.flow && state.flow.steps[state.index];
+      if (step && step.autoAdvance) { setTimeout(onContinue, 160); }
     });
     root.addEventListener("change", function (e) {
       var t = e.target; if (!t.dataset.field) { return; }
@@ -410,9 +414,9 @@
     if (mbFill) { mbFill.style.width = "100%"; }
     root.innerHTML =
       '<div class="apply-done">' +
-        "<h1>Sorry — we can't assist right now</h1>" +
+        "<h1>Sorry, we can't assist right now</h1>" +
         "<p>Based on your answers, this falls outside our current lending criteria, so we're not able to help on this occasion.</p>" +
-        '<p>If your circumstances change, we\'d genuinely love to hear from you — you\'re welcome to call us on <a href="tel:' + phoneInfo().tel + '" style="color:var(--purple);font-weight:700">' + phoneInfo().display + '</a> for a chat.</p>' +
+        '<p>If your circumstances change, we\'d genuinely love to hear from you. You\'re welcome to call us on <a href="tel:' + phoneInfo().tel + '" style="color:var(--purple);font-weight:700">' + phoneInfo().display + '</a> for a chat.</p>' +
         '<a class="btn-continue" href="index.html" style="display:block;text-decoration:none;text-align:center">Back to home</a>' +
       "</div>";
     window.scrollTo({ top: 0 });
@@ -480,7 +484,7 @@
       .catch(function (err) {
         if (err instanceof TypeError) { showDone(); return; } // no backend (preview)
         if (btn) { btn.disabled = false; btn.textContent = "See my options"; }
-        var e = root.querySelector(".js-error"); if (e) { e.textContent = "Sorry — something went wrong. Please call us on " + phoneInfo().display + "."; e.hidden = false; }
+        var e = root.querySelector(".js-error"); if (e) { e.textContent = "Sorry, something went wrong. Please call us on " + phoneInfo().display + "."; e.hidden = false; }
       });
   }
 
@@ -498,7 +502,7 @@
     root.innerHTML =
       '<div class="apply-done">' +
         '<div class="success-tick"><svg viewBox="0 0 52 52"><path class="logo-stroke" d="M14 27 l8 8 l16 -18" /></svg></div>' +
-        "<h1>Thanks — we've got it.</h1>" +
+        "<h1>Thanks, we've got it.</h1>" +
         "<p>One of our team will be in touch very soon with your options. If you'd rather talk now, call us on <a href=\"tel:" + phoneInfo().tel + "\" style=\"color:var(--purple);font-weight:700\">" + phoneInfo().display + "</a>.</p>" +
         '<a class="btn-continue" href="index.html" style="display:block;text-decoration:none;text-align:center">Back to home</a>' +
       "</div>";
