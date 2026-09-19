@@ -66,19 +66,19 @@ body.admin { background: #ffffff; }
 .admin-empty { text-align: center; color: var(--muted); padding: 40px 0; }
 
 /* ------------------------------ Board ---------------------------- */
-.admin-boardwrap { padding: 18px 24px 44px; }
-.admin-board { display: flex; gap: 16px; align-items: flex-start; overflow-x: auto; padding-bottom: 12px; }
+.admin-boardwrap { padding: 16px 20px 44px; }
+.admin-board { display: flex; gap: 10px; align-items: flex-start; overflow-x: auto; padding-bottom: 12px; }
 .col {
-  flex: 0 0 300px; background: #f2f2f4; border: 1px solid #e7e4ec;
-  border-radius: 14px; border-top: 3px solid #b0b4bb;
+  flex: 0 0 300px; background: #f4f4f6; border: 1px solid #e7e4ec;
+  border-radius: 12px; border-top: 3px solid #b0b4bb;
 }
-.col-head { display: flex; align-items: center; justify-content: space-between; padding: 13px 14px 10px; }
+.col-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 12px 8px; }
 .col-title { font-weight: 800; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.03em; color: var(--grey); }
 .col-count {
   background: #fff; border: 1px solid var(--border); border-radius: 99px;
   min-width: 22px; text-align: center; font-size: 0.74rem; font-weight: 800; color: var(--grey); padding: 1px 7px;
 }
-.col-body { padding: 0 10px 12px; display: flex; flex-direction: column; gap: 10px; min-height: 44px; }
+.col-body { padding: 0 8px 10px; display: flex; flex-direction: column; gap: 8px; min-height: 44px; }
 .col-empty { color: var(--muted); font-size: 0.8rem; text-align: center; padding: 14px 0; }
 
 /* Column accent = coloured TOP BORDER only; columns stay neutral otherwise.
